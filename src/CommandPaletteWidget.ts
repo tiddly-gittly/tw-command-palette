@@ -508,9 +508,8 @@ class CommandPaletteWidget extends Widget {
 
     this.history = $tw.wiki.getTiddlerData(this.commandHistoryPath, { history: [] }).history;
 
-    const prevOpenCommandPaletteListener = $tw.rootWidget.eventListeners['open-command-palette'];
     $tw.rootWidget.addEventListener('open-command-palette', (e: AllPossibleEvent) => {
-      prevOpenCommandPaletteListener?.(e);
+      $tw.hooks.invokeHook('th-open-command-palette', e);
       this.openPalette(e, e.param);
     });
 
