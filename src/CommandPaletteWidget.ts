@@ -2,10 +2,11 @@
 /* eslint-disable unicorn/prevent-abbreviations */
 import uniq from 'lodash/uniq';
 import debounce from 'lodash/debounce';
+import type { IWidgetEvent } from 'tiddlywiki';
 
 const Widget = require('$:/core/modules/widgets/widget.js').widget;
 
-type AllPossibleEvent = PointerEvent | KeyboardEvent | MouseEvent;
+type AllPossibleEvent = IWidgetEvent | PointerEvent | KeyboardEvent | MouseEvent;
 export interface IResult {
   action?: (event: AllPossibleEvent) => void;
   caption?: string;
@@ -511,7 +512,7 @@ class CommandPaletteWidget extends Widget {
 
     $tw.rootWidget.addEventListener('open-command-palette-selection', (e: AllPossibleEvent) => this.openPaletteSelection(e));
 
-    $tw.rootWidget.addEventListener('insert-command-palette-result', (e: AllPossibleEvent) => this.insertSelectedResult(e));
+    $tw.rootWidget.addEventListener('insert-command-palette-result', (e: AllPossibleEvent) => this.insertSelectedResult());
 
     $tw.rootWidget.addEventListener('command-palette-switch-history', (e) => this.handleSwitchHistory(e, true));
 
