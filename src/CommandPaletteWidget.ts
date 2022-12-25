@@ -1528,7 +1528,6 @@ class CommandPaletteWidget extends Widget {
   }
 
   createElement<E extends keyof HTMLElementTagNameMap>(name: E, proprieties: any, styles?: Partial<CSSStyleDeclaration>): HTMLDivElement {
-    document.createElement;
     let el = this.document.createElement(name) as HTMLDivElement;
     for (let [propriety, value] of Object.entries(proprieties || {})) {
       // @ts-expect-error ts-migrate(2304) FIXME: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'HTMLDivElement'. No index signature with a parameter of type 'string' was found on type 'HTMLDivElement'.ts(7053)
