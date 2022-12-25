@@ -8,8 +8,7 @@
     ".tsx",
     ".snap",
     ".tldr",
-    ".md",
-    ".json"
+    ".md"
   ],
   "license": "MIT",
   "version": "0.0.1",
