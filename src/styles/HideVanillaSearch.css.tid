@@ -1,0 +1,9 @@
+tags: $:/tags/Stylesheet
+title: $:/plugins/linonetwo/commandpalette/HideVanillaSearch.css
+type: text/vnd.tiddlywiki
+
+<$list filter="[[$:/plugins/linonetwo/commandpalette/settings/HideDefaultSearchBar]get[text]else[no]match[yes]]">
+.tc-sidebar-lists.tc-sidebar-search {
+  display: none;
+}
+</$list>

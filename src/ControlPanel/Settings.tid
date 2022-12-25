@@ -1,0 +1,12 @@
+title: $:/plugins/linonetwo/commandpalette/ControlPanel/Settings
+caption: CommandPalette
+tags: $:/tags/ControlPanel/SettingsTab
+
+These settings let you customise the behaviour of CommandPalette plugin.
+
+---
+
+!! Appearance
+
+;Hide default search bar:
+:<$checkbox tiddler="$:/plugins/linonetwo/commandpalette/settings/HideDefaultSearchBar" field="text" checked="yes" unchecked="no"> If you only use commandpalette to search and don't need default search bar, check this box.</$checkbox>
