@@ -1,9 +1,11 @@
 {
-  "title": "$:/plugins/linonetwo/tw-example-plugin",
-  "author": "LinOnetwo",
-  "description": "put your description here, and fill in the author and title above",
-  "core-version": ">=5.1.22",
-  "plugin-type": "plugin",
-  "version": "0.0.1",
-  "list": "readme"
+    "title": "$:/plugins/linonetwo/commandpalette",
+    "description": "Command palette Chinese translated",
+    "author": "linonetwo",
+    "version": "0.3.1",
+    "core-version": ">=5.0.8",
+    "list": "readme",
+    "source": "https://github.com/tiddly-gittly/tiddlywiki-plugins",
+    "dependents": "$:/plugins/linonetwo/pinyin-fuzzy-search",
+    "plugin-type": "plugin"
 }

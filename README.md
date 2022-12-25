@@ -1,23 +1,12 @@
 # Typescript plugin template for TiddlyWiki5
 
-This template will help you automatically package zipped multiple-file plugin for nodejs wiki, and single file JSON plugin for HTML wiki.
+此插件基于[[Souk21/TW-commandpalette|https://github.com/Souk21/TW-commandpalette]]，非常感谢他的工作，在过去的一年里这个插件极大地为我提高了工作效率。我将它主要源码复制过来汉化并加入拼音搜索功能，以便我们更灵活地在中文环境下使用。
 
-You can also try [Modern.TiddlyDev](https://github.com/tiddly-gittly/Modern.TiddlyDev).
+## 功能
 
-## What need to change after apply the template
+按下 ctrl/cmd + P 唤起搜索框，按的时候如果多加一个 shift 可以唤起功能框。
 
-### Basic
-
-1. update `title`, `author` and `description` in the [src/plugin.info](src/plugin.info), update `url` field in the [package.json](package.json).
-2. write your plugin code in the [src/](src/) directory, use `index.ts` as your ts code's entry point.
-3. you can use other file name or path, just update the "tsFiles" field in the package.json
-4. write `.js.meta` file aloneside with your ts file (that listed in the "tsFiles" field in the package.json), because when bundled as a plugin, all ts (in "tsFiles" field) will become js.
-5. other tid files just put in the src directory, they will be copy to the plugin automatically.
-   1. You can use folder to organize the files, like `src/filters/` to place the filter tiddlers, and that structure will be preserved in the nodejs multiple-file plugin
-   2. In the JSON plugin, the structure will strictly follow the tiddler title.
-   3. `ignoredExtensionsWhenBuildPlugin` field in package.json are file extensions that should not be copied to the dist. Normally they will be bundled by esbuild.
-6. update demo site tiddlers in the [demo/](demo/) directory.
-7. update this readme.md
+搜索的时候可以打拼音。
 
 ## During development
 

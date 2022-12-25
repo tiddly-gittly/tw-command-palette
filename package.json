@@ -1,7 +1,7 @@
 {
   "url": "https://github.com/tiddly-gittly/tw-example-plugin",
   "tsFiles": [
-    "index"
+    "CommandPaletteWidget"
   ],
   "ignoredExtensionsWhenBuildPlugin": [
     ".ts",
@@ -26,6 +26,9 @@
     "prepublishOnly": "npm run make && tsc --emitDeclarationOnly",
     "build:types": "tsc --emitDeclarationOnly",
     "installType": "typesync"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@types/archiver": "5.3.1",
