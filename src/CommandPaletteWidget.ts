@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+/* eslint-disable unicorn/prevent-abbreviations */
 import uniq from 'lodash/uniq';
 import debounce from 'lodash/debounce';
 
@@ -126,7 +128,7 @@ class CommandPaletteWidget extends Widget {
     return (e: any) => this.invokeActionString(text, this, e);
   }
 
-  actionStringInput(action: any, hint: any, e: any) {
+  actionStringInput(action: any, hint: any, _e: any) {
     this.blockProviderChange = true;
     this.allowInputFieldSelection = true;
     this.hint.innerText = hint;
@@ -148,7 +150,7 @@ class CommandPaletteWidget extends Widget {
   }
 
   tagOperation(
-    event: AllPossibleEvent,
+    _event: AllPossibleEvent,
     hintTiddler: string,
     hintTag: string,
     /** (tiddler, terms) => [tiddlers] */
@@ -159,7 +161,7 @@ class CommandPaletteWidget extends Widget {
     this.blockProviderChange = true;
     if (allowNoSelection) this.allowInputFieldSelection = true;
     this.currentProvider = this.historyProviderBuilder(hintTiddler);
-    this.currentResolver = (e: AllPossibleEvent) => {
+    this.currentResolver = (_e: AllPossibleEvent) => {
       if (this.currentSelection === 0) return;
       const tiddler: string | undefined = this.getDataFromResultDiv(this.currentResults[this.currentSelection - 1], 'name');
       this.currentProvider = (terms: string) => {
@@ -227,15 +229,15 @@ class CommandPaletteWidget extends Widget {
     this.actions.push(
       {
         name: 'Refresh Command Palette',
-        action: (e: AllPossibleEvent) => {
+        action: (_e: AllPossibleEvent) => {
           this.refreshCommandPalette();
           this.promptCommand('');
         },
         keepPalette: true,
       },
       { name: 'Explorer', action: (e: AllPossibleEvent) => this.explorer(e), keepPalette: true },
-      { name: 'History', caption: '查看历史记录', action: (e: AllPossibleEvent) => this.showHistory(), keepPalette: true },
-      { name: 'New Command Wizard', caption: '交互式创建新命令', action: (e: AllPossibleEvent) => this.newCommandWizard(), keepPalette: true },
+      { name: 'History', caption: '查看历史记录', action: (_e: AllPossibleEvent) => this.showHistory(), keepPalette: true },
+      { name: 'New Command Wizard', caption: '交互式创建新命令', action: (_e: AllPossibleEvent) => this.newCommandWizard(), keepPalette: true },
       {
         name: 'Add tag to tiddler',
         caption: '向条目添加标签',
@@ -362,7 +364,7 @@ class CommandPaletteWidget extends Widget {
     const hintStep = () => {
       this.input.value = '';
       this.hint.innerText = '输入提示文本';
-      this.currentResolver = (e: AllPossibleEvent) => {
+      this.currentResolver = (_e: AllPossibleEvent) => {
         hint = this.input.value;
         messageStep();
       };
@@ -387,8 +389,8 @@ class CommandPaletteWidget extends Widget {
       };
     };
 
-    this.currentProvider = (terms: string) => {};
-    this.currentResolver = (e: AllPossibleEvent) => {
+    this.currentProvider = (_terms: string) => {};
+    this.currentResolver = (_e: AllPossibleEvent) => {
       if (this.input.value.length === 0) return;
       name = this.input.value;
       typeStep();
@@ -396,7 +398,7 @@ class CommandPaletteWidget extends Widget {
     this.showResults([]);
   }
 
-  explorer(e: AllPossibleEvent) {
+  explorer(_e: AllPossibleEvent) {
     this.blockProviderChange = true;
     this.input.value = '$:/';
     this.lastExplorerInput = '$:/';
@@ -409,7 +411,7 @@ class CommandPaletteWidget extends Widget {
     this.onInput();
   }
 
-  explorerProvider(url: string, terms: string) {
+  explorerProvider(url: string, _terms: string) {
     const switchFolder = (url: string) => {
       this.input.value = url;
       this.lastExplorerInput = this.input.value;
@@ -428,7 +430,7 @@ class CommandPaletteWidget extends Widget {
     const files = [];
     for (const tiddler of tiddlers) {
       if (tiddler.endsWith('/')) {
-        folders.push({ name: tiddler, action: (e: AllPossibleEvent) => switchFolder(`${url}${tiddler}`) });
+        folders.push({ name: tiddler, action: (_e: AllPossibleEvent) => switchFolder(`${url}${tiddler}`) });
       } else {
         files.push({
           name: tiddler,
@@ -446,7 +448,7 @@ class CommandPaletteWidget extends Widget {
       const splits = url.split('/');
       splits.splice(-2);
       const parent = splits.join('/') + '/';
-      topResult = { name: '..', action: (e: AllPossibleEvent) => switchFolder(parent) };
+      topResult = { name: '..', action: (_e: AllPossibleEvent) => switchFolder(parent) };
       this.showResults([topResult, ...folders, ...files]);
       return;
     }
@@ -560,7 +562,7 @@ class CommandPaletteWidget extends Widget {
     this.currentProvider = () => {};
   }
 
-  helpProvider(terms: string) {
+  helpProvider(_terms: string) {
     // TODO: tiddlerify?
     this.currentSelection = 0;
     this.hint.innerText = 'Help';
@@ -606,7 +608,7 @@ class CommandPaletteWidget extends Widget {
         this.invokeActionString(shortcut.text, this, e, { commandpaletteinput: inputWithoutShortcut });
         this.closePalette();
       };
-      provider = (terms: string) => {
+      provider = (_terms: string) => {
         this.hint.innerText = shortcut.hint;
         this.showResults([]);
       };
@@ -670,7 +672,7 @@ class CommandPaletteWidget extends Widget {
   }
 
   historyProviderBuilder(hint: string, mode?: 'drafts' | 'story') {
-    return (terms: string) => {
+    return (_terms: string) => {
       this.currentSelection = 0;
       this.hint.innerText = hint;
       let results;
@@ -690,7 +692,7 @@ class CommandPaletteWidget extends Widget {
 
   // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'message' implicitly has an 'any' type.
   commandWithHistoryPicker(message, hint, mode) {
-    const handler = (e: AllPossibleEvent) => {
+    const handler = (_e: AllPossibleEvent) => {
       this.blockProviderChange = true;
       this.allowInputFieldSelection = true;
       this.currentProvider = provider;
@@ -699,7 +701,7 @@ class CommandPaletteWidget extends Widget {
       this.onInput(this.input.value);
     };
     const provider = this.historyProviderBuilder(hint, mode);
-    const resolver = (e: AllPossibleEvent) => {
+    const resolver = (_e: AllPossibleEvent) => {
       if (this.currentSelection === 0) return;
       const title = this.getDataFromResultDiv(this.currentResults[this.currentSelection - 1], 'name');
       this.parentWidget.dispatchEvent({
@@ -741,7 +743,7 @@ class CommandPaletteWidget extends Widget {
     this.openPalette(event, selection);
   }
 
-  openPalette(e: AllPossibleEvent, selection?: string) {
+  openPalette(_e: AllPossibleEvent, selection?: string) {
     // call currentProvider first to ask currentProvider load latest history. Otherwise it will load history after open, which will show old one and refresh.
     this.currentProvider('');
     this.isOpened = true;
@@ -1051,7 +1053,7 @@ class CommandPaletteWidget extends Widget {
     this.showResults(searches);
   }
 
-  tagListResolver(e: AllPossibleEvent) {
+  tagListResolver(_e: AllPossibleEvent) {
     if (this.currentSelection === 0) {
       const input = (this.input.value as string).substring(2);
 
@@ -1116,7 +1118,7 @@ class CommandPaletteWidget extends Widget {
     return { tags, searchTerms, tagsFilter };
   }
 
-  settingsProvider(terms: string) {
+  settingsProvider(_terms: string) {
     this.currentSelection = 0;
     this.hint.innerText = 'Select the setting you want to change';
     const isNumerical: IValidator = (terms: string) => terms.length > 0 && terms.match(/\D/gm) === null;
@@ -1179,7 +1181,7 @@ class CommandPaletteWidget extends Widget {
   promptForThemeSetting() {
     this.blockProviderChange = true;
     this.allowInputFieldSelection = false;
-    this.currentProvider = (terms: string) => {
+    this.currentProvider = (_terms: string) => {
       this.currentSelection = 0;
       this.hint.innerText = '选择一个主题';
       const defaultValue = this.defaultSettings.theme;
@@ -1403,7 +1405,7 @@ class CommandPaletteWidget extends Widget {
     e.stopPropagation();
   }
 
-  createTiddlerProvider(terms: string) {
+  createTiddlerProvider(_terms: string) {
     this.currentSelection = 0;
     this.hint.innerText = '创建条目，空格隔开可以用#打多个标签';
     this.showResults([]);
@@ -1504,18 +1506,17 @@ class CommandPaletteWidget extends Widget {
     }
   }
 
-  // @ts-expect-error ts-migrate(7023) FIXME: 'getActiveElement' implicitly has return type 'any... Remove this comment to see the full error message
-  getActiveElement(element = document.activeElement) {
+  getActiveElement(element = document.activeElement): Element | null {
     // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
     const shadowRoot = element.shadowRoot;
     // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
-    const contentDocument = element.contentDocument;
+    const contentDocument = element.contentDocument as Document;
 
-    if (shadowRoot != undefined && shadowRoot.activeElement != undefined) {
+    if (shadowRoot?.activeElement) {
       return this.getActiveElement(shadowRoot.activeElement);
     }
 
-    if (contentDocument && contentDocument.activeElement) {
+    if (contentDocument?.activeElement) {
       return this.getActiveElement(contentDocument.activeElement);
     }
 
