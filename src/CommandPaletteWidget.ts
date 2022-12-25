@@ -5,23 +5,23 @@ const Widget = require('$:/core/modules/widgets/widget.js').widget;
 
 type AllPossibleEvent = PointerEvent | KeyboardEvent | MouseEvent;
 export interface IResult {
-  name: string;
+  action?: (event: AllPossibleEvent) => void;
   caption?: string;
   hint?: string;
-  action?: (event: AllPossibleEvent) => void;
+  name: string;
 }
 export interface IHistoryResult extends IResult {
   title: string;
 }
 
 export interface IAction extends IResult {
-  keepPalette: boolean;
   immediate?: boolean;
+  keepPalette: boolean;
 }
 
 export interface ITrigger extends IResult {
-  trigger: string;
   text: string;
+  trigger: string;
 }
 
 /**
@@ -29,7 +29,7 @@ export interface ITrigger extends IResult {
  * filterFallback means the filter to use when pinyinfuse not installed
  */
 export interface IRawSearchStep {
-  steps: Array<{ caret: string; filter: string; caretFallback: string; filterFallback: string; hint: string }>;
+  steps: Array<{ caret: string; caretFallback: string; filter: string; filterFallback: string; hint: string }>;
 }
 export interface ISearchStep {
   caret: number;
@@ -39,29 +39,29 @@ export interface ISearchStep {
 
 export interface ITiddler {
   fields: {
-    text: string;
-    title: string;
-    tags: string[];
+    'command-palette-caption'?: string;
+    'command-palette-caret'?: string;
+    'command-palette-hint'?: string;
+    'command-palette-immediate'?: string;
+    'command-palette-mode'?: string;
+    'command-palette-name'?: string;
+    'command-palette-trigger'?: string;
     // our custom fields
     'command-palette-type'?: string;
-    'command-palette-name'?: string;
-    'command-palette-caption'?: string;
-    'command-palette-hint'?: string;
-    'command-palette-mode'?: string;
     'command-palette-user-input'?: string;
-    'command-palette-caret'?: string;
-    'command-palette-immediate'?: string;
-    'command-palette-trigger'?: string;
+    tags: string[];
+    text: string;
+    title: string;
   };
 }
 
 export interface ISettings {
-  maxResults: number;
+  alwaysPassSelection: boolean;
+  escapeGoesBack: boolean;
   maxResultHintSize: number;
+  maxResults: number;
   neverBasic: boolean;
   showHistoryOnOpen: boolean;
-  escapeGoesBack: boolean;
-  alwaysPassSelection: boolean;
   theme: string;
 }
 
@@ -69,25 +69,25 @@ export type IValidator = (term: string) => boolean;
 
 class CommandPaletteWidget extends Widget {
   private actions: IAction[] = [];
-  private triggers: ITrigger[] = [];
+  private readonly triggers: ITrigger[] = [];
   private currentResults: HTMLDivElement[] = [];
 
-  private typeField = 'command-palette-type' as const;
+  private readonly typeField = 'command-palette-type' as const;
   /** 用于搜索的字段 */
-  private nameField = 'command-palette-name' as const;
+  private readonly nameField = 'command-palette-name' as const;
   /** 用于展示翻译内容的字段 */
-  private captionField = 'command-palette-caption' as const;
-  private hintField = 'command-palette-hint' as const;
-  private modeField = 'command-palette-mode' as const;
-  private userInputField = 'command-palette-user-input' as const;
-  private caretField = 'command-palette-caret' as const;
-  private immediateField = 'command-palette-immediate' as const;
-  private triggerField = 'command-palette-trigger' as const;
+  private readonly captionField = 'command-palette-caption' as const;
+  private readonly hintField = 'command-palette-hint' as const;
+  private readonly modeField = 'command-palette-mode' as const;
+  private readonly userInputField = 'command-palette-user-input' as const;
+  private readonly caretField = 'command-palette-caret' as const;
+  private readonly immediateField = 'command-palette-immediate' as const;
+  private readonly triggerField = 'command-palette-trigger' as const;
 
-  private currentSelection = 0; //0 is nothing selected, 1 is first result,...
-  private symbolProviders: Record<string, { searcher: (term: string, hint?: string) => void; resolver: (e: AllPossibleEvent) => void }> = {};
+  private currentSelection = 0; // 0 is nothing selected, 1 is first result,...
+  private symbolProviders: Record<string, { resolver: (e: AllPossibleEvent) => void; searcher: (term: string, hint?: string) => void }> = {};
   private blockProviderChange = false;
-  private defaultSettings: ISettings = {
+  private readonly defaultSettings: ISettings = {
     maxResults: 15,
     maxResultHintSize: 45,
     neverBasic: false,
@@ -96,12 +96,13 @@ class CommandPaletteWidget extends Widget {
     alwaysPassSelection: false,
     theme: '$:/plugins/linonetwo/commandpalette/Compact.css',
   };
+
   private settings: Partial<ISettings> = {};
-  private commandHistoryPath = '$:/plugins/linonetwo/commandpalette/CommandPaletteHistory' as const;
-  private settingsPath = '$:/plugins/linonetwo/commandpalette/CommandPaletteSettings' as const;
-  private searchStepsPath = '$:/plugins/linonetwo/commandpalette/CommandPaletteSearchSteps' as const;
-  private customCommandsTag = '$:/tags/CommandPaletteCommand' as const;
-  private themesTag = '$:/tags/CommandPaletteTheme' as const;
+  private readonly commandHistoryPath = '$:/plugins/linonetwo/commandpalette/CommandPaletteHistory' as const;
+  private readonly settingsPath = '$:/plugins/linonetwo/commandpalette/CommandPaletteSettings' as const;
+  private readonly searchStepsPath = '$:/plugins/linonetwo/commandpalette/CommandPaletteSearchSteps' as const;
+  private readonly customCommandsTag = '$:/tags/CommandPaletteCommand' as const;
+  private readonly themesTag = '$:/tags/CommandPaletteTheme' as const;
 
   /** current item's click/enter handler function */
   private currentResolver: (e: AllPossibleEvent) => void = () => {};
@@ -139,9 +140,9 @@ class CommandPaletteWidget extends Widget {
     this.onInput(this.input.value);
   }
 
-  invokeFieldMangler(tiddler: any, message: any, param: any, e: any) {
-    let action = `<$fieldmangler tiddler="${tiddler}">
-			<$action-sendmessage $message="${message}" $param="${param}"/>
+  invokeFieldMangler(tiddler: any, message: any, parameter: any, e: any) {
+    const action = `<$fieldmangler tiddler="${tiddler}">
+			<$action-sendmessage $message="${message}" $param="${parameter}"/>
 			</$fieldmangler>`;
     this.invokeActionString(action, this, e);
   }
@@ -160,12 +161,12 @@ class CommandPaletteWidget extends Widget {
     this.currentProvider = this.historyProviderBuilder(hintTiddler);
     this.currentResolver = (e: AllPossibleEvent) => {
       if (this.currentSelection === 0) return;
-      let tiddler: string | undefined = this.getDataFromResultDiv(this.currentResults[this.currentSelection - 1], 'name');
+      const tiddler: string | undefined = this.getDataFromResultDiv(this.currentResults[this.currentSelection - 1], 'name');
       this.currentProvider = (terms: string) => {
         this.currentSelection = 0;
         this.hint.innerText = hintTag;
         if (tiddler) {
-          let searches = filter(tiddler, terms);
+          const searches = filter(tiddler, terms);
           this.showResults(
             searches.map((s) => {
               return { name: s };
@@ -182,10 +183,10 @@ class CommandPaletteWidget extends Widget {
           tag = this.getDataFromResultDiv(this.currentResults[this.currentSelection - 1], 'name');
         }
         this.invokeFieldMangler(tiddler, message, tag, e);
-        if (!e.getModifierState('Shift')) {
-          this.closePalette();
-        } else {
+        if (e.getModifierState('Shift')) {
           this.onInput(this.input.value);
+        } else {
+          this.closePalette();
         }
       };
     };
@@ -196,8 +197,8 @@ class CommandPaletteWidget extends Widget {
   refreshThemes(e: AllPossibleEvent) {
     this.themes = this.getTiddlersWithTag(this.themesTag);
     let found = false;
-    for (let theme of this.themes) {
-      let themeName = theme.fields.title;
+    for (const theme of this.themes) {
+      const themeName = theme.fields.title;
       if (themeName === this.settings.theme) {
         found = true;
         this.addTagIfNecessary(themeName, '$:/tags/Stylesheet', e);
@@ -209,7 +210,7 @@ class CommandPaletteWidget extends Widget {
     this.addTagIfNecessary(this.defaultSettings.theme, '$:/tags/Stylesheet', e);
   }
 
-  //Re-adding an existing tag changes modification date
+  // Re-adding an existing tag changes modification date
   // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'tiddler' implicitly has an 'any' type.
   addTagIfNecessary(tiddler, tag, e) {
     if (this.hasTag(tiddler, tag)) return;
@@ -223,80 +224,82 @@ class CommandPaletteWidget extends Widget {
 
   refreshCommands() {
     this.actions = [];
-    this.actions.push({
-      name: 'Refresh Command Palette',
-      action: (e: AllPossibleEvent) => {
-        this.refreshCommandPalette();
-        this.promptCommand('');
+    this.actions.push(
+      {
+        name: 'Refresh Command Palette',
+        action: (e: AllPossibleEvent) => {
+          this.refreshCommandPalette();
+          this.promptCommand('');
+        },
+        keepPalette: true,
       },
-      keepPalette: true,
-    });
-    this.actions.push({ name: 'Explorer', action: (e: AllPossibleEvent) => this.explorer(e), keepPalette: true });
-    this.actions.push({ name: 'History', caption: '查看历史记录', action: (e: AllPossibleEvent) => this.showHistory(), keepPalette: true });
-    this.actions.push({ name: 'New Command Wizard', caption: '交互式创建新命令', action: (e: AllPossibleEvent) => this.newCommandWizard(), keepPalette: true });
-    this.actions.push({
-      name: 'Add tag to tiddler',
-      caption: '向条目添加标签',
-      action: (e) =>
-        this.tagOperation(
-          e,
-          '选择一个条目来添加标签',
-          '选择一个标签来添加 (⇧⏎ 可以多次添加)',
-          (tiddler: string, terms: string): string[] =>
-            $tw.wiki.filterTiddlers(
-              `[!is[system]tags[]] [is[system]tags[]] -[[${tiddler}]tags[]] +[${$tw.utils.pinyinfuse ? 'pinyinfuse' : 'search'}[${terms}]]`,
-            ),
-          true,
-          'tm-add-tag',
-        ),
-      keepPalette: true,
-    });
-    this.actions.push({
-      name: 'Remove tag',
-      caption: '去除标签',
-      action: (e) =>
-        this.tagOperation(
-          e,
-          '选择一个条目来去除标签',
-          '选择一个标签来去除 (⇧⏎ 可以去除多次)',
+      { name: 'Explorer', action: (e: AllPossibleEvent) => this.explorer(e), keepPalette: true },
+      { name: 'History', caption: '查看历史记录', action: (e: AllPossibleEvent) => this.showHistory(), keepPalette: true },
+      { name: 'New Command Wizard', caption: '交互式创建新命令', action: (e: AllPossibleEvent) => this.newCommandWizard(), keepPalette: true },
+      {
+        name: 'Add tag to tiddler',
+        caption: '向条目添加标签',
+        action: (e) =>
+          this.tagOperation(
+            e,
+            '选择一个条目来添加标签',
+            '选择一个标签来添加 (⇧⏎ 可以多次添加)',
+            (tiddler: string, terms: string): string[] =>
+              $tw.wiki.filterTiddlers(
+                `[!is[system]tags[]] [is[system]tags[]] -[[${tiddler}]tags[]] +[${$tw.utils.pinyinfuse ? 'pinyinfuse' : 'search'}[${terms}]]`,
+              ),
+            true,
+            'tm-add-tag',
+          ),
+        keepPalette: true,
+      },
+      {
+        name: 'Remove tag',
+        caption: '去除标签',
+        action: (e) =>
+          this.tagOperation(
+            e,
+            '选择一个条目来去除标签',
+            '选择一个标签来去除 (⇧⏎ 可以去除多次)',
 
-          (tiddler: string, terms: string): string[] =>
-            $tw.wiki.filterTiddlers(`[[${tiddler}]tags[]] +[${$tw.utils.pinyinfuse ? 'pinyinfuse' : 'search'}[${terms}]]`),
-          false,
-          'tm-remove-tag',
-        ),
-      keepPalette: true,
-    });
+            (tiddler: string, terms: string): string[] =>
+              $tw.wiki.filterTiddlers(`[[${tiddler}]tags[]] +[${$tw.utils.pinyinfuse ? 'pinyinfuse' : 'search'}[${terms}]]`),
+            false,
+            'tm-remove-tag',
+          ),
+        keepPalette: true,
+      },
+    );
 
-    let commandTiddlers = this.getTiddlersWithTag(this.customCommandsTag);
-    for (let tiddler of commandTiddlers) {
+    const commandTiddlers = this.getTiddlersWithTag(this.customCommandsTag);
+    for (const tiddler of commandTiddlers) {
       if (!tiddler.fields[this.typeField] === undefined) continue;
-      let name = tiddler.fields[this.nameField];
+      const name = tiddler.fields[this.nameField];
       if (typeof name !== 'string') throw new Error(`命令菜单条目 ${tiddler.fields.title} 缺失 ${this.nameField} 字段`);
-      let caption = this.translateCaption(tiddler.fields[this.captionField]);
-      let type = tiddler.fields[this.typeField];
+      const caption = this.translateCaption(tiddler.fields[this.captionField]);
+      const type = tiddler.fields[this.typeField];
       let text = this.translateCaption(tiddler.fields.text);
       if (text === undefined) text = '';
-      let textFirstLine = (text.match(/^.*/) ?? [''])[0];
-      let hint = this.translateCaption(tiddler.fields[this.hintField] ?? tiddler.fields[this.nameField] ?? '');
+      const textFirstLine = (text.match(/^.*/) ?? [''])[0];
+      const hint = this.translateCaption(tiddler.fields[this.hintField] ?? tiddler.fields[this.nameField] ?? '');
       if (type === 'shortcut') {
         ``;
-        let trigger = tiddler.fields[this.triggerField];
+        const trigger = tiddler.fields[this.triggerField];
         if (trigger === undefined) continue;
         this.triggers.push({ name, caption, trigger, text, hint });
         continue;
       }
       if (!tiddler.fields[this.nameField] === undefined) continue;
       if (type === 'prompt') {
-        let immediate = !!tiddler.fields[this.immediateField];
-        let caret: number = Number(tiddler.fields[this.caretField]) ?? 0;
-        let action = { name, caption, hint, action: () => this.promptCommand(textFirstLine, caret), keepPalette: !immediate, immediate: immediate };
+        const immediate = !!tiddler.fields[this.immediateField];
+        const caret: number = Number(tiddler.fields[this.caretField]) ?? 0;
+        const action = { name, caption, hint, action: () => this.promptCommand(textFirstLine, caret), keepPalette: !immediate, immediate };
         this.actions.push(action);
         continue;
       }
       if (type === 'prompt-basic') {
-        let caret: number = Number(tiddler.fields[this.caretField]) ?? 0;
-        let action = { name, caption, hint, action: () => this.promptCommandBasic(textFirstLine, caret, hint), keepPalette: true };
+        const caret: number = Number(tiddler.fields[this.caretField]) ?? 0;
+        const action = { name, caption, hint, action: () => this.promptCommandBasic(textFirstLine, caret, hint), keepPalette: true };
         this.actions.push(action);
         continue;
       }
@@ -305,7 +308,7 @@ class CommandPaletteWidget extends Widget {
         continue;
       }
       if (type === 'actionString') {
-        let userInput = tiddler.fields[this.userInputField] !== undefined && tiddler.fields[this.userInputField] === 'true';
+        const userInput = tiddler.fields[this.userInputField] !== undefined && tiddler.fields[this.userInputField] === 'true';
         if (userInput) {
           this.actions.push({ name, caption, hint, action: (e: AllPossibleEvent) => this.actionStringInput(text, hint, e), keepPalette: true });
         } else {
@@ -314,7 +317,7 @@ class CommandPaletteWidget extends Widget {
         continue;
       }
       if (type === 'history') {
-        let mode = tiddler.fields[this.modeField];
+        const mode = tiddler.fields[this.modeField];
         this.actions.push({
           name,
           caption,
@@ -340,7 +343,7 @@ class CommandPaletteWidget extends Widget {
     let type = '';
     let hint = '';
 
-    let messageStep = () => {
+    const messageStep = () => {
       this.input.value = '';
       this.hint.innerText = '输入信息';
       this.currentResolver = (e: AllPossibleEvent) => {
@@ -356,7 +359,7 @@ class CommandPaletteWidget extends Widget {
       };
     };
 
-    let hintStep = () => {
+    const hintStep = () => {
       this.input.value = '';
       this.hint.innerText = '输入提示文本';
       this.currentResolver = (e: AllPossibleEvent) => {
@@ -365,7 +368,7 @@ class CommandPaletteWidget extends Widget {
       };
     };
 
-    let typeStep = () => {
+    const typeStep = () => {
       this.input.value = '';
       this.hint.innerText = 'Enter type (prompt, prompt-basic, message, actionString, history)';
       this.currentResolver = (e: AllPossibleEvent) => {
@@ -407,7 +410,7 @@ class CommandPaletteWidget extends Widget {
   }
 
   explorerProvider(url: string, terms: string) {
-    let switchFolder = (url: string) => {
+    const switchFolder = (url: string) => {
       this.input.value = url;
       this.lastExplorerInput = this.input.value;
       this.currentProvider = (terms: string) => this.explorerProvider(url, terms);
@@ -418,12 +421,12 @@ class CommandPaletteWidget extends Widget {
     }
     this.lastExplorerInput = this.input.value;
     this.currentSelection = 0;
-    let search = this.input.value.substr(url.length);
+    const search = this.input.value.substr(url.length);
 
-    let tiddlers = $tw.wiki.filterTiddlers(`[removeprefix[${url}]splitbefore[/]sort[]${$tw.utils.pinyinfuse ? 'pinyinfuse' : 'search'}[${search}]]`);
-    let folders = [];
-    let files = [];
-    for (let tiddler of tiddlers) {
+    const tiddlers = $tw.wiki.filterTiddlers(`[removeprefix[${url}]splitbefore[/]sort[]${$tw.utils.pinyinfuse ? 'pinyinfuse' : 'search'}[${search}]]`);
+    const folders = [];
+    const files = [];
+    for (const tiddler of tiddlers) {
       if (tiddler.endsWith('/')) {
         folders.push({ name: tiddler, action: (e: AllPossibleEvent) => switchFolder(`${url}${tiddler}`) });
       } else {
@@ -440,9 +443,9 @@ class CommandPaletteWidget extends Widget {
     }
     let topResult;
     if (url !== '$:/') {
-      let splits = url.split('/');
-      splits.splice(splits.length - 2);
-      let parent = splits.join('/') + '/';
+      const splits = url.split('/');
+      splits.splice(-2);
+      const parent = splits.join('/') + '/';
       topResult = { name: '..', action: (e: AllPossibleEvent) => switchFolder(parent) };
       this.showResults([topResult, ...folders, ...files]);
       return;
@@ -451,7 +454,7 @@ class CommandPaletteWidget extends Widget {
   }
 
   setSetting<K extends keyof ISettings>(name: K, value: ISettings[K]) {
-    //doing the validation here too (it's also done in refreshSettings, so you can load you own settings with a json file)
+    // doing the validation here too (it's also done in refreshSettings, so you can load you own settings with a json file)
     if (typeof value === 'string') {
       if (value === 'true') (value as unknown as boolean) = true;
       if (value === 'false') (value as unknown as boolean) = false;
@@ -461,33 +464,33 @@ class CommandPaletteWidget extends Widget {
     $tw.wiki.setTiddlerData(this.settingsPath, this.settings);
   }
 
-  //loadSettings?
+  // loadSettings?
   refreshSettings<K extends keyof ISettings>() {
-    //get user or default settings
+    // get user or default settings
 
     this.settings = $tw.wiki.getTiddlerData(this.settingsPath, { ...this.defaultSettings });
-    //Adding eventual missing properties to current user settings
-    for (let prop in this.defaultSettings) {
-      if (!this.defaultSettings.hasOwnProperty(prop)) continue;
-      const ownProp = prop as K;
-      if (this.settings[ownProp] === undefined) {
-        this.settings[ownProp] = this.defaultSettings[ownProp] as ISettings[K];
+    // Adding eventual missing properties to current user settings
+    for (const property in this.defaultSettings) {
+      if (!this.defaultSettings.hasOwnProperty(property)) continue;
+      const ownProperty = property as K;
+      if (this.settings[ownProperty] === undefined) {
+        this.settings[ownProperty] = this.defaultSettings[ownProperty];
       }
     }
     // cast all booleans from string from tw
-    for (let prop in this.settings) {
-      if (!this.settings.hasOwnProperty(prop)) continue;
-      const ownProp = prop as K;
-      if (typeof this.settings[ownProp] !== 'string') continue;
-      if ((this.settings[ownProp] as string).toLowerCase() === 'true') (this.settings[ownProp] as boolean) = true;
-      if ((this.settings[ownProp] as string).toLowerCase() === 'false') (this.settings[ownProp] as boolean) = false;
+    for (const property in this.settings) {
+      if (!this.settings.hasOwnProperty(property)) continue;
+      const ownProperty = property as K;
+      if (typeof this.settings[ownProperty] !== 'string') continue;
+      if ((this.settings[ownProperty] as string).toLowerCase() === 'true') (this.settings[ownProperty] as boolean) = true;
+      if ((this.settings[ownProperty] as string).toLowerCase() === 'false') (this.settings[ownProperty] as boolean) = false;
     }
   }
 
-  //helper function to retrieve all tiddlers (+ their fields) with a tag
+  // helper function to retrieve all tiddlers (+ their fields) with a tag
   // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'tag' implicitly has an 'any' type.
   getTiddlersWithTag(tag): ITiddler[] {
-    let tiddlers = $tw.wiki.getTiddlersWithTag(tag);
+    const tiddlers = $tw.wiki.getTiddlersWithTag(tag);
     // @ts-expect-error ts-migrate(7006) FIXME: Parameter 't' implicitly has an 'any' type.
     return tiddlers.map((t) => $tw.wiki.getTiddler(t));
   }
@@ -512,7 +515,7 @@ class CommandPaletteWidget extends Widget {
 
     $tw.rootWidget.addEventListener('command-palette-switch-history-back', (e) => this.handleSwitchHistory(e, false));
 
-    let inputAndMainHintWrapper = this.createElement('div', { className: 'inputhintwrapper' });
+    const inputAndMainHintWrapper = this.createElement('div', { className: 'inputhintwrapper' });
     this.div = this.createElement('div', { className: 'commandpalette' }, { display: 'none' });
     this.mask = this.createElement('div', { className: 'commandpalette-masklayer' }, { opacity: '0' });
     this.input = this.createElement('input', { type: 'text' });
@@ -558,10 +561,10 @@ class CommandPaletteWidget extends Widget {
   }
 
   helpProvider(terms: string) {
-    //TODO: tiddlerify?
+    // TODO: tiddlerify?
     this.currentSelection = 0;
     this.hint.innerText = 'Help';
-    let searches = [
+    const searches = [
       { name: '直接打字是搜索条目标题和内容；而以下述特殊字符开头可以执行特殊搜索', action: () => this.promptCommand('') },
       { name: '> 查看和搜索命令列表', action: () => this.promptCommand('>') },
       { name: '+ 创建条目，先输入条目名，然后可以带上#打标签', action: () => this.promptCommand('+') },
@@ -582,20 +585,10 @@ class CommandPaletteWidget extends Widget {
     let terms = '';
     let resolver;
     let provider;
-    let shortcut = this.triggers.find((t) => text.startsWith(t.trigger));
-    if (shortcut !== undefined) {
-      resolver = (e: AllPossibleEvent) => {
-        let inputWithoutShortcut = this.input.value.substr(shortcut!.trigger.length);
-        this.invokeActionString(shortcut!.text, this, e, { commandpaletteinput: inputWithoutShortcut });
-        this.closePalette();
-      };
-      provider = (terms: string) => {
-        this.hint.innerText = shortcut!.hint;
-        this.showResults([]);
-      };
-    } else {
+    const shortcut = this.triggers.find((t) => text.startsWith(t.trigger));
+    if (shortcut === undefined) {
       // 从上到下找，先找长的，再找短的，以便 ## 优先匹配 ## 而不是 #
-      let providerSymbol = Object.keys(this.symbolProviders)
+      const providerSymbol = Object.keys(this.symbolProviders)
         .sort((a, b) => -a.length + b.length)
         .find((symbol) => text.startsWith(symbol));
       if (providerSymbol === undefined) {
@@ -607,6 +600,16 @@ class CommandPaletteWidget extends Widget {
         resolver = this.symbolProviders[providerSymbol].resolver;
         terms = text.replace(providerSymbol, '');
       }
+    } else {
+      resolver = (e: AllPossibleEvent) => {
+        const inputWithoutShortcut = this.input.value.substr(shortcut.trigger.length);
+        this.invokeActionString(shortcut.text, this, e, { commandpaletteinput: inputWithoutShortcut });
+        this.closePalette();
+      };
+      provider = (terms: string) => {
+        this.hint.innerText = shortcut.hint;
+        this.showResults([]);
+      };
     }
     return { resolver, provider, terms };
   }
@@ -614,7 +617,7 @@ class CommandPaletteWidget extends Widget {
   refreshSearchSteps() {
     this.searchSteps = [];
     const steps = $tw.wiki.getTiddlerData<IRawSearchStep>(this.searchStepsPath).steps;
-    for (let step of steps) {
+    for (const step of steps) {
       this.searchSteps.push(
         this.searchStepBuilder(
           $tw.utils.pinyinfuse ? step.filter : step.filterFallback,
@@ -637,7 +640,7 @@ class CommandPaletteWidget extends Widget {
     // we have history list in palette by default, if we have showHistoryOnOpen === true
     // TODO: handle this if !showHistoryOnOpen
     if (!this.isOpened) {
-      this.openPalette(event, undefined);
+      this.openPalette(event);
     }
 
     this.onKeyDown(
@@ -661,7 +664,7 @@ class CommandPaletteWidget extends Widget {
 
   // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'command' implicitly has an 'any' type.
   updateCommandHistory(command) {
-    this.history = Array.from(new Set([command.name, ...this.history]));
+    this.history = [...new Set([command.name, ...this.history])];
 
     $tw.wiki.setTiddlerData(this.commandHistoryPath, { history: this.history });
   }
@@ -687,7 +690,7 @@ class CommandPaletteWidget extends Widget {
 
   // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'message' implicitly has an 'any' type.
   commandWithHistoryPicker(message, hint, mode) {
-    let handler = (e: AllPossibleEvent) => {
+    const handler = (e: AllPossibleEvent) => {
       this.blockProviderChange = true;
       this.allowInputFieldSelection = true;
       this.currentProvider = provider;
@@ -695,10 +698,10 @@ class CommandPaletteWidget extends Widget {
       this.input.value = '';
       this.onInput(this.input.value);
     };
-    let provider = this.historyProviderBuilder(hint, mode);
-    let resolver = (e: AllPossibleEvent) => {
+    const provider = this.historyProviderBuilder(hint, mode);
+    const resolver = (e: AllPossibleEvent) => {
       if (this.currentSelection === 0) return;
-      let title = this.getDataFromResultDiv(this.currentResults[this.currentSelection - 1], 'name');
+      const title = this.getDataFromResultDiv(this.currentResults[this.currentSelection - 1], 'name');
       this.parentWidget.dispatchEvent({
         type: message,
         param: title,
@@ -713,14 +716,14 @@ class CommandPaletteWidget extends Widget {
     };
   }
 
-  onInput(text: string = '') {
+  onInput(text = '') {
     if (this.blockProviderChange) {
-      //prevent provider changes
+      // prevent provider changes
       this.currentProvider(text);
       this.setSelectionToFirst();
       return;
     }
-    let { resolver, provider, terms } = this.parseCommand(text);
+    const { resolver, provider, terms } = this.parseCommand(text);
     this.currentResolver = resolver;
     this.currentProvider = provider;
     this.currentProvider(terms);
@@ -734,9 +737,10 @@ class CommandPaletteWidget extends Widget {
   }
 
   openPaletteSelection(event: AllPossibleEvent) {
-    let selection = this.getCurrentSelection();
+    const selection = this.getCurrentSelection();
     this.openPalette(event, selection);
   }
+
   openPalette(e: AllPossibleEvent, selection?: string) {
     // call currentProvider first to ask currentProvider load latest history. Otherwise it will load history after open, which will show old one and refresh.
     this.currentProvider('');
@@ -744,7 +748,7 @@ class CommandPaletteWidget extends Widget {
     this.allowInputFieldSelection = false;
     this.goBack = undefined;
     this.blockProviderChange = false;
-    let activeElement = this.getActiveElement();
+    const activeElement = this.getActiveElement();
     this.previouslyFocused = {
       element: activeElement,
       start: activeElement.selectionStart,
@@ -759,7 +763,7 @@ class CommandPaletteWidget extends Widget {
       this.input.value += this.getCurrentSelection();
     }
     this.currentSelection = 0;
-    this.onInput(this.input.value); //Trigger results on open
+    this.onInput(this.input.value); // Trigger results on open
     this.div.style.display = 'flex';
     this.mask.style.opacity = '0.6';
     this.input.focus();
@@ -767,17 +771,17 @@ class CommandPaletteWidget extends Widget {
 
   insertSelectedResult() {
     if (!this.isOpened) return;
-    if (this.currentSelection === 0) return; //TODO: what to do here?
-    let previous = this.previouslyFocused;
-    let previousValue = previous.element.value;
+    if (this.currentSelection === 0) return; // TODO: what to do here?
+    const previous = this.previouslyFocused;
+    const previousValue = previous.element.value;
     if (previousValue === undefined) return;
-    let selection = this.getDataFromResultDiv(this.currentResults[this.currentSelection - 1], 'name');
+    const selection = this.getDataFromResultDiv(this.currentResults[this.currentSelection - 1], 'name');
     // TODO: early return may cause bug here?
     if (!selection) return;
-    if (previous.start !== previous.end) {
-      this.previouslyFocused.element.value = previousValue.substring(0, previous.start) + selection + previousValue.substring(previous.end);
-    } else {
+    if (previous.start === previous.end) {
       this.previouslyFocused.element.value = previousValue.substring(0, previous.start) + selection + previousValue.substring(previous.start);
+    } else {
+      this.previouslyFocused.element.value = previousValue.substring(0, previous.start) + selection + previousValue.substring(previous.end);
     }
     this.previouslyFocused.caretPos = previous.start + selection.length;
     this.closePalette();
@@ -791,55 +795,69 @@ class CommandPaletteWidget extends Widget {
   }
 
   onKeyDown(e: KeyboardEvent) {
-    if (e.key === 'Escape') {
-      //									\/ There's no previous state
-      if (!this.settings.escapeGoesBack || this.goBack === undefined) {
-        this.closePalette();
-      } else {
-        this.goBack();
-        this.goBack = undefined;
-      }
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      e.stopPropagation();
-      let sel = this.currentSelection - 1;
+    switch (e.key) {
+      case 'Escape': {
+        //									\/ There's no previous state
+        if (!this.settings.escapeGoesBack || this.goBack === undefined) {
+          this.closePalette();
+        } else {
+          this.goBack();
+          this.goBack = undefined;
+        }
 
-      if (sel === 0) {
-        if (!this.allowInputFieldSelection) {
+        break;
+      }
+      case 'ArrowUp': {
+        e.preventDefault();
+        e.stopPropagation();
+        let sel = this.currentSelection - 1;
+
+        if (sel === 0) {
+          if (!this.allowInputFieldSelection) {
+            sel = this.currentResults.length;
+          }
+        } else if (sel < 0) {
           sel = this.currentResults.length;
         }
-      } else if (sel < 0) {
-        sel = this.currentResults.length;
+        this.setSelection(sel);
+
+        break;
       }
-      this.setSelection(sel);
-    } else if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      e.stopPropagation();
-      let sel = (this.currentSelection + 1) % (this.currentResults.length + 1);
-      if (!this.allowInputFieldSelection && sel === 0 && this.currentResults.length !== 0) {
-        sel = 1;
+      case 'ArrowDown': {
+        e.preventDefault();
+        e.stopPropagation();
+        let sel = (this.currentSelection + 1) % (this.currentResults.length + 1);
+        if (!this.allowInputFieldSelection && sel === 0 && this.currentResults.length > 0) {
+          sel = 1;
+        }
+        this.setSelection(sel);
+
+        break;
       }
-      this.setSelection(sel);
-    } else if (e.key === 'Enter') {
-      e.preventDefault();
-      e.stopPropagation();
-      this.validateSelection(e);
+      case 'Enter': {
+        e.preventDefault();
+        e.stopPropagation();
+        this.validateSelection(e);
+
+        break;
+      }
+      // No default
     }
   }
 
   addResult(result: IResult, id: number) {
-    let resultDiv = this.createElement('div', { className: 'commandpaletteresult' });
-    let titleDiv = this.createElement('div', { className: 'commandpalettetitle', innerText: result.caption || result.name });
+    const resultDiv = this.createElement('div', { className: 'commandpaletteresult' });
+    const titleDiv = this.createElement('div', { className: 'commandpalettetitle', innerText: result.caption || result.name });
     resultDiv.appendChild(titleDiv);
     if (result.hint !== undefined) {
-      let hint = this.createElement('div', { className: 'commandpalettehint', innerText: result.hint });
+      const hint = this.createElement('div', { className: 'commandpalettehint', innerText: result.hint });
       resultDiv.appendChild(hint);
     }
     // we will get this later
     resultDiv.dataset.result = JSON.stringify(result);
     /** we use this to pass the action */
-    if (result.action) {
-      resultDiv.onabort = result.action as unknown as (this: GlobalEventHandlers, ev: UIEvent) => any;
+    if (result.action != undefined) {
+      resultDiv.onabort = result.action as unknown as (this: GlobalEventHandlers, event_: UIEvent) => any;
     }
     this.currentResults.push(resultDiv);
     resultDiv.addEventListener('click', (e) => {
@@ -863,6 +881,7 @@ class CommandPaletteWidget extends Widget {
   private getDataFromResultDiv<K extends keyof IResult>(resultDiv: HTMLDivElement, key: K): IResult[K] | undefined {
     return JSON.parse(resultDiv.dataset.result ?? '{}')[key];
   }
+
   private getActionFromResultDiv(resultDiv: HTMLDivElement): IResult['action'] | undefined {
     return resultDiv.onabort as unknown as IResult['action'];
   }
@@ -875,12 +894,12 @@ class CommandPaletteWidget extends Widget {
 
   defaultResolver(e: AllPossibleEvent) {
     if (e.getModifierState('Shift')) {
-      this.input.value = '+' + this.input.value; //this resolver expects that the input starts with +
+      this.input.value = '+' + this.input.value; // this resolver expects that the input starts with +
       this.createTiddlerResolver(e);
       return;
     }
     if (this.currentSelection === 0) return;
-    let selectionTitle = this.getDataFromResultDiv(this.currentResults[this.currentSelection - 1], 'name');
+    const selectionTitle = this.getDataFromResultDiv(this.currentResults[this.currentSelection - 1], 'name');
     this.closePalette();
     this.navigateTo(selectionTitle);
   }
@@ -943,21 +962,21 @@ class CommandPaletteWidget extends Widget {
 
   setSelection(id: number) {
     this.currentSelection = id;
-    for (let i = 0; i < this.currentResults.length; i++) {
-      let selected = this.currentSelection === i + 1;
-      this.currentResults[i].className = selected ? 'commandpaletteresult commandpaletteresultselected' : 'commandpaletteresult';
+    for (let index = 0; index < this.currentResults.length; index++) {
+      const selected = this.currentSelection === index + 1;
+      this.currentResults[index].className = selected ? 'commandpaletteresult commandpaletteresultselected' : 'commandpaletteresult';
     }
     if (this.currentSelection === 0) {
       this.scrollDiv.scrollTop = 0;
       return;
     }
-    let scrollHeight = this.scrollDiv.offsetHeight;
-    let scrollPos = this.scrollDiv.scrollTop;
-    let selectionPos = Number(this.currentResults[this.currentSelection - 1]?.offsetTop ?? 0);
-    let selectionHeight = Number(this.currentResults[this.currentSelection - 1]?.offsetHeight ?? 0);
+    const scrollHeight = this.scrollDiv.offsetHeight;
+    const scrollPos = this.scrollDiv.scrollTop;
+    const selectionPos = Number(this.currentResults[this.currentSelection - 1]?.offsetTop ?? 0);
+    const selectionHeight = Number(this.currentResults[this.currentSelection - 1]?.offsetHeight ?? 0);
 
     if (selectionPos < scrollPos || selectionPos >= scrollPos + scrollHeight) {
-      //select the closest scrolling position showing the selection
+      // select the closest scrolling position showing the selection
       let a = selectionPos;
       let b = selectionPos - scrollHeight + selectionHeight;
       a = Math.abs(a - scrollPos);
@@ -997,17 +1016,17 @@ class CommandPaletteWidget extends Widget {
         searches = [];
       }
     } else {
-      searches = uniq(this.searchSteps.reduce((acc: IResult[], current) => [...acc, ...current(terms)], []));
+      searches = uniq(this.searchSteps.reduce((accumulator: IResult[], current) => [...accumulator, ...current(terms)], []));
     }
     this.showResults(searches);
   }
 
   searchStepBuilder(filter: string, caret: number, hint: string): (term: string) => IResult[] {
     return (terms: string) => {
-      let search = filter.substring(0, caret) + terms + filter.substring(caret);
+      const search = filter.substring(0, caret) + terms + filter.substring(caret);
 
-      let results = $tw.wiki.filterTiddlers(search).map((s) => {
-        return { name: s, hint: hint };
+      const results = $tw.wiki.filterTiddlers(search).map((s) => {
+        return { name: s, hint };
       });
       return results;
     };
@@ -1034,14 +1053,14 @@ class CommandPaletteWidget extends Widget {
 
   tagListResolver(e: AllPossibleEvent) {
     if (this.currentSelection === 0) {
-      let input = (this.input.value as string).substring(2);
+      const input = (this.input.value as string).substring(2);
 
-      let exist = $tw.wiki.filterTiddlers('[tag[' + input + ']]');
+      const exist = $tw.wiki.filterTiddlers('[tag[' + input + ']]');
       if (!exist) return;
       this.input.value = '##' + input;
       return;
     }
-    let result = this.currentResults[this.currentSelection - 1];
+    const result = this.currentResults[this.currentSelection - 1];
     this.input.value = '##' + result.innerText;
     this.onInput(this.input.value);
   }
@@ -1050,15 +1069,15 @@ class CommandPaletteWidget extends Widget {
     this.currentSelection = 0;
     this.hint.innerText = '用「#标签 #标签2」搜索条目';
     let tiddlerNameSearchResults: string[] = [];
-    if (terms.length !== 0) {
-      let { tags, searchTerms, tagsFilter } = this.parseTags(this.input.value);
+    if (terms.length > 0) {
+      const { tags, searchTerms, tagsFilter } = this.parseTags(this.input.value);
 
-      let taggedTiddlers: string[] = $tw.wiki.filterTiddlers(tagsFilter);
+      const taggedTiddlers: string[] = $tw.wiki.filterTiddlers(tagsFilter);
 
-      if (taggedTiddlers.length !== 0) {
+      if (taggedTiddlers.length > 0) {
         if (tags.length === 1) {
-          let tag = tags[0];
-          let tagTiddlerExists = this.tiddlerOrShadowExists(tag);
+          const tag = tags[0];
+          const tagTiddlerExists = this.tiddlerOrShadowExists(tag);
           if (tagTiddlerExists && searchTerms.some((s) => tag.includes(s))) tiddlerNameSearchResults.push(tag);
         }
         tiddlerNameSearchResults = [...tiddlerNameSearchResults, ...taggedTiddlers];
@@ -1075,23 +1094,23 @@ class CommandPaletteWidget extends Widget {
    * @param input `'#aaa 1 #bbb#ccc'` => `['aaa', 'bbb#ccc']` and search `1`
    */
   parseTags(input: string) {
-    let splits = input.split(' ').filter((s) => s !== '');
-    let tags = [];
-    let searchTerms = [];
-    for (let i = 0; i < splits.length; i++) {
+    const splits = input.split(' ').filter((s) => s !== '');
+    const tags = [];
+    const searchTerms = [];
+    for (const split of splits) {
       // 空格分隔的结果可以以 # 开头，表示标签
-      if (splits[i].startsWith('#')) {
-        tags.push(splits[i].substr(1));
+      if (split.startsWith('#')) {
+        tags.push(split.substr(1));
         continue;
       }
       // 也可以不带 # ，表示搜索词
-      searchTerms.push(splits[i]);
+      searchTerms.push(split);
     }
     let tagsFilter = `[all[tiddlers+system+shadows]${tags.reduce((a, c) => {
       return a + 'tag[' + c + ']';
     }, '')}]`;
-    if (searchTerms.length !== 0) {
-      tagsFilter = tagsFilter.substring(0, tagsFilter.length - 1); //remove last ']'
+    if (searchTerms.length > 0) {
+      tagsFilter = tagsFilter.substring(0, tagsFilter.length - 1); // remove last ']'
       tagsFilter += `${$tw.utils.pinyinfuse ? 'pinyinfuse' : 'search'}[${searchTerms.join(' ')}]]`;
     }
     return { tags, searchTerms, tagsFilter };
@@ -1100,10 +1119,10 @@ class CommandPaletteWidget extends Widget {
   settingsProvider(terms: string) {
     this.currentSelection = 0;
     this.hint.innerText = 'Select the setting you want to change';
-    let isNumerical: IValidator = (terms: string) => terms.length !== 0 && terms.match(/\D/gm) === null;
-    let isBoolean: IValidator = (terms: string) => terms.length !== 0 && terms.match(/(true\b)|(false\b)/gim) !== null;
+    const isNumerical: IValidator = (terms: string) => terms.length > 0 && terms.match(/\D/gm) === null;
+    const isBoolean: IValidator = (terms: string) => terms.length > 0 && terms.match(/(true\b)|(false\b)/gim) !== null;
     this.showResults([
-      { name: 'Theme (currently ' + this.settings.theme?.match?.(/[^\/]*$/) ?? 'no ' + ')', action: () => this.promptForThemeSetting() },
+      { name: 'Theme (currently ' + this.settings.theme?.match?.(/[^/]*$/) ?? 'no ' + ')', action: () => this.promptForThemeSetting() },
       this.settingResultBuilder('Max results', 'maxResults', 'Choose the maximum number of results', isNumerical, 'Error: value must be a positive integer'),
       this.settingResultBuilder(
         'Show history on open',
@@ -1143,8 +1162,8 @@ class CommandPaletteWidget extends Widget {
     ]);
   }
 
-  settingResultBuilder<K extends keyof ISettings>(name: string, settingName: K, hint: string, validator: IValidator, errorMsg: string) {
-    return { name: name + ' (currently ' + this.settings[settingName] + ')', action: () => this.promptForSetting(settingName, hint, validator, errorMsg) };
+  settingResultBuilder<K extends keyof ISettings>(name: string, settingName: K, hint: string, validator: IValidator, errorMessage: string) {
+    return { name: name + ' (currently ' + this.settings[settingName] + ')', action: () => this.promptForSetting(settingName, hint, validator, errorMessage) };
   }
 
   settingsResolver(e: AllPossibleEvent) {
@@ -1163,10 +1182,10 @@ class CommandPaletteWidget extends Widget {
     this.currentProvider = (terms: string) => {
       this.currentSelection = 0;
       this.hint.innerText = '选择一个主题';
-      let defaultValue = this.defaultSettings['theme'];
-      let results = [
+      const defaultValue = this.defaultSettings.theme;
+      const results = [
         {
-          name: '恢复默认值: ' + defaultValue.match(/[^\/]*$/),
+          name: '恢复默认值: ' + defaultValue.match(/[^/]*$/),
           action: () => {
             this.setSetting('theme', defaultValue);
             // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
@@ -1174,15 +1193,15 @@ class CommandPaletteWidget extends Widget {
           },
         },
       ];
-      for (let theme of this.themes) {
-        let name = theme.fields.title;
-        let shortName = name.match(/[^\/]*$/);
-        let action = () => {
+      for (const theme of this.themes) {
+        const name = theme.fields.title;
+        const shortName = name.match(/[^/]*$/);
+        const action = () => {
           this.setSetting('theme', name);
           // @ts-expect-error ts-migrate(2554) FIXME: Expected 1 arguments, but got 0.
           this.refreshThemes();
         };
-        results.push({ name: shortName, action: action });
+        results.push({ name: shortName, action });
       }
       this.showResults(results);
     };
@@ -1193,22 +1212,22 @@ class CommandPaletteWidget extends Widget {
     this.onInput(this.input.value);
   }
 
-  promptForSetting<K extends keyof ISettings>(settingName: K, hint: string, validator: IValidator, errorMsg: string) {
+  promptForSetting<K extends keyof ISettings>(settingName: K, hint: string, validator: IValidator, errorMessage: string) {
     this.blockProviderChange = true;
     this.allowInputFieldSelection = true;
     this.currentProvider = (terms: string) => {
       this.currentSelection = 0;
       this.hint.innerText = hint;
-      let defaultValue = this.defaultSettings[settingName];
-      let results = [{ name: 'Revert to default value: ' + defaultValue, action: () => this.setSetting(settingName, defaultValue) }];
+      const defaultValue = this.defaultSettings[settingName];
+      const results = [{ name: 'Revert to default value: ' + defaultValue, action: () => this.setSetting(settingName, defaultValue) }];
       if (!validator(terms)) {
-        results.push({ name: errorMsg, action: () => {} });
+        results.push({ name: errorMessage, action: () => {} });
       }
       this.showResults(results);
     };
     this.currentResolver = (e: AllPossibleEvent) => {
       if (this.currentSelection === 0) {
-        let input = this.input.value;
+        const input = this.input.value;
         if (validator(input)) {
           this.setSetting(settingName, input);
           this.goBack = undefined;
@@ -1217,8 +1236,8 @@ class CommandPaletteWidget extends Widget {
           this.promptCommand('|');
         }
       } else {
-        let action = this.getActionFromResultDiv(this.currentResults[this.currentSelection - 1]);
-        if (action) {
+        const action = this.getActionFromResultDiv(this.currentResults[this.currentSelection - 1]);
+        if (action != undefined) {
           action(e);
           this.goBack = undefined;
           this.blockProviderChange = false;
@@ -1232,12 +1251,12 @@ class CommandPaletteWidget extends Widget {
   }
 
   showResults(results: IResult[]) {
-    for (let cur of this.currentResults) {
-      cur.remove();
+    for (const current of this.currentResults) {
+      current.remove();
     }
     this.currentResults = [];
     let resultCount = 0;
-    for (let result of results) {
+    for (const result of results) {
       this.addResult(result, resultCount);
       resultCount++;
       if (resultCount >= (this.settings.maxResults ?? this.defaultSettings.maxResults)) break;
@@ -1245,16 +1264,17 @@ class CommandPaletteWidget extends Widget {
   }
 
   // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'message' implicitly has an 'any' type.
-  tmMessageBuilder(message, params = {}) {
+  tmMessageBuilder(message, parameters = {}) {
     return (e: AllPossibleEvent) => {
-      let event = {
+      const event = {
         type: message,
-        paramObject: params,
+        paramObject: parameters,
         event: e,
       };
       this.parentWidget.dispatchEvent(event);
     };
   }
+
   actionProvider(terms: string) {
     this.currentSelection = 0;
     this.hint.innerText = '查看和搜索命令列表';
@@ -1286,63 +1306,63 @@ class CommandPaletteWidget extends Widget {
     this.hint.innerText = hint === undefined ? '筛选器语句' : hint;
     terms = '[' + terms;
 
-    let fields = $tw.wiki.filterTiddlers('[fields[]]');
+    const fields = $tw.wiki.filterTiddlers('[fields[]]');
 
-    let results = $tw.wiki.filterTiddlers(terms).map((r) => {
+    const results = $tw.wiki.filterTiddlers(terms).map((r) => {
       return { name: r };
     });
     // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'i' implicitly has an 'any' type.
-    let insertResult = (i, result) => results.splice(i + 1, 0, result);
-    for (let i = 0; i < results.length; i++) {
-      let initialResult = results[i];
+    const insertResult = (index, result) => results.splice(index + 1, 0, result);
+    for (let index = 0; index < results.length; index++) {
+      const initialResult = results[index];
       let alreadyMatched = false;
       let date = 'Invalid Date';
       if (initialResult.name.length === 17) {
-        //to be sure to only match tiddly dates (17 char long)
+        // to be sure to only match tiddly dates (17 char long)
 
         date = $tw.utils.parseDate(initialResult.name).toLocaleString();
       }
       if (date !== 'Invalid Date') {
-        results[i].hint = date;
-        results[i].action = () => {};
+        results[index].hint = date;
+        results[index].action = () => {};
         alreadyMatched = true;
       }
 
-      let isTag = $tw.wiki.getTiddlersWithTag(initialResult.name).length !== 0;
+      const isTag = $tw.wiki.getTiddlersWithTag(initialResult.name).length > 0;
       if (isTag) {
         if (alreadyMatched) {
-          insertResult(i, { ...results[i] });
-          i += 1;
+          insertResult(index, { ...results[index] });
+          index += 1;
         }
-        results[i].action = () => this.promptCommand('#' + initialResult.name);
-        results[i].hint = 'Tag'; //Todo more info?
+        results[index].action = () => this.promptCommand('#' + initialResult.name);
+        results[index].hint = 'Tag'; // Todo more info?
         alreadyMatched = true;
       }
-      let isTiddler = this.tiddlerOrShadowExists(initialResult.name);
+      const isTiddler = this.tiddlerOrShadowExists(initialResult.name);
       if (isTiddler) {
         if (alreadyMatched) {
-          insertResult(i, { ...results[i] });
-          i += 1;
+          insertResult(index, { ...results[index] });
+          index += 1;
         }
-        results[i].action = () => {
+        results[index].action = () => {
           this.navigateTo(initialResult.name);
           this.closePalette();
         };
-        results[i].hint = 'Tiddler';
+        results[index].hint = 'Tiddler';
         alreadyMatched = true;
       }
-      let isField = fields.includes(initialResult.name);
+      const isField = fields.includes(initialResult.name);
       if (isField) {
         if (alreadyMatched) {
-          insertResult(i, { ...results[i] });
-          i += 1;
+          insertResult(index, { ...results[index] });
+          index += 1;
         }
         let parsed;
         try {
           parsed = $tw.wiki.parseFilter(this.input.value);
-        } catch (e) {} //The error is already displayed to the user
-        let foundTitles = [];
-        for (let node of parsed || []) {
+        } catch {} // The error is already displayed to the user
+        const foundTitles = [];
+        for (const node of parsed || []) {
           if (node.operators.length !== 2) continue;
           if (node.operators[0].operator === 'title' && node.operators[1].operator === 'fields') {
             foundTitles.push(node.operators[0].operand);
@@ -1356,14 +1376,14 @@ class CommandPaletteWidget extends Widget {
             hint = hint.toLocaleString();
           }
           hint = hint.toString().replace(/(\r\n|\n|\r)/gm, '');
-          let maxSize = (this.settings.maxResultHintSize ?? this.defaultSettings.maxResultHintSize) - 3;
+          const maxSize = (this.settings.maxResultHintSize ?? this.defaultSettings.maxResultHintSize) - 3;
           if (hint.length > maxSize) {
             hint = hint.substring(0, maxSize);
             hint += '...';
           }
         }
-        results[i].hint = hint;
-        results[i].action = () => {};
+        results[index].hint = hint;
+        results[index].action = () => {};
         alreadyMatched = true;
       }
       // let isContentType = terms.includes('content-type');
@@ -1391,10 +1411,10 @@ class CommandPaletteWidget extends Widget {
 
   createTiddlerResolver(e: AllPossibleEvent) {
     let { tags, searchTerms } = this.parseTags(this.input.value.substring(1));
-    let title = searchTerms.join(' ');
+    const title = searchTerms.join(' ');
     // @ts-expect-error ts-migrate(2322) FIXME: Type 'string' is not assignable to type 'any[]'.
     tags = tags.join(' ');
-    this.tmMessageBuilder('tm-new-tiddler', { title: title, tags: tags })(e);
+    this.tmMessageBuilder('tm-new-tiddler', { title, tags })(e);
     this.closePalette();
   }
 
@@ -1411,7 +1431,7 @@ class CommandPaletteWidget extends Widget {
   promptCommandBasic(value: string, caret: number, hint: string) {
     // TODO: I delete this.settings.neverBasic === 'true' ||  here, see if cause bug
     if (this.settings.neverBasic === true) {
-      //TODO: validate settings to avoid unnecessary checks
+      // TODO: validate settings to avoid unnecessary checks
       this.promptCommand(value, caret);
       return;
     }
@@ -1422,12 +1442,12 @@ class CommandPaletteWidget extends Widget {
   }
 
   basicProviderBuilder(value: string, caret: number, hint: string) {
-    let start = value.substr(0, caret);
-    let end = value.substr(caret);
+    const start = value.substr(0, caret);
+    const end = value.substr(caret);
     // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'input' implicitly has an 'any' type.
     return (input) => {
-      let { resolver, provider, terms } = this.parseCommand(start + input + end);
-      let backgroundProvider = provider;
+      const { resolver, provider, terms } = this.parseCommand(start + input + end);
+      const backgroundProvider = provider;
       backgroundProvider(terms, hint);
       this.currentResolver = resolver;
     };
@@ -1435,11 +1455,11 @@ class CommandPaletteWidget extends Widget {
 
   getCommandHistory() {
     // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'h' implicitly has an 'any' type.
-    this.history = this.history.filter((h) => this.actions.some((a) => a.name === h)); //get rid of deleted command that are still in history;
+    this.history = this.history.filter((h) => this.actions.some((a) => a.name === h)); // get rid of deleted command that are still in history;
     // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'h' implicitly has an 'any' type.
-    let results = this.history.map((h) => this.actions.find((a) => a.name === h));
+    const results = this.history.map((h) => this.actions.find((a) => a.name === h));
     while (results.length <= (this.settings.maxResults ?? this.defaultSettings.maxResults)) {
-      let nextDefaultAction = this.actions.find((a) => !results.includes(a));
+      const nextDefaultAction = this.actions.find((a) => !results.includes(a));
       if (nextDefaultAction === undefined) break;
       results.push(nextDefaultAction);
     }
@@ -1450,12 +1470,12 @@ class CommandPaletteWidget extends Widget {
     e.preventDefault();
     e.stopPropagation();
     if (this.currentSelection === 0) return;
-    let result = this.actions.find((a) => a.name === this.getDataFromResultDiv(this.currentResults[this.currentSelection - 1], 'name'));
-    if (!result) return;
+    const result = this.actions.find((a) => a.name === this.getDataFromResultDiv(this.currentResults[this.currentSelection - 1], 'name'));
+    if (result == undefined) return;
     if (result.keepPalette) {
-      let curInput = this.input.value;
+      const currentInput = this.input.value;
       this.goBack = () => {
-        this.input.value = curInput;
+        this.input.value = currentInput;
         this.blockProviderChange = false;
         this.onInput(this.input.value);
       };
@@ -1473,9 +1493,9 @@ class CommandPaletteWidget extends Widget {
 
   getCurrentSelection() {
     // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
-    let selection = window.getSelection().toString();
+    const selection = window.getSelection().toString();
     if (selection !== '') return selection;
-    let activeElement = this.getActiveElement();
+    const activeElement = this.getActiveElement();
     if (activeElement === undefined || activeElement.selectionStart === undefined) return '';
     if (activeElement.selectionStart > activeElement.selectionEnd) {
       return activeElement.value.substring(activeElement.selectionStart, activeElement.selectionEnd);
@@ -1483,6 +1503,7 @@ class CommandPaletteWidget extends Widget {
       return activeElement.value.substring(activeElement.selectionEnd, activeElement.selectionStart);
     }
   }
+
   // @ts-expect-error ts-migrate(7023) FIXME: 'getActiveElement' implicitly has return type 'any... Remove this comment to see the full error message
   getActiveElement(element = document.activeElement) {
     // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
@@ -1490,7 +1511,7 @@ class CommandPaletteWidget extends Widget {
     // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
     const contentDocument = element.contentDocument;
 
-    if (shadowRoot && shadowRoot.activeElement) {
+    if (shadowRoot != undefined && shadowRoot.activeElement != undefined) {
       return this.getActiveElement(shadowRoot.activeElement);
     }
 
@@ -1500,27 +1521,28 @@ class CommandPaletteWidget extends Widget {
 
     return element;
   }
+
   // @ts-expect-error ts-migrate(7006) FIXME: Parameter 'el' implicitly has an 'any' type.
-  focusAtCaretPosition(el, caretPos) {
-    if (el !== null) {
-      el.value = el.value;
+  focusAtCaretPosition(element, caretPos) {
+    if (element !== null) {
+      element.value = element.value;
       // ^ this is used to not only get "focus", but
       // to make sure we don't have it everything -selected-
       // (it causes an issue in chrome, and having it doesn't hurt any other browser)
-      if (el.createTextRange) {
-        var range = el.createTextRange();
+      if (element.createTextRange) {
+        const range = element.createTextRange();
         range.move('character', caretPos);
         range.select();
         return true;
       } else {
         // (el.selectionStart === 0 added for Firefox bug)
-        if (el.selectionStart || el.selectionStart === 0) {
-          el.focus();
-          el.setSelectionRange(caretPos, caretPos);
+        if (element.selectionStart || element.selectionStart === 0) {
+          element.focus();
+          element.setSelectionRange(caretPos, caretPos);
           return true;
         } else {
           // fail city, fortunately this never happens (as far as I've tested) :)
-          el.focus();
+          element.focus();
           return false;
         }
       }
@@ -1528,16 +1550,17 @@ class CommandPaletteWidget extends Widget {
   }
 
   createElement<E extends keyof HTMLElementTagNameMap>(name: E, proprieties: any, styles?: Partial<CSSStyleDeclaration>): HTMLDivElement {
-    let el = this.document.createElement(name) as HTMLDivElement;
-    for (let [propriety, value] of Object.entries(proprieties || {})) {
+    const element = this.document.createElement(name) as HTMLDivElement;
+    for (const [propriety, value] of Object.entries(proprieties || {})) {
       // @ts-expect-error ts-migrate(2304) FIXME: Element implicitly has an 'any' type because expression of type 'string' can't be used to index type 'HTMLDivElement'. No index signature with a parameter of type 'string' was found on type 'HTMLDivElement'.ts(7053)
-      el[propriety] = value;
+      element[propriety] = value;
     }
-    for (let [style, value] of Object.entries(styles || {})) {
-      el.style[style] = value;
+    for (const [style, value] of Object.entries(styles != undefined || {})) {
+      element.style[style] = value;
     }
-    return el;
+    return element;
   }
+
   /*
 			Selectively refreshes the widget if needed. Returns true if the widget or any of its children needed re-rendering
 			*/
