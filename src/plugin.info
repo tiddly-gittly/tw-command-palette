@@ -1,7 +1,7 @@
 {
     "title": "$:/plugins/linonetwo/commandpalette",
     "description": "Command palette Chinese translated",
-    "author": "linonetwo",
+    "author": "LinOnetwo",
     "version": "0.3.4",
     "core-version": ">=5.0.8",
     "list": "readme",
