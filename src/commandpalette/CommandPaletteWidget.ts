@@ -7,22 +7,22 @@ import type { IParseTreeNode, IWidgetEvent, IWidgetInitialiseOptions } from 'tid
 import { widget as Widget } from '$:/core/modules/widgets/widget.js';
 
 type AllPossibleEvent = IWidgetEvent | PointerEvent | KeyboardEvent | MouseEvent;
-export interface IResult {
+interface IResult {
   action?: (event: AllPossibleEvent) => void;
   caption?: string;
   hint?: string;
   name: string;
 }
-export interface IHistoryResult extends IResult {
+interface IHistoryResult extends IResult {
   title: string;
 }
 
-export interface IAction extends IResult {
+interface IAction extends IResult {
   immediate?: boolean;
   keepPalette: boolean;
 }
 
-export interface ITrigger extends IResult {
+interface ITrigger extends IResult {
   text: string;
   trigger: string;
 }
@@ -31,16 +31,16 @@ export interface ITrigger extends IResult {
  * The data stored in the searchStepsPath , are filter templates for default searcher. caret means where to put the terms, usually inside the filter like `search[${here}]`
  * filterFallback means the filter to use when pinyinfuse not installed
  */
-export interface IRawSearchStep {
+interface IRawSearchStep {
   steps: Array<{ caret: string; caretFallback: string; filter: string; filterFallback: string; hint: string }>;
 }
-export interface ISearchStep {
+interface ISearchStep {
   caret: number;
   filter: string;
   hint: string;
 }
 
-export interface ITiddler {
+interface ITiddler {
   fields: {
     'command-palette-caption'?: string;
     'command-palette-caret'?: string;
@@ -58,7 +58,7 @@ export interface ITiddler {
   };
 }
 
-export interface ISettings {
+interface ISettings {
   alwaysPassSelection: boolean;
   escapeGoesBack: boolean;
   maxResultHintSize: number;
@@ -68,7 +68,7 @@ export interface ISettings {
   theme: string;
 }
 
-export type IValidator = (term: string) => boolean;
+type IValidator = (term: string) => boolean;
 
 class CommandPaletteWidget extends Widget {
   private actions: IAction[] = [];
