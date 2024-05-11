@@ -1,0 +1,9 @@
+title: $:/plugins/linonetwo/commandpalette/language/zh-Hans/Readme
+
+\define lingo-base() $:/plugins/linonetwo/commandpalette/language/
+
+! <<lingo Name>>
+
+<<lingo Description>>
+
+在这里写自述文档。

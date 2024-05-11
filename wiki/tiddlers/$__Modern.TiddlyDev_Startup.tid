@@ -10,4 +10,4 @@ type: text/vnd.tiddlywiki
 <$reveal type="gteq" state="$:/info/browser/screen/width" text={{{ [{$:/themes/tiddlywiki/vanilla/metrics/sidebarbreakpoint}removesuffix[px]] }}}><$action-setfield $tiddler="$:/state/sidebar" $value="yes"/></$reveal>
 
 <!-- switch theme -->
-<$action-setfield $tiddler="$:/palette" $value={{{ [{$:/info/darkmode}match[yes]then[$:/palettes/CupertinoDark]else[$:/palettes/Vanilla]] }}}/>
+<$action-setfield $tiddler="$:/palette" $value={{{ [{$:/info/darkmode}match[yes]then[$:/palettes/Nord]else[$:/palettes/Notion]] }}}/>

@@ -1,0 +1,9 @@
+title: $:/plugins/linonetwo/commandpalette/language/en-GB/Readme
+
+\define lingo-base() $:/plugins/linonetwo/commandpalette/language/
+
+! <<lingo Name>>
+
+<<lingo Description>>
+
+Write readme here.
