@@ -26,7 +26,7 @@ type: text/vnd.tiddlywiki
     width: calc(100vw - 40px);
   }
 }
-.commandpalette-masklayer {
+.commandpalette-mask-layer {
     position: fixed;
     z-index: 9998;
     top: 0;

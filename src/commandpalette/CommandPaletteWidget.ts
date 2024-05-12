@@ -600,7 +600,7 @@ class CommandPaletteWidget extends Widget {
 
     const inputAndMainHintWrapper = this.createElement('div', { className: 'inputhintwrapper' });
     this.div = this.createElement('div', { className: 'commandpalette' }, { display: 'none' });
-    this.mask = this.createElement('div', { className: 'commandpalette-masklayer' }, { opacity: '0' });
+    this.mask = this.createElement('div', { className: 'commandpalette-mask-layer' }, { opacity: '0' });
     this.input = this.createElement('input', { type: 'text' });
     this.hint = this.createElement('div', { className: 'commandpalettehint commandpalettehintmain' });
     inputAndMainHintWrapper.append(this.input, this.hint);

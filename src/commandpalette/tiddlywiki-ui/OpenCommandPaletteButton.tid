@@ -1,0 +1,22 @@
+caption: {{$:/plugins/linonetwo/commandpalette/icons/command-palette}} Command Palette
+description: Open Command Palette
+tags: $:/tags/PageControls
+title: $:/core/ui/Buttons/CommandPalette
+type: text/vnd.tiddlywiki
+
+\whitespace trim
+<$button
+  class=<<tv-config-toolbar-class>>
+  message="open-command-palette"
+  tooltip="Open Command Palette"
+  aria-label="Command Palette"
+>
+  <% if [<tv-config-toolbar-icons>match[yes]] %>
+    {{$:/plugins/linonetwo/commandpalette/icons/command-palette}}
+  <% endif %>
+  <% if [<tv-config-toolbar-text>match[yes]] %>
+    <span class="tc-btn-text">
+      <$text text="Command Palette"/>
+    </span>
+  <% endif %>
+</$button>
