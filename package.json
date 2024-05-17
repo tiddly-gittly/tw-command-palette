@@ -51,6 +51,7 @@
   "dependencies": {
     "@algolia/autocomplete-js": "^1.17.0",
     "@algolia/autocomplete-theme-classic": "^1.17.0",
+    "@seznam/visibility-observer": "^1.1.0",
     "fuse.js": "^7.0.0",
     "lodash": "^4.17.21",
     "npm-check-updates": "^16.14.20",

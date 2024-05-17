@@ -1,9 +1,12 @@
+import { Modal } from '$:/core/modules/utils/dom/modal.js';
 import { widget as Widget } from '$:/core/modules/widgets/widget.js';
 import { autocomplete, AutocompletePlugin } from '@algolia/autocomplete-js';
 import { IChangedTiddlers, ITiddlerFields } from 'tiddlywiki';
 import '@algolia/autocomplete-theme-classic';
+import { observe, unobserve } from '@seznam/visibility-observer';
 
 class CommandPaletteWidget extends Widget {
+  id = 'default';
   refresh(_changedTiddlers: IChangedTiddlers) {
     return false;
   }
@@ -12,6 +15,7 @@ class CommandPaletteWidget extends Widget {
     this.parentDomNode = parent;
     this.computeAttributes();
     this.execute();
+    this.id = this.getAttribute('id', 'default');
     const containerElement = $tw.utils.domMaker('nav', {
       class: 'tw-commandpalette-container',
     });
@@ -46,14 +50,29 @@ class CommandPaletteWidget extends Widget {
             navigateTo: itemUrl,
             navigateFromNode: this,
           });
-          this.onClose();
+          this.destroy();
         },
       },
       plugins,
     });
     this.onCommandPaletteDOMInit(containerElement);
+    observe(containerElement, this.onVisibilityChange.bind(this));
   }
 
+  onVisibilityChange(
+    visibilityEntry: IntersectionObserverEntry & {
+      target: HTMLElement;
+    },
+  ) {
+    if (!visibilityEntry.isIntersecting) {
+      this.destroy();
+      unobserve(visibilityEntry.target, this.onVisibilityChange.bind(this));
+    }
+  }
+
+  /** Copy from Modal, to use its logic */
+  srcDocument = this.document;
+  modalCount = 0;
   /**
    * Do things after command palette UI is initialized.
    */
@@ -67,9 +86,12 @@ class CommandPaletteWidget extends Widget {
     // no API to listen esc, listen manually
     inputElement.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') {
-        this.onClose();
+        this.destroy();
       }
     });
+    this.modalCount++;
+    // call with this
+    Modal.prototype.adjustPageClass.call(this);
   }
 
   handleDarkMode() {
@@ -83,8 +105,15 @@ class CommandPaletteWidget extends Widget {
     }
   }
 
-  onClose() {
+  removeChildDomNodes(): void {
+    this.destroy();
+    super.removeChildDomNodes();
+  }
+
+  destroy() {
     $tw.wiki.deleteTiddler('$:/state/commandpalette/default/opened');
+    this.modalCount = 0;
+    Modal.prototype.adjustPageClass.call(this);
   }
 }
 
