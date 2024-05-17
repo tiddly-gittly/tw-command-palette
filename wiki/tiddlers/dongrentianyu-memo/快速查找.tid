@@ -1,0 +1,37 @@
+created: 20230914045324466
+creator: 马不前
+list-after: $:/core/ui/SideBar/Recent
+modified: 20231003123809600
+modifier: 马不前
+tags: Configuration $:/tags/AdvancedSearch $:/tags/SideBar
+title: 快速查找
+
+<$edit-text tiddler="$:/state/memo/list-search" field="text" tag=input
+placeholder="请输入查询链接，只展示一个" class="w-100"/>
+
+<$button tooltip="清除搜索内容" class="tc-btn-invisible tc-btn-mini">
+<$action-setfield
+$tiddler="$:/state/memo/list-search"
+text=""
+/>
+清除内容 <<doc-svg "$:/core/images/close-button" "#b89a6b">>
+</$button>
+
+<$let ls={{{ [[$:/state/memo/list-search]get[text]] }}}
+ss=".+?"
+ls-regexp="原文：\[(.+)\]\(.+?\)"
+sl-regexp={{{  [<ls-regexp>search-replace<ss>,<ls>]  }}}>
+
+<$list filter="[!is[system]regexp:text<sl-regexp>]">
+
+<$link>
+<$text text={{{ [<currentTiddler>get[text]splitregexp[\n]first[]removeprefix[#]] }}} /><br>
+{{!!caption}}
+</$link>
+
+</$list>
+
+</$let>
+
+
+<<list-searchx filter:"[!is[system]]" search:"search:text" class:"alert alert-secondary" placeholder:"请输入查询链接或内容，展示所有条目中存在的" template:"original-title-template" >>

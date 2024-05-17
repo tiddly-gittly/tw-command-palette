@@ -1,0 +1,14 @@
+[
+    {
+        "created": "20230926010148000",
+        "creator": "马不前",
+        "title": "λ:/thoughts-memo-translation-main/andy/note/spaced-repetition/Language models may generate good question-answer flashcards from cloze deletion prompts",
+        "text": "# 语言模型可以基于填空卡生成高质量的问答卡\r\n\r\n原文：[Language models may generate good question-answer flashcards from cloze deletion prompts (andymatuschak.org)](https://notes.andymatuschak.org/z4A7LCXBAkAUH2uZ21JnNrBhJHCjkobFMyn)\r\n\r\n相比完整的问答卡，填空卡编写起来更容易也更快。然而[在间隔重复记忆系统中，填空卡似乎比问答卡产生更少的理解](https://notes.andymatuschak.org/zX7yi8v7qy3n1RfQDkFZFeyTCZPX3BVqy8sC)。有一条「中间路径」很有趣，那就是让语言模型基于填空卡生成问答卡。我和 [Ozzie Kirkby] 做了些初始实验（[2021-06-10](https://notes.andymatuschak.org/zWLsqjDeYgCEERgoVeE8BjFbPrWSPsR5WhY)），结果非常不错。\r\n\r\n参见：[填空卡可用于创建典型的 N 面卡片](https://notes.andymatuschak.org/zgpjhmJfdVNcrGroeKW1VQ92YLGCftpyVPc)。\r\n\r\n## 参考文献\r\n\r\n这个想法是与 [Ozzie Kirkby](https://notes.andymatuschak.org/zn9igQGgecLncBSpKbgv5123mC5YEAP3hnfP) 在 [2021-06-11](https://notes.andymatuschak.org/ztU5BioqBqxGDTcbL6jYctqsiJnVfd3mUtW) 讨论时得到的",
+        "type": "text/markdown",
+        "caption": " 语言模型可以基于填空卡生成高质量的问答卡\r",
+        "modified": "20230930171250224",
+        "modifier": "马不前",
+        "obvault": "thoughts-memo-translation-main",
+        "original-title": "Language models may generate good question-answer flashcards from cloze deletion prompts"
+    }
+]

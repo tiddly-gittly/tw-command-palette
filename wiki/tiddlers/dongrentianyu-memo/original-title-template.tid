@@ -1,0 +1,16 @@
+code-body: yes
+created: 20230914045616286
+creator: 马不前
+modified: 20230930164614843
+modifier: 马不前
+tags: Configuration
+title: original-title-template
+
+<$list filter="[all[current]]" >
+
+<$link>
+{{!!caption}}<br>
+{{!!original-title}}
+</$link>
+
+</$list>

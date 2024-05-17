@@ -1,0 +1,14 @@
+[
+    {
+        "created": "20230926010148000",
+        "creator": "马不前",
+        "title": "λ:/thoughts-memo-translation-main/andy/note/spaced-repetition/Log experimenting with GPT-3 to generate spaced repetition prompts",
+        "text": "# 日志：使用 GPT-3 生成间隔重复卡片的实验\r\n\r\n原文：[Log: experimenting with GPT-3 to generate spaced repetition prompts (andymatuschak.org)](https://notes.andymatuschak.org/z2FBdAnkR9BXc9YZE924sfFRXMKwmHFQAhLXv)\r\n\r\n[2020-07-15](https://notes.andymatuschak.org/z6Wa4G8cQr7p4qqZYHd4Fu8h1w1TERbhkosKo)\r\n\r\n最后设法让 GPT-3 生成了以下卡片：\r\n\r\n>\r\n\r\n>\r\n\r\n>\r\n\r\n>\r\n\r\n>\r\n\r\n>\r\n\r\n>\r\n\r\n>\r\n\r\n>\r\n\r\n>\r\n\r\n>",
+        "type": "text/markdown",
+        "caption": " 日志：使用 GPT-3 生成间隔重复卡片的实验\r",
+        "modified": "20230930171250224",
+        "modifier": "马不前",
+        "obvault": "thoughts-memo-translation-main",
+        "original-title": "Log experimenting with GPT-3 to generate spaced repetition prompts"
+    }
+]
