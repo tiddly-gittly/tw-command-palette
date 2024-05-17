@@ -42,8 +42,10 @@ tags: $:/tags/Stylesheet
   transition: opacity {{$:/config/AnimationDuration}}ms;
   backdrop-filter: blur(10px);
   background-color: rgba(255,255,255,0.6);
+  overscroll-behavior: contain;
+  overscroll-behavior: none;
 }
 
-.aa-Panel {
+div.aa-Panel {
   z-index: 2000;
 }
