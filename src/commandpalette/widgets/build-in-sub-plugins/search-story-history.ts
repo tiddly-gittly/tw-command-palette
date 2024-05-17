@@ -1,6 +1,7 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import uniq from 'lodash/uniq';
 import { ITiddlerFields } from 'tiddlywiki';
+import { lingo } from '../utils/lingo';
 
 export const plugin = {
   getSources() {
@@ -13,6 +14,8 @@ export const plugin = {
             ...historyData.reverse().map((x) => x.title),
             ...$tw.wiki.filterTiddlers('[list[$:/StoryList]]'),
           ]);
+          // DEBUG: console historyTitles
+          console.log(`historyTitles`, historyTitles);
           let filteredHistoryTitles: string[] = [];
           if ($tw.wiki.getTiddler('$:/plugins/linonetwo/pinyin-fuzzy-search/pinyin-fuzzy-search.js') === undefined) {
             filteredHistoryTitles = $tw.wiki.filterTiddlers(`[search:title[${query}]]`, undefined, $tw.wiki.makeTiddlerIterator(historyTitles));
@@ -36,7 +39,7 @@ export const plugin = {
             return item.title;
           },
           noResults() {
-            return 'No results.';
+            return `${lingo('StoryHistory')} - ${lingo('NoResult')}`;
           },
         },
       },

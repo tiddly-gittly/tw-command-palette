@@ -1,5 +1,6 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
+import { lingo } from '../utils/lingo';
 
 export const plugin = {
   getSources() {
@@ -23,7 +24,7 @@ export const plugin = {
             return item.title;
           },
           noResults() {
-            return 'No results.';
+            return `${lingo('UserTitle')} - ${lingo('NoResult')}`;
           },
         },
       },

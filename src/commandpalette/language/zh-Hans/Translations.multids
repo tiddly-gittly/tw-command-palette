@@ -1,10 +1,14 @@
 title: $:/plugins/linonetwo/commandpalette/language/zh-Hans/
 
-Name: 未命名插件
-Description: 未填描述
-Configs/Description: 通过这些设置，您可以自定义「未命名插件」插件的行为。
+Name: 命令菜单
+Description: 搜索条目文本，以及执行太微中的命令。美观大方的多合一搜索框和快捷指令中心。
+Configs/Description: 通过这些设置，您可以自定义「命令菜单」插件的行为。
 Configs/PluginConfigs/Caption: 插件设置
 Configs/XXX/Caption: 配置甲
 Configs/XXX/Description: 配置甲是甲
 Configs/YYY/Caption: 配置乙
 Configs/ZZZ/Caption: 配置丙
+UserTitle: 用户条目标题
+UserTitlePinyin: 用户条目拼音
+StoryHistory: 用户条目拼音
+NoResult: 无结果

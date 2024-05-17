@@ -1,10 +1,14 @@
 title: $:/plugins/linonetwo/commandpalette/language/en-GB/
 
-Name: Unnamed Plugin
-Description: Unfilled Description
-Configs/Description: These settings let you customise the behaviour of "Unnamed Plugin" plugin.
+Name: Command Palette
+Description: Search the text of tiddlers, and execute commands in Tiddlywiki. Beautiful omni-bar and shortcut command center.
+Configs/Description: These settings let you customise the behaviour of "Command Palette" plugin.
 Configs/PluginConfigs/Caption: Plugin Configs
 Configs/XXX/Caption: XXX
 Configs/XXX/Description: XXX is XXX
 Configs/YYY/Caption: YYY
 Configs/ZZZ/Caption: ZZZ
+UserTitle: Title of user tiddler
+UserTitlePinyin: Title Pinyin of user tiddler
+StoryHistory: Story history
+NoResult: No result
