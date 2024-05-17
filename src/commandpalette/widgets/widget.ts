@@ -50,8 +50,25 @@ class CommandPaletteWidget extends Widget {
       },
       plugins,
     });
+    this.onCommandPaletteDOMInit(containerElement);
+  }
+
+  /**
+   * Do things after command palette UI is initialized.
+   */
+  onCommandPaletteDOMInit(containerElement: HTMLElement) {
+    const inputElement = containerElement.querySelector('input');
+    if (inputElement === null) {
+      return;
+    }
     // autoFocus param is not working, focus manually.
-    containerElement.querySelector('input')?.focus();
+    inputElement.focus();
+    // no API to listen esc, listen manually
+    inputElement.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        this.onClose();
+      }
+    });
   }
 
   onClose() {
