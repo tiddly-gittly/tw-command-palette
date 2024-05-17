@@ -30,6 +30,7 @@ class CommandPaletteWidget extends Widget {
         console.error(`Failed to load command palette plugin ${title}`, error);
       }
     });
+    this.handleDarkMode();
     autocomplete({
       container: containerElement,
       placeholder: 'Search for tiddlers',
@@ -69,6 +70,17 @@ class CommandPaletteWidget extends Widget {
         this.onClose();
       }
     });
+  }
+
+  handleDarkMode() {
+    const isDark = $tw.wiki.getTiddlerText('$:/info/darkmode') === 'yes';
+    if (isDark) {
+      // https://www.algolia.com/doc/ui-libraries/autocomplete/api-reference/autocomplete-theme-classic/#dark-mode
+      const dataset = (this.document as unknown as Document).body?.dataset;
+      if (dataset !== undefined) {
+        dataset.theme = 'dark';
+      }
+    }
   }
 
   onClose() {
