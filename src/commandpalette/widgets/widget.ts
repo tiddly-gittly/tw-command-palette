@@ -4,8 +4,8 @@ import { autocomplete } from '@algolia/autocomplete-js';
 import { IChangedTiddlers } from 'tiddlywiki';
 import '@algolia/autocomplete-theme-classic';
 import { observe, unobserve } from '@seznam/visibility-observer';
-import { uniqSourcesBy } from './utils/uniqSourcesBy';
 import { getSubPlugins } from './utils/getSubPlugins';
+import { uniqSourcesBy } from './utils/uniqSourcesBy';
 
 class CommandPaletteWidget extends Widget {
   id = 'default';
