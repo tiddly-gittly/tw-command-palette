@@ -11,6 +11,8 @@ class CommandPaletteWidget extends Widget {
     return false;
   }
 
+  autoCompleteInstance: ReturnType<typeof autocomplete> | undefined;
+
   render(parent: Element, nextSibling: Element) {
     this.parentDomNode = parent;
     this.computeAttributes();
@@ -39,10 +41,11 @@ class CommandPaletteWidget extends Widget {
         }
       });
     this.handleDarkMode();
-    autocomplete({
+    this.autoCompleteInstance = autocomplete({
       container: containerElement,
       placeholder: 'Search for tiddlers',
       autoFocus: true,
+      openOnFocus: true,
       ignoreCompositionEvents: true,
       getSources() {
         return [];
@@ -109,15 +112,11 @@ class CommandPaletteWidget extends Widget {
     }
   }
 
-  removeChildDomNodes(): void {
-    this.destroy();
-    super.removeChildDomNodes();
-  }
-
   destroy() {
     $tw.wiki.deleteTiddler('$:/state/commandpalette/default/opened');
     this.modalCount = 0;
     Modal.prototype.adjustPageClass.call(this);
+    this.autoCompleteInstance?.destroy();
   }
 }
 
