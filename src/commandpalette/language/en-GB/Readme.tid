@@ -6,4 +6,8 @@ title: $:/plugins/linonetwo/commandpalette/language/en-GB/Readme
 
 <<lingo Description>>
 
-Write readme here.
+This plugin is compatible with [[Souk21/TW-commandpalette|https://github.com/Souk21/TW-commandpalette]], but is written with TypeScript and [ext[algolia/autocomplete|https://github.com/algolia/autocomplete]], make it much more powerful and friendly to developers to extend its functionality.
+
+!! Feature
+
+Press ctrl/cmd + P to call up the search box, or add Shift to call up the command box (aka, command palette).

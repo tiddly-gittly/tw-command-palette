@@ -32,6 +32,9 @@ export const plugin = {
           return item.title;
         },
         templates: {
+          header() {
+            return lingo('StoryHistory');
+          },
           item({ item }) {
             if (typeof item.caption === 'string' && item.caption !== '') {
               return `${item.caption} (${item.title})`;
