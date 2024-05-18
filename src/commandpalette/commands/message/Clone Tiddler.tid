@@ -1,6 +1,6 @@
 command-palette-type: message
 caption: {{$:/language/Buttons/Clone/Caption}}
-description: {{$:/language/Buttons/Clone/Hint}}
+description: {{$:/language/Buttons/Clone/Hint}} <<currentTiddler>>
 tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/Clone Tiddler
 
