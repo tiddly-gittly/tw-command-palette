@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { Modal } from '$:/core/modules/utils/dom/modal.js';
 import { widget as Widget } from '$:/core/modules/widgets/widget.js';
 import { autocomplete } from '@algolia/autocomplete-js';
 import { IChangedTiddlers } from 'tiddlywiki';
 import '@algolia/autocomplete-theme-classic';
 import { observe, unobserve } from '@seznam/visibility-observer';
+import { IContext } from './utils/context';
 import { getSubPlugins } from './utils/getSubPlugins';
 import { uniqSourcesBy } from './utils/uniqSourcesBy';
 
@@ -38,7 +40,13 @@ class CommandPaletteWidget extends Widget {
         return [];
       },
       navigator: {
-        navigate: ({ itemUrl }) => {
+        navigate: ({ itemUrl, state }) => {
+          if (state.context.newQuery) {
+            this.autoCompleteInstance?.setQuery?.((state.context as IContext).newQuery!);
+            this.autoCompleteInstance?.setContext({ newQuery: undefined } satisfies IContext);
+            void this.autoCompleteInstance?.refresh?.();
+            return;
+          }
           this.dispatchEvent({
             type: 'tm-navigate',
             navigateTo: itemUrl,
@@ -49,7 +57,13 @@ class CommandPaletteWidget extends Widget {
       },
       plugins: getSubPlugins(),
       reshape({ sourcesBySourceId }) {
-        return removeDuplicates(...Object.values(sourcesBySourceId));
+        const {
+          'title': titleSource,
+          'title-pinyin': titlePinyinSource,
+          'story-history': storyHistorySource,
+          ...rest
+        } = sourcesBySourceId;
+        return [...removeDuplicates(...[titleSource, titlePinyinSource, storyHistorySource].filter(Boolean)), ...Object.values(rest)];
       },
     });
     this.onCommandPaletteDOMInit(containerElement);

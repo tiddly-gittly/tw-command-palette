@@ -11,4 +11,6 @@ Configs/HideDefaultSearchBar/Description: If you only use commandpalette to sear
 UserTitle: Title of user tiddler
 UserTitlePinyin: Title Pinyin of user tiddler
 StoryHistory: Story history
+Tags: Tags
+Tagging: User tiddlers with tags
 NoResult: No result or no uniq result

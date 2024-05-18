@@ -11,4 +11,6 @@ Configs/HideDefaultSearchBar/Description: 如果您只使用命令菜单搜索�
 UserTitle: 用户条目标题
 UserTitlePinyin: 用户条目拼音
 StoryHistory: 故事流浏览历史
+Tags: 标签
+Tagging: 带标签的用户条目
 NoResult: 无结果或结果重复
