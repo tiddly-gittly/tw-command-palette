@@ -5,7 +5,7 @@ Description: Search the text of tiddlers, and execute commands in Tiddlywiki. Be
 Configs/Description: These settings let you customise the behaviour of "Command Palette" plugin.
 Configs/PluginConfigs/Caption: Plugin Configs
 Configs/TitleAlias/Caption: Fields regarded as title to search
-Configs/TitleAlias/Description: When searching title, you may want to include more fields to search. Note that adding too many fields can cause lag.
+Configs/TitleAlias/Description: When searching title, you may want to include more fields to search. Separate fields with spaces, note that adding too many fields can cause lag.
 Configs/HideDefaultSearchBar/Caption: Hide default search bar
 Configs/HideDefaultSearchBar/Description: If you only use commandpalette to search and don't need default search bar, check this box.
 UserTitle: Title of user tiddler

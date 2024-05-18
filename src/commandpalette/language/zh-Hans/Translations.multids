@@ -5,7 +5,7 @@ Description: 搜索条目文本，以及执行太微中的命令。美观大方�
 Configs/Description: 通过这些设置，您可以自定义「命令菜单」插件的行为。
 Configs/PluginConfigs/Caption: 插件设置
 Configs/TitleAlias/Caption: 视为标题的字段
-Configs/TitleAlias/Description: 搜索标题时，您可能希望包含更多的字段加入搜索。注意加入过多字段会变卡。
+Configs/TitleAlias/Description: 搜索标题时，您可能希望包含更多的字段加入搜索。字段之间用空格隔开，注意加入过多字段会变卡。
 Configs/HideDefaultSearchBar/Caption: 隐藏默认搜索栏
 Configs/HideDefaultSearchBar/Description: 如果您只使用命令菜单搜索，不需要默认搜索栏，请选中此复选框。
 UserTitle: 用户条目标题
