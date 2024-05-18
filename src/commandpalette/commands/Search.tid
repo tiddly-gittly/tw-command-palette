@@ -4,4 +4,3 @@ caption: {{$:/language/Buttons/AdvancedSearch/Caption}}
 description: {{$:/language/Buttons/AdvancedSearch/Hint}}
 tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/Search
-type: text/vnd.tiddlywiki

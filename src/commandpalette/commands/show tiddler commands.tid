@@ -4,6 +4,5 @@ caption: 展示可用命令Tiddler列表
 description: 列出命令菜单的命令来自哪些Tiddlers
 tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/show tiddler commands
-type: text/vnd.tiddlywiki
 
 @$:/tags/CommandPaletteCommand

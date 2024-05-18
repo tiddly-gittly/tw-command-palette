@@ -1,9 +1,8 @@
-command-palette-mode: drafts
-command-palette-type: history
+command-palette-filter: [has:field[draft.of]]
+command-palette-type: message
 caption: {{$:/language/Buttons/Cancel/Caption}}
 description: {{$:/language/Buttons/Cancel/Hint}}
 tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/Cancel Tiddler
-type: text/vnd.tiddlywiki
 
 tm-cancel-tiddler

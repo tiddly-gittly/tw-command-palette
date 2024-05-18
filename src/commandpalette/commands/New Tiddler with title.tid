@@ -4,6 +4,5 @@ caption: 以标题{{$:/language/Buttons/NewTiddler/Caption}}
 description: 以标题{{$:/language/Buttons/NewTiddler/Hint}}
 tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/New Tiddler with title
-type: text/vnd.tiddlywiki
 
 +

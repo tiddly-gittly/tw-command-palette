@@ -5,6 +5,5 @@ caption: 查看语言列表
 description: 在命令菜单里列出语言列表
 tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/See Languages
-type: text/vnd.tiddlywiki
 
 [!has[draft.of]plugin-type[language]search[]]

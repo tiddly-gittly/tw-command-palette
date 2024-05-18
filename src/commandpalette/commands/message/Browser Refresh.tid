@@ -3,6 +3,5 @@ caption: {{$:/language/Buttons/Refresh/Caption}}
 description: {{$:/language/Buttons/Refresh/Hint}}
 tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/Browser Refresh
-type: text/vnd.tiddlywiki
 
 tm-browser-refresh

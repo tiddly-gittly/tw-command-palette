@@ -4,6 +4,5 @@ caption: 带某个标签的Tiddler
 description: 在命令菜单里列出带某个标签的Tiddler
 tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/Search tiddlers with tag
-type: text/vnd.tiddlywiki
 
 @

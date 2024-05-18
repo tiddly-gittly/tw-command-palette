@@ -1,8 +1,7 @@
-command-palette-type: history
+command-palette-type: message
 caption: {{$:/language/Buttons/Clone/Caption}}
 description: {{$:/language/Buttons/Clone/Hint}}
 tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/Clone Tiddler
-type: text/vnd.tiddlywiki
 
 tm-new-tiddler

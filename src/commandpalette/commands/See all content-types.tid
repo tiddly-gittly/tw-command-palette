@@ -5,6 +5,5 @@ caption: 查看内容类型
 description: 在命令菜单里列出所有Wiki里涉及到的内容类型
 tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/See all content-types
-type: text/vnd.tiddlywiki
 
 [all[tiddlers+shadows]each[type]get[type]search[]]

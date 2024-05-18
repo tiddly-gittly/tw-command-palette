@@ -4,6 +4,5 @@ caption: {{$:/language/Buttons/AdvancedSearch/Caption}}
 description: {{$:/language/Buttons/AdvancedSearch/Hint}}
 tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/Filter operation
-type: text/vnd.tiddlywiki
 
 [

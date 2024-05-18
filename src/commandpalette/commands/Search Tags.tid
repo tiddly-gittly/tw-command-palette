@@ -4,6 +4,5 @@ caption: 搜索标签列表
 description: 在命令菜单里列出搜索到的标签
 tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/Search Tags
-type: text/vnd.tiddlywiki
 
 #

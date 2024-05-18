@@ -4,6 +4,5 @@ caption: {{$:/language/Buttons/Permaview/Caption}}
 description: {{$:/language/Buttons/Permaview/Hint}}
 tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/Permaview
-type: text/vnd.tiddlywiki
 
 tm-permaview

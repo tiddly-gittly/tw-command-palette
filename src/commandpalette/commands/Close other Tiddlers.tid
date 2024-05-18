@@ -1,9 +1,8 @@
 command-palette-name: Close other Tiddlers
-command-palette-type: history
+command-palette-type: message
 caption: {{$:/language/Buttons/CloseOthers/Caption}}
 description: {{$:/language/Buttons/CloseOthers/Hint}}
 tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/Close other Tiddlers
-type: text/vnd.tiddlywiki
 
 tm-close-other-tiddlers

@@ -5,6 +5,5 @@ caption: 搜索字段名
 description: 在命令菜单里搜索列出所有Wiki里涉及到的字段名
 tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/Search fields
-type: text/vnd.tiddlywiki
 
 [fields[]search[]]

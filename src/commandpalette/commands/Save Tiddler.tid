@@ -1,10 +1,8 @@
-command-palette-mode: drafts
-command-palette-name: Save Tiddler
-command-palette-type: history
+command-palette-filter: [has:field[draft.of]]
+command-palette-type: message
 caption: {{$:/language/Buttons/Save/Caption}}
 description: {{$:/language/Buttons/Save/Hint}}
 tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/Save Tiddler
-type: text/vnd.tiddlywiki
 
 tm-save-tiddler

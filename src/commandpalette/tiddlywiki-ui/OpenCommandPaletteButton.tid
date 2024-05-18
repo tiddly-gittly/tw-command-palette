@@ -2,7 +2,6 @@ caption: {{$:/plugins/linonetwo/commandpalette/icons/command-palette}} Command P
 description: Open Command Palette
 tags: $:/tags/PageControls
 title: $:/core/ui/Buttons/CommandPalette
-type: text/vnd.tiddlywiki
 
 \whitespace trim
 <$button

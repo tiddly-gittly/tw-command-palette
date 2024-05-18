@@ -4,6 +4,5 @@ caption: {{$:/language/Buttons/Print/Caption}}
 description: {{$:/language/Buttons/Print/Hint}}
 tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/Print
-type: text/vnd.tiddlywiki
 
 tm-print

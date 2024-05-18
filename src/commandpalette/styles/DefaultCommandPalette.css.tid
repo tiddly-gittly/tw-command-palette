@@ -1,6 +1,5 @@
 tags: $:/tags/CommandPaletteTheme
 title: $:/plugins/linonetwo/commandpalette/styles/DefaultCommandPalette.css
-type: text/vnd.tiddlywiki
 tags: $:/tags/Stylesheet
 
 \rules only filteredtranscludeinline transcludeinline macrodef macrocallinline html

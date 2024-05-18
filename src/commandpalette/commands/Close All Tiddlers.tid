@@ -4,6 +4,5 @@ caption: {{$:/language/Buttons/CloseAll/Caption}}
 description: {{$:/language/Buttons/CloseAll/Hint}}
 tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/Close All Tiddlers
-type: text/vnd.tiddlywiki
 
 tm-close-all-tiddlers
