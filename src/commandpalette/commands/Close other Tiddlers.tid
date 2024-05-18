@@ -1,7 +1,7 @@
 command-palette-name: Close other Tiddlers
 command-palette-type: history
-command-palette-caption: {{$:/language/Buttons/CloseOthers/Caption}}
-command-palette-hint: {{$:/language/Buttons/CloseOthers/Hint}}
+caption: {{$:/language/Buttons/CloseOthers/Caption}}
+description: {{$:/language/Buttons/CloseOthers/Hint}}
 tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/Close other Tiddlers
 type: text/vnd.tiddlywiki

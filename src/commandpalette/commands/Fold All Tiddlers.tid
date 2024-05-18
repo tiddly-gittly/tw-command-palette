@@ -1,7 +1,7 @@
 command-palette-name: Fold All Tiddlers
 command-palette-type: message
-command-palette-caption: {{$:/language/Buttons/FoldAll/Caption}}
-command-palette-hint: {{$:/language/Buttons/FoldAll/Hint}}
+caption: {{$:/language/Buttons/FoldAll/Caption}}
+description: {{$:/language/Buttons/FoldAll/Hint}}
 tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/Fold All Tiddlers
 type: text/vnd.tiddlywiki

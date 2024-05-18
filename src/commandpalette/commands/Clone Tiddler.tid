@@ -1,7 +1,6 @@
-command-palette-name: Clone Tiddler
 command-palette-type: history
-command-palette-caption: {{$:/language/Buttons/Clone/Caption}}
-command-palette-hint: {{$:/language/Buttons/Clone/Hint}}
+caption: {{$:/language/Buttons/Clone/Caption}}
+description: {{$:/language/Buttons/Clone/Hint}}
 tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/Clone Tiddler
 type: text/vnd.tiddlywiki
