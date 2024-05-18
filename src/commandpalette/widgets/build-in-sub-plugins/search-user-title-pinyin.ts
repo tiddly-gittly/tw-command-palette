@@ -1,5 +1,6 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
+import { getFieldsAsTitle } from '../utils/getFieldsAsTitle';
 import { lingo } from '../utils/lingo';
 
 export const plugin = {
@@ -9,13 +10,12 @@ export const plugin = {
       return [];
     }
     if (parameters.query.length === 0) return [];
-    const fieldsAsTitle = ['title', 'caption'].join(',');
     return [
       {
         sourceId: 'title-pinyin',
         getItems({ query }) {
           if (query === '') return [];
-          return $tw.wiki.filterTiddlers(`[all[tiddlers]!is[system]pinyinfuse:${fieldsAsTitle}[${query}]]`)
+          return $tw.wiki.filterTiddlers(`[all[tiddlers]!is[system]pinyinfuse:${getFieldsAsTitle()}[${query}]]`)
             .map((title) => $tw.wiki.getTiddler(title)?.fields)
             .filter(Boolean) as ITiddlerFields[];
         },

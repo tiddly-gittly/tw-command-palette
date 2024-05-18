@@ -1,5 +1,4 @@
 title: $:/plugins/linonetwo/commandpalette/configs/
 
-xxx: https://tidgi.fun/
-yyy: https://tidgi.fun/
-zzz: https://tidgi.fun/
+TitleAlias: title caption alias
+HideDefaultSearchBar: no
