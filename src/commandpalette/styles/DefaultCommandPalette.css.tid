@@ -47,5 +47,11 @@ tags: $:/tags/Stylesheet
 }
 
 div.aa-Panel {
-  z-index: 2000;
+  z-index: 10000;
+}
+div.aa-SourceHeader {
+  border-bottom: 1px solid;
+  padding-bottom: 0.3em;
+  padding-top: 0.3em;
+  opacity: 0.5;
 }
