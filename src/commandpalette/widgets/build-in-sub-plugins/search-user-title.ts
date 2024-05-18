@@ -29,7 +29,7 @@ export const plugin = {
             return item.title;
           },
           noResults() {
-            return `${lingo('UserTitle')} - ${lingo('NoResult')}`;
+            return lingo('NoResult');
           },
         },
       },

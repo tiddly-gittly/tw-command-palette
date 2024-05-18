@@ -48,7 +48,7 @@ export const plugin = {
             return item.title;
           },
           noResults() {
-            return `${lingo('Message')} - ${lingo('NoResult')}`;
+            return lingo('NoResult');
           },
         },
       },

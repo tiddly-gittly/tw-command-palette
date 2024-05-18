@@ -37,7 +37,7 @@ export const plugin = {
             return item.title;
           },
           noResults() {
-            return `${lingo('UserTitlePinyin')} - ${lingo('NoResult')}`;
+            return lingo('NoResult');
           },
         },
       },
