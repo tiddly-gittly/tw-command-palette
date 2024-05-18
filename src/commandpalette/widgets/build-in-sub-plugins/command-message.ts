@@ -47,9 +47,6 @@ export const plugin = {
             }
             return item.title;
           },
-          noResults() {
-            return lingo('NoResult');
-          },
         },
       },
     ];

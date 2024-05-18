@@ -33,9 +33,6 @@ export const plugin = {
             }
             return item.title;
           },
-          noResults() {
-            return lingo('NoResult');
-          },
         },
       },
     ];
@@ -63,9 +60,6 @@ export const plugin = {
               return `${item.caption} (${item.title})`;
             }
             return item.title;
-          },
-          noResults() {
-            return `${lingo('Tagging')} - ${lingo('NoResult')}`;
           },
         },
       });
