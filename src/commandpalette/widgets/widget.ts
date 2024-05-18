@@ -82,8 +82,6 @@ class CommandPaletteWidget extends Widget {
     }
   }
 
-  /** Handle CJK IME */
-  imeOpen = false;
   /** Copy from Modal, to use its logic */
   srcDocument = this.document;
   modalCount = 0;
@@ -114,12 +112,6 @@ class CommandPaletteWidget extends Widget {
         event.stopPropagation();
         event.preventDefault();
       }
-    });
-    inputElement.addEventListener('compositionstart', () => {
-      this.imeOpen = true;
-    });
-    inputElement.addEventListener('compositionend', () => {
-      this.imeOpen = false;
     });
     this.modalCount++;
     // call with this

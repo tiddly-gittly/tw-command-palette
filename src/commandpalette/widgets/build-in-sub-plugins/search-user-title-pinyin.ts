@@ -5,8 +5,12 @@ import { lingo } from '../utils/lingo';
 
 export const plugin = {
   getSources(parameters) {
-    // check `pinyinfuse` operator is installed
-    if ($tw.wiki.getTiddler('$:/plugins/linonetwo/pinyin-fuzzy-search/pinyin-fuzzy-search.js') === undefined) {
+    if (
+      // check `pinyinfuse` operator is installed
+      $tw.wiki.getTiddler('$:/plugins/linonetwo/pinyin-fuzzy-search/pinyin-fuzzy-search.js') === undefined ||
+      // don't search pinyin if already includes CJK
+      ($tw.utils.containsChinese as (text: string) => boolean)?.(parameters.query)
+    ) {
       return [];
     }
     if (parameters.query.length === 0) return [];
