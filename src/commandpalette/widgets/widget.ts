@@ -26,9 +26,9 @@ class CommandPaletteWidget extends Widget {
     this.domNodes.push(containerElement);
     const plugins: Array<AutocompletePlugin<ITiddlerFields, unknown>> = [];
     /**
-     * Try loading plugins. Plugin should add tag `$:/tags/CommandPalette/Plugin` and export a `plugin` object.
+     * Try loading plugins. Plugin should add tag `$:/tags/CommandPalettePlugin` and export a `plugin` object.
      */
-    const searchTitlePluginTitles = $tw.wiki.filterTiddlers('[all[shadows]tag[$:/tags/CommandPalette/Plugin]]');
+    const searchTitlePluginTitles = $tw.wiki.filterTiddlers('[all[shadows]tag[$:/tags/CommandPalettePlugin]]');
     searchTitlePluginTitles
       .map(title => this.wiki.getTiddler(title)?.fields)
       .filter(item => item !== undefined)
