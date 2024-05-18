@@ -1,10 +1,11 @@
 import { Modal } from '$:/core/modules/utils/dom/modal.js';
 import { widget as Widget } from '$:/core/modules/widgets/widget.js';
-import { autocomplete, AutocompletePlugin } from '@algolia/autocomplete-js';
-import { IChangedTiddlers, ITiddlerFields } from 'tiddlywiki';
+import { autocomplete } from '@algolia/autocomplete-js';
+import { IChangedTiddlers } from 'tiddlywiki';
 import '@algolia/autocomplete-theme-classic';
 import { observe, unobserve } from '@seznam/visibility-observer';
 import { uniqSourcesBy } from './utils/uniqSourcesBy';
+import { getSubPlugins } from './utils/getSubPlugins';
 
 class CommandPaletteWidget extends Widget {
   id = 'default';
@@ -24,23 +25,7 @@ class CommandPaletteWidget extends Widget {
     });
     parent.insertBefore(containerElement, nextSibling);
     this.domNodes.push(containerElement);
-    const plugins: Array<AutocompletePlugin<ITiddlerFields, unknown>> = [];
-    /**
-     * Try loading plugins. Plugin should add tag `$:/tags/CommandPalettePlugin` and export a `plugin` object.
-     */
-    const searchTitlePluginTitles = $tw.wiki.filterTiddlers('[all[shadows]tag[$:/tags/CommandPalettePlugin]]');
-    searchTitlePluginTitles
-      .map(title => this.wiki.getTiddler(title)?.fields)
-      .filter(item => item !== undefined)
-      .sort((a, b) => (b.priority as number | undefined ?? 0) - (a.priority as number | undefined ?? 0))
-      .forEach((tiddlerField) => {
-        try {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access, security/detect-non-literal-require, security-node/detect-non-literal-require-calls
-          plugins.push(require(tiddlerField.title).plugin);
-        } catch (error) {
-          console.error(`Failed to load command palette plugin ${tiddlerField.title}`, error);
-        }
-      });
+
     this.handleDarkMode();
     const removeDuplicates = uniqSourcesBy(({ item }) => item.title);
     this.autoCompleteInstance = autocomplete({
@@ -62,7 +47,7 @@ class CommandPaletteWidget extends Widget {
           this.destroy();
         },
       },
-      plugins,
+      plugins: getSubPlugins(),
       reshape({ sourcesBySourceId }) {
         return removeDuplicates(...Object.values(sourcesBySourceId));
       },
@@ -130,7 +115,7 @@ class CommandPaletteWidget extends Widget {
   }
 
   destroy() {
-    $tw.wiki.deleteTiddler('$:/state/commandpalette/default/opened');
+    $tw.wiki.deleteTiddler(`$:/state/commandpalette/${this.id}/opened`);
     this.modalCount = 0;
     Modal.prototype.adjustPageClass.call(this);
     this.autoCompleteInstance?.destroy();
