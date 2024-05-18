@@ -100,7 +100,19 @@ class CommandPaletteWidget extends Widget {
     // no API to listen esc, listen manually
     inputElement.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') {
-        this.destroy();
+        if (inputElement.value === '') {
+          this.destroy();
+        } else {
+          event.stopPropagation();
+          event.preventDefault();
+          inputElement.value = '';
+        }
+      }
+      // pressing enter is useless (it auto searches), and will cause dropdown to close, so ignore it.
+      if (event.key === 'Enter') {
+        this.autoCompleteInstance?.setIsOpen(true);
+        event.stopPropagation();
+        event.preventDefault();
       }
     });
     inputElement.addEventListener('compositionstart', () => {
