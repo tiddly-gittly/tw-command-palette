@@ -85,10 +85,10 @@ class CommandPaletteWidget extends Widget {
         navigateFromNode: this,
       });
     }
-    if (!state.context.noDestroy) {
-      this.destroy();
+    if (!state.context.noClose) {
+      this.setCloseState();
     }
-    this.autoCompleteInstance?.setContext({ noNavigate: undefined, newQuery: undefined, noDestroy: undefined } satisfies IContext);
+    this.autoCompleteInstance?.setContext({ noNavigate: undefined, newQuery: undefined, noClose: undefined } satisfies IContext);
   }
 
   /** Copy from Modal, to use its logic */
@@ -138,11 +138,17 @@ class CommandPaletteWidget extends Widget {
     }
   }
 
-  destroy() {
+  setCloseState() {
     $tw.wiki.deleteTiddler(`$:/state/commandpalette/${this.id}/opened`);
+    this.autoCompleteInstance?.setIsOpen(false);
     this.modalCount = 0;
     Modal.prototype.adjustPageClass.call(this);
+  }
+
+  destroy() {
+    this.setCloseState();
     this.autoCompleteInstance?.destroy();
+    this.autoCompleteInstance = undefined;
   }
 }
 

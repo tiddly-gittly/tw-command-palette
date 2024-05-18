@@ -6,9 +6,9 @@ export interface IContext {
    */
   newQuery?: string;
   /**
-   * Ask to disable default behavior of destroy the widget after item activate. Let plugin handle it by itself.
+   * Ask to disable default behavior of close the dropdown after item activate. Let plugin handle it by itself.
    */
-  noDestroy?: boolean;
+  noClose?: boolean;
   /**
    * Ask to disable default behavior of open a tiddler. Let plugin handle it by itself.
    */

@@ -21,7 +21,7 @@ export const plugin = {
           return item.title;
         },
         onSelect({ item }) {
-          parameters.setContext({ newQuery: `#${item.title}`, noDestroy: true } satisfies IContext);
+          parameters.setContext({ newQuery: `#${item.title}`, noClose: true } satisfies IContext);
         },
         templates: {
           header() {
