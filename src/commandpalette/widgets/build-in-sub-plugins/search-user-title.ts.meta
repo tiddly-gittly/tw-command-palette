@@ -2,3 +2,4 @@ title: $:/plugins/linonetwo/commandpalette/widget/build-in-sub-plugins/search-us
 tags: $:/tags/CommandPalette/Plugin
 type: application/javascript
 module-type: library
+priority: 5

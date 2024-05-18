@@ -26,14 +26,18 @@ class CommandPaletteWidget extends Widget {
      * Try loading plugins. Plugin should add tag `$:/tags/CommandPalette/Plugin` and export a `plugin` object.
      */
     const searchTitlePluginTitles = $tw.wiki.filterTiddlers('[all[shadows]tag[$:/tags/CommandPalette/Plugin]]');
-    searchTitlePluginTitles.forEach((title) => {
-      try {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access, security/detect-non-literal-require, security-node/detect-non-literal-require-calls
-        plugins.push(require(title).plugin);
-      } catch (error) {
-        console.error(`Failed to load command palette plugin ${title}`, error);
-      }
-    });
+    searchTitlePluginTitles
+      .map(title => this.wiki.getTiddler(title)?.fields)
+      .filter(item => item !== undefined)
+      .sort((a, b) => (b.priority as number | undefined ?? 0) - (a.priority as number | undefined ?? 0))
+      .forEach((tiddlerField) => {
+        try {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access, security/detect-non-literal-require, security-node/detect-non-literal-require-calls
+          plugins.push(require(tiddlerField.title).plugin);
+        } catch (error) {
+          console.error(`Failed to load command palette plugin ${tiddlerField.title}`, error);
+        }
+      });
     this.handleDarkMode();
     autocomplete({
       container: containerElement,
