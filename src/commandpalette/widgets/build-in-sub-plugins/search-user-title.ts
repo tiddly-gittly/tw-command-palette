@@ -3,12 +3,14 @@ import { ITiddlerFields } from 'tiddlywiki';
 import { lingo } from '../utils/lingo';
 
 export const plugin = {
-  getSources() {
+  getSources(parameters) {
+    if (parameters.query.length === 0) return [];
     const fieldsAsTitle = ['title', 'caption'].join(',');
     return [
       {
         sourceId: 'title',
         getItems({ query }) {
+          if (query === '') return [];
           return $tw.wiki.filterTiddlers(`[all[tiddlers]!is[system]search:${fieldsAsTitle}[${query}]]`)
             .map((title) => $tw.wiki.getTiddler(title)?.fields)
             .filter(Boolean) as ITiddlerFields[];

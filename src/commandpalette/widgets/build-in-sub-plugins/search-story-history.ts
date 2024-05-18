@@ -14,8 +14,6 @@ export const plugin = {
             ...historyData.reverse().map((x) => x.title),
             ...$tw.wiki.filterTiddlers('[list[$:/StoryList]]'),
           ]);
-          // DEBUG: console historyTitles
-          console.log(`historyTitles`, historyTitles);
           let filteredHistoryTitles: string[] = [];
           if ($tw.wiki.getTiddler('$:/plugins/linonetwo/pinyin-fuzzy-search/pinyin-fuzzy-search.js') === undefined) {
             filteredHistoryTitles = $tw.wiki.filterTiddlers(`[search:title[${query}]]`, undefined, $tw.wiki.makeTiddlerIterator(historyTitles));
@@ -26,7 +24,7 @@ export const plugin = {
             .map((title) => $tw.wiki.getTiddler(title)?.fields)
             .filter(Boolean) as ITiddlerFields[];
           // swap first and second, so its easier to switch to second, like using ctrl + tab in vscode
-          return [second, first, ...rest];
+          return [second, first, ...rest].filter(Boolean);
         },
         getItemUrl({ item }) {
           return item.title;
