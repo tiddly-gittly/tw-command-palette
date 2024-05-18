@@ -51,6 +51,7 @@
   "dependencies": {
     "@algolia/autocomplete-core": "^1.17.1",
     "@algolia/autocomplete-js": "^1.17.0",
+    "@algolia/autocomplete-shared": "^1.17.1",
     "@algolia/autocomplete-theme-classic": "^1.17.0",
     "@seznam/visibility-observer": "^1.1.0",
     "fuse.js": "^7.0.0",

@@ -14,6 +14,9 @@ importers:
       '@algolia/autocomplete-js':
         specifier: ^1.17.0
         version: 1.17.0(@algolia/client-search@4.23.3)(algoliasearch@4.23.3)(search-insights@2.13.0)
+      '@algolia/autocomplete-shared':
+        specifier: ^1.17.1
+        version: 1.17.1(@algolia/client-search@4.23.3)(algoliasearch@4.23.3)
       '@algolia/autocomplete-theme-classic':
         specifier: ^1.17.0
         version: 1.17.0

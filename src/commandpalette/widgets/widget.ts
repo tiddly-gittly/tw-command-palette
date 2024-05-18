@@ -2,8 +2,10 @@
 import { Modal } from '$:/core/modules/utils/dom/modal.js';
 import { widget as Widget } from '$:/core/modules/widgets/widget.js';
 import { autocomplete } from '@algolia/autocomplete-js';
-import { IChangedTiddlers } from 'tiddlywiki';
+import type { AutocompleteNavigator } from '@algolia/autocomplete-shared/dist/esm/core/AutocompleteNavigator';
+import { IChangedTiddlers, ITiddlerFields } from 'tiddlywiki';
 import '@algolia/autocomplete-theme-classic';
+import { AutocompleteState } from '@algolia/autocomplete-core';
 import { observe, unobserve } from '@seznam/visibility-observer';
 import { IContext } from './utils/context';
 import { getSubPlugins } from './utils/getSubPlugins';
@@ -15,7 +17,7 @@ class CommandPaletteWidget extends Widget {
     return false;
   }
 
-  autoCompleteInstance: ReturnType<typeof autocomplete> | undefined;
+  autoCompleteInstance: ReturnType<typeof autocomplete<ITiddlerFields>> | undefined;
 
   render(parent: Element, nextSibling: Element) {
     this.parentDomNode = parent;
@@ -29,31 +31,15 @@ class CommandPaletteWidget extends Widget {
     this.domNodes.push(containerElement);
 
     this.handleDarkMode();
-    const removeDuplicates = uniqSourcesBy(({ item }) => item.title);
-    this.autoCompleteInstance = autocomplete({
+    const removeDuplicates = uniqSourcesBy<ITiddlerFields>(({ item }) => item.title);
+    this.autoCompleteInstance = autocomplete<ITiddlerFields>({
       container: containerElement,
       placeholder: 'Search for tiddlers',
       autoFocus: true,
       openOnFocus: true,
       ignoreCompositionEvents: true,
-      getSources() {
-        return [];
-      },
       navigator: {
-        navigate: ({ itemUrl, state }) => {
-          if (state.context.newQuery) {
-            this.autoCompleteInstance?.setQuery?.((state.context as IContext).newQuery!);
-            this.autoCompleteInstance?.setContext({ newQuery: undefined } satisfies IContext);
-            void this.autoCompleteInstance?.refresh?.();
-            return;
-          }
-          this.dispatchEvent({
-            type: 'tm-navigate',
-            navigateTo: itemUrl,
-            navigateFromNode: this,
-          });
-          this.destroy();
-        },
+        navigate: this.onNavigate.bind(this) satisfies AutocompleteNavigator<ITiddlerFields>['navigate'],
       },
       plugins: getSubPlugins(),
       reshape({ sourcesBySourceId }) {
@@ -66,6 +52,7 @@ class CommandPaletteWidget extends Widget {
         return [...removeDuplicates(...[titleSource, titlePinyinSource, storyHistorySource].filter(Boolean)), ...Object.values(rest)];
       },
     });
+    this.autoCompleteInstance.setContext({ widget: this } satisfies IContext);
     this.onCommandPaletteDOMInit(containerElement);
     observe(containerElement, this.onVisibilityChange.bind(this));
   }
@@ -79,6 +66,29 @@ class CommandPaletteWidget extends Widget {
       this.destroy();
       unobserve(visibilityEntry.target, this.onVisibilityChange.bind(this));
     }
+  }
+
+  onNavigate({ itemUrl, state }: {
+    item: ITiddlerFields;
+    itemUrl: string;
+    state: AutocompleteState<ITiddlerFields>;
+  }): void {
+    if (state.context.newQuery) {
+      this.autoCompleteInstance?.setQuery?.((state.context as IContext).newQuery!);
+      this.autoCompleteInstance?.setContext({ newQuery: undefined } satisfies IContext);
+      void this.autoCompleteInstance?.refresh?.();
+    }
+    if (!state.context.noNavigate) {
+      this.dispatchEvent({
+        type: 'tm-navigate',
+        navigateTo: itemUrl,
+        navigateFromNode: this,
+      });
+    }
+    if (!state.context.noDestroy) {
+      this.destroy();
+    }
+    this.autoCompleteInstance?.setContext({ noNavigate: undefined, newQuery: undefined, noDestroy: undefined } satisfies IContext);
   }
 
   /** Copy from Modal, to use its logic */

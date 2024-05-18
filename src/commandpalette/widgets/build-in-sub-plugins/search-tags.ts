@@ -20,8 +20,8 @@ export const plugin = {
         getItemUrl({ item }) {
           return item.title;
         },
-        onActive({ item }) {
-          parameters.setContext({ newQuery: `#${item.title}` } satisfies IContext);
+        onSelect({ item }) {
+          parameters.setContext({ newQuery: `#${item.title}`, noDestroy: true } satisfies IContext);
         },
         templates: {
           header() {
