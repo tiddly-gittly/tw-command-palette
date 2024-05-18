@@ -4,6 +4,7 @@ import { autocomplete, AutocompletePlugin } from '@algolia/autocomplete-js';
 import { IChangedTiddlers, ITiddlerFields } from 'tiddlywiki';
 import '@algolia/autocomplete-theme-classic';
 import { observe, unobserve } from '@seznam/visibility-observer';
+import { uniqSourcesBy } from './utils/uniqSourcesBy';
 
 class CommandPaletteWidget extends Widget {
   id = 'default';
@@ -41,6 +42,7 @@ class CommandPaletteWidget extends Widget {
         }
       });
     this.handleDarkMode();
+    const removeDuplicates = uniqSourcesBy(({ item }) => item.title);
     this.autoCompleteInstance = autocomplete({
       container: containerElement,
       placeholder: 'Search for tiddlers',
@@ -61,6 +63,9 @@ class CommandPaletteWidget extends Widget {
         },
       },
       plugins,
+      reshape({ sourcesBySourceId }) {
+        return removeDuplicates(...Object.values(sourcesBySourceId));
+      },
     });
     this.onCommandPaletteDOMInit(containerElement);
     observe(containerElement, this.onVisibilityChange.bind(this));
@@ -77,6 +82,8 @@ class CommandPaletteWidget extends Widget {
     }
   }
 
+  /** Handle CJK IME */
+  imeOpen = false;
   /** Copy from Modal, to use its logic */
   srcDocument = this.document;
   modalCount = 0;
@@ -95,6 +102,12 @@ class CommandPaletteWidget extends Widget {
       if (event.key === 'Escape') {
         this.destroy();
       }
+    });
+    inputElement.addEventListener('compositionstart', () => {
+      this.imeOpen = true;
+    });
+    inputElement.addEventListener('compositionend', () => {
+      this.imeOpen = false;
     });
     this.modalCount++;
     // call with this

@@ -49,6 +49,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
+    "@algolia/autocomplete-core": "^1.17.1",
     "@algolia/autocomplete-js": "^1.17.0",
     "@algolia/autocomplete-theme-classic": "^1.17.0",
     "@seznam/visibility-observer": "^1.1.0",
