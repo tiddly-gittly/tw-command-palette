@@ -79,6 +79,7 @@ class CommandPaletteWidget extends Widget {
       void this.autoCompleteInstance?.refresh?.();
     }
     if (!state.context.noNavigate) {
+      $tw.wiki.setText('$:/layout', 'text', undefined, '', { suppressTimestamp: true });
       this.dispatchEvent({
         type: 'tm-navigate',
         navigateTo: itemUrl,

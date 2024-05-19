@@ -14,5 +14,7 @@ StoryHistory: 故事流浏览历史
 Tags: 标签
 Tagging: 带标签的用户条目
 Message: 触发系统消息
+Layout: 切换布局
 CurrentTiddler: 当前条目
+CurrentLayout: 当前布局
 NoResult: 无结果或结果重复

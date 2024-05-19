@@ -14,5 +14,7 @@ StoryHistory: Story history
 Tags: Tags
 Tagging: User tiddlers with tags
 Message: Trigger system message
+Layout: Switch layout
 CurrentTiddler: Current tiddler
+CurrentLayout: Current layout
 NoResult: No result or no uniq result
