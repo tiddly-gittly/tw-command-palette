@@ -1,0 +1,7 @@
+command-palette-type: filter
+caption: <<lingo Filter/Recent/Caption $:/plugins/linonetwo/commandpalette/language/>>
+description: <<lingo Filter/Recent/Description $:/plugins/linonetwo/commandpalette/language/>>
+tags: $:/tags/CommandPaletteCommand
+title: $:/plugins/linonetwo/commandpalette/Recent Tiddlers Command
+
+[!is[system]!sort[created]limit[100]search<commandpaletteinput>]

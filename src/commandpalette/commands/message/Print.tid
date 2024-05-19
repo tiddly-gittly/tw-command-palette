@@ -1,4 +1,3 @@
-command-palette-name: Print
 command-palette-type: message
 caption: {{$:/language/Buttons/Print/Caption}}
 description: {{$:/language/Buttons/Print/Hint}}

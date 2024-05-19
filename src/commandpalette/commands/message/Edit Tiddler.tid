@@ -1,4 +1,3 @@
-command-palette-name: Edit Tiddler
 command-palette-type: message
 caption: {{$:/language/Buttons/Edit/Caption}}
 description: {{$:/language/Buttons/Edit/Hint}}

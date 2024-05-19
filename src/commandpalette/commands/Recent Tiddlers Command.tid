@@ -1,9 +1,0 @@
-command-palette-caret: 33
-command-palette-name: Recent Tiddlers
-command-palette-type: prompt-basic
-caption: 查看最近编辑过的Tiddler
-description: 在命令菜单里列出最近编辑过的Tiddler
-tags: $:/tags/CommandPaletteCommand
-title: $:/plugins/linonetwo/commandpalette/Recent Tiddlers Command
-
-[!is[system]!sort[created]search[]]

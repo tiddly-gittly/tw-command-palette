@@ -1,0 +1,6 @@
+command-palette-type: actionString
+caption: <<lingo ShowControlPanel $:/plugins/linonetwo/commandpalette/language/>>
+tags: $:/tags/CommandPaletteCommand
+title: $:/plugins/linonetwo/commandpalette/Show Control Panel
+
+<$action-navigate $to="$:/ControlPanel"/>

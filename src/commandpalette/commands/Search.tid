@@ -1,6 +1,0 @@
-command-palette-name: Search
-command-palette-type: prompt
-caption: {{$:/language/Buttons/AdvancedSearch/Caption}}
-description: {{$:/language/Buttons/AdvancedSearch/Hint}}
-tags: $:/tags/CommandPaletteCommand
-title: $:/plugins/linonetwo/commandpalette/Search

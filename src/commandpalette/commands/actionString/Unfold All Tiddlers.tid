@@ -1,4 +1,3 @@
-command-palette-name: Unfold All Tiddlers
 command-palette-type: actionString
 caption: {{$:/language/Buttons/UnfoldAll/Caption}}
 description: {{$:/language/Buttons/UnfoldAll/Hint}}

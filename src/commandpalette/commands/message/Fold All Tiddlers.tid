@@ -1,4 +1,3 @@
-command-palette-name: Fold All Tiddlers
 command-palette-type: message
 caption: {{$:/language/Buttons/FoldAll/Caption}}
 description: {{$:/language/Buttons/FoldAll/Hint}}

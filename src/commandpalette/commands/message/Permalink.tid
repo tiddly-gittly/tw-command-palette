@@ -1,4 +1,3 @@
-command-palette-name: Permalink
 command-palette-type: message
 caption: {{$:/language/Buttons/Permalink/Caption}}
 description: {{$:/language/Buttons/Permalink/Hint}}

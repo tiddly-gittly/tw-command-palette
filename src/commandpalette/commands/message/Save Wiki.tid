@@ -1,4 +1,3 @@
-command-palette-name: Save Wiki
 command-palette-type: message
 caption: {{$:/language/Buttons/SaveWiki/Caption}}
 description: {{$:/language/Buttons/SaveWiki/Hint}}

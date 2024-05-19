@@ -1,4 +1,3 @@
-command-palette-name: New Journal
 command-palette-type: actionString
 caption: {{$:/language/Buttons/NewJournal/Caption}}
 description: {{$:/language/Buttons/NewJournal/Hint}}

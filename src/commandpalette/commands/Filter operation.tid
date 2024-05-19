@@ -1,8 +1,0 @@
-command-palette-name: Filter operation
-command-palette-type: prompt
-caption: {{$:/language/Buttons/AdvancedSearch/Caption}}
-description: {{$:/language/Buttons/AdvancedSearch/Hint}}
-tags: $:/tags/CommandPaletteCommand
-title: $:/plugins/linonetwo/commandpalette/Filter operation
-
-[

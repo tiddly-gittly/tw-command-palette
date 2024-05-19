@@ -1,4 +1,3 @@
-command-palette-name: Delete Tiddler
 command-palette-type: message
 caption: {{$:/language/Buttons/Delete/Caption}}
 description: {{$:/language/Buttons/Delete/Hint}}

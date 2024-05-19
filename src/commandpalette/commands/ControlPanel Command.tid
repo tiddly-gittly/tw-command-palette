@@ -1,8 +1,0 @@
-command-palette-name: Show Control Panel
-command-palette-type: actionString
-caption: 打开命令菜单
-description: 打开命令菜单
-tags: $:/tags/CommandPaletteCommand
-title: $:/plugins/linonetwo/commandpalette/ControlPanel Command
-
-<$action-navigate $to="$:/ControlPanel"/>

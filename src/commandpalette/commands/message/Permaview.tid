@@ -1,4 +1,3 @@
-command-palette-name: Permaview
 command-palette-type: message
 caption: {{$:/language/Buttons/Permaview/Caption}}
 description: {{$:/language/Buttons/Permaview/Hint}}

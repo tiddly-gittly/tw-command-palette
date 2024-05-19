@@ -1,4 +1,3 @@
-command-palette-name: New Tiddler
 command-palette-type: message
 caption: {{$:/language/Buttons/NewTiddler/Caption}}
 description: {{$:/language/Buttons/NewTiddler/Hint}}

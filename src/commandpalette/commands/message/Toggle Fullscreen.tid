@@ -1,4 +1,3 @@
-command-palette-name: Toggle Fullscreen
 command-palette-type: message
 caption: {{$:/language/Buttons/FullScreen/Caption}}
 description: {{$:/language/Buttons/FullScreen/Hint}}

@@ -1,4 +1,3 @@
-command-palette-name: Home
 command-palette-type: message
 caption: {{$:/language/Buttons/Home/Caption}}
 description: {{$:/language/Buttons/Home/Hint}}

@@ -1,8 +1,0 @@
-command-palette-name: Refresh Server
-command-palette-type: message
-caption: 服务器{{$:/language/Buttons/Refresh/Caption}}
-description: 服务器{{$:/language/Buttons/Refresh/Hint}}
-tags: $:/tags/CommandPaletteCommand
-title: $:/plugins/linonetwo/commandpalette/Refresh Server
-
-tm-server-refresh

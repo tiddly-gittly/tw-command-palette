@@ -1,0 +1,7 @@
+command-palette-type: filter
+caption: <<lingo Filter/Fields/Caption $:/plugins/linonetwo/commandpalette/language/>>
+description: <<lingo Filter/Fields/Description $:/plugins/linonetwo/commandpalette/language/>>
+tags: $:/tags/CommandPaletteCommand
+title: $:/plugins/linonetwo/commandpalette/Search fields
+
+[fields[]search<commandpaletteinput>]
