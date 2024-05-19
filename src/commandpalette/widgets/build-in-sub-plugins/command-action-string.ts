@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-null */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
@@ -9,23 +10,16 @@ export const plugin = {
   getSources(parameters) {
     if (parameters.query.length === 0) return [];
     const focusedTiddler = $tw.wiki.getTiddlerText('$:/temp/focussedTiddler');
-    const variables = { currentTiddler: focusedTiddler ?? '' };
+    const variables = { currentTiddler: focusedTiddler ?? '', commandpaletteinput: parameters.query };
     const { widget } = parameters.state.context as IContext;
     return [
       {
-        sourceId: 'message',
+        sourceId: 'actionString',
         getItems({ query }) {
           if (query === '') return [];
-          return $tw.wiki.filterTiddlers(`[all[tiddlers+shadows]tag[$:/tags/CommandPaletteCommand]field:command-palette-type[message]]`)
+          return $tw.wiki.filterTiddlers(`[all[tiddlers+shadows]tag[$:/tags/CommandPaletteCommand]field:command-palette-type[actionString]]`)
             .map((title) => $tw.wiki.getTiddler(title)?.fields)
-            .filter((tiddler): tiddler is ITiddlerFields => {
-              if (tiddler === undefined) return false;
-              const filter = tiddler['command-palette-filter'] as string | undefined;
-              // if no filter, just pass. If user didn't install `$:/plugins/Gk0Wk/focused-tiddler`, also pass.
-              if (!filter || !focusedTiddler) return true;
-              const passTheFilterOnTiddler = $tw.wiki.filterTiddlers(filter, undefined, $tw.wiki.makeTiddlerIterator([focusedTiddler])).length > 0;
-              return passTheFilterOnTiddler;
-            })
+            .filter((tiddler): tiddler is ITiddlerFields => tiddler !== undefined)
             .filter(tiddler =>
               // TODO: add pinyinfuse
               $tw.wiki.filterTiddlers(
@@ -44,12 +38,8 @@ export const plugin = {
         },
         onSelect({ item }) {
           parameters.setContext({ noNavigate: true } satisfies IContext);
-          widget?.dispatchEvent?.({
-            type: item.text.trim(),
-            tiddlerTitle: focusedTiddler,
-            // TODO: if need param, into param input mode like vscode does. Or Listen on right arrow key in onActive, and open a side panel to input params
-            // param
-          });
+          // this calls `invokeActions` under the hood
+          widget?.invokeActionString(item.text, widget, null, variables);
         },
         templates: {
           header() {
@@ -59,7 +49,7 @@ export const plugin = {
               caption = `(${renderTextWithCache(caption, widget, variables)})`;
             }
             // show original title + caption
-            return `${lingo('Message')} - ${lingo('CurrentTiddler')}: ${focusedTiddler} ${caption}`;
+            return `${lingo('ActionString')} - ${lingo('CurrentTiddler')}: ${focusedTiddler} ${caption}`;
           },
           item({ item }) {
             if (typeof item.caption === 'string' && item.caption !== '') {
