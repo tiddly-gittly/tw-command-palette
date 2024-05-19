@@ -1,10 +1,13 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import uniq from 'lodash/uniq';
 import { ITiddlerFields } from 'tiddlywiki';
+import { IContext } from '../utils/context';
 import { lingo } from '../utils/lingo';
+import { renderTextWithCache } from '../utils/renderTextWithCache';
 
 export const plugin = {
-  getSources() {
+  getSources(parameters) {
+    const { widget } = parameters.state.context as IContext;
     return [
       {
         sourceId: 'story-history',
@@ -35,7 +38,7 @@ export const plugin = {
           },
           item({ item }) {
             if (typeof item.caption === 'string' && item.caption !== '') {
-              return `${item.caption} (${item.title})`;
+              return `${renderTextWithCache(item.caption, widget)} (${item.title})`;
             }
             return item.title;
           },

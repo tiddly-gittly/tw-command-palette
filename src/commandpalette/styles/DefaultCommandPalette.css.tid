@@ -54,3 +54,8 @@ div.aa-SourceHeader {
   padding-top: 0.3em;
   opacity: 0.5;
 }
+div.tw-commandpalette-layout-result {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}

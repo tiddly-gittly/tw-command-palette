@@ -2,6 +2,7 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { IContext } from '../utils/context';
+import { getIconSvg } from '../utils/getIconSvg';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
 
@@ -41,10 +42,15 @@ export const plugin = {
               : $tw.wiki.getTiddlerText('$:/language/PageTemplate/Name');
             return `${lingo('Layout')} - ${lingo('CurrentLayout')}: ${currentLayoutName}`;
           },
-          item({ item }) {
+          item({ item, createElement }) {
             if (typeof item.name === 'string' && item.name !== '') {
+              const name = renderTextWithCache(item.name, widget);
               const description = renderTextWithCache(item.description, widget);
-              return `${renderTextWithCache(item.name, widget)}${description ? ` - ${description}` : ''}`;
+              const icon = getIconSvg(item.icon as string, widget);
+              return createElement('div', {
+                class: 'tw-commandpalette-layout-result',
+                innerHTML: `${icon}${name}${description ? ` - ${description}` : ''}`,
+              });
             }
             return item.title;
           },
