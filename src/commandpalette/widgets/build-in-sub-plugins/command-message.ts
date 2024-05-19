@@ -24,14 +24,16 @@ export const plugin = {
               // if no filter, just pass. If user didn't install `$:/plugins/Gk0Wk/focused-tiddler`, also pass.
               if (!filter || !focusedTiddler) return true;
               const passTheFilterOnTiddler = $tw.wiki.filterTiddlers(filter, undefined, $tw.wiki.makeTiddlerIterator([focusedTiddler])).length > 0;
-              if (!passTheFilterOnTiddler) return false;
+              return passTheFilterOnTiddler;
+            })
+            .filter(tiddler =>
               // TODO: add pinyinfuse
-              return $tw.wiki.filterTiddlers(
+              $tw.wiki.filterTiddlers(
                 `[search[${query}]]`,
                 undefined,
                 $tw.wiki.makeTiddlerIterator([renderTextWithCache(tiddler.caption, widget), renderTextWithCache(tiddler.description, widget)]),
-              ).length > 0;
-            });
+              ).length > 0
+            );
         },
         getItemUrl({ item }) {
           return item.title;
