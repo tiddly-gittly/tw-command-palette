@@ -15,7 +15,7 @@ export const plugin = {
         sourceId: 'layout',
         getItems({ query }) {
           if (query === '') return [];
-          return $tw.wiki.filterTiddlers(`[all[shadows]tag[$:/tags/Layout]]`)
+          return $tw.wiki.filterTiddlers(`[all[tiddlers+shadows]tag[$:/tags/Layout]] [[$:/core/ui/PageTemplate]] +[!is[draft]sort[name]]`)
             .map((title) => $tw.wiki.getTiddler(title)?.fields)
             .filter((tiddler): tiddler is ITiddlerFields => {
               if (tiddler === undefined) return false;
@@ -36,9 +36,10 @@ export const plugin = {
         },
         templates: {
           header() {
-            const currentLayoutTitle = $tw.wiki.getTiddlerText('$:/layout');
-            const currentLayoutName = currentLayoutTitle
-              ? renderTextWithCache($tw.wiki.getTiddlerText(currentLayoutTitle), widget)
+            const currentLayoutTitle = $tw.wiki.getTiddlerText('$:/layout', '');
+            const rawLayoutName = $tw.wiki.getTiddler(currentLayoutTitle)?.fields?.name;
+            const currentLayoutName = rawLayoutName
+              ? renderTextWithCache(rawLayoutName, widget)
               : $tw.wiki.getTiddlerText('$:/language/PageTemplate/Name');
             return `${lingo('Layout')} - ${lingo('CurrentLayout')}: ${currentLayoutName}`;
           },
