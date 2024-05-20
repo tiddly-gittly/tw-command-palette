@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
+import { checkIsCommand } from '../utils/checkPrefix';
 import { IContext } from '../utils/context';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
@@ -9,8 +10,9 @@ import { renderTextWithCache } from '../utils/renderTextWithCache';
 export const plugin = {
   getSources(parameters) {
     if (parameters.query.length === 0) return [];
+    if (!checkIsCommand(parameters)) return [];
     const focusedTiddler = $tw.wiki.getTiddlerText('$:/temp/focussedTiddler');
-    const variables = { currentTiddler: focusedTiddler ?? '', commandpaletteinput: parameters.query };
+    const variables = { currentTiddler: focusedTiddler ?? '', commandpaletteinput: parameters.query.slice(1) };
     const { widget } = parameters.state.context as IContext;
     return [
       {
@@ -23,7 +25,7 @@ export const plugin = {
             .filter(tiddler =>
               // TODO: add pinyinfuse
               $tw.wiki.filterTiddlers(
-                `[search[${query}]]`,
+                `[search[${query.slice(1)}]]`,
                 undefined,
                 $tw.wiki.makeTiddlerIterator([
                   tiddler.title.replace('$:/plugins/linonetwo/commandpalette/', ''),

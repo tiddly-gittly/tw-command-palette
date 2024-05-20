@@ -1,11 +1,13 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
+import { checkIsSearch } from '../utils/checkPrefix';
 import { getFieldsAsTitle } from '../utils/getFieldsAsTitle';
 import { lingo } from '../utils/lingo';
 
 export const plugin = {
   getSources(parameters) {
     if (parameters.query.length === 0) return [];
+    if (!checkIsSearch(parameters)) return [];
     return [
       {
         sourceId: 'title',
