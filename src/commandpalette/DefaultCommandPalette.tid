@@ -1,5 +1,5 @@
-title: $:/plugins/linonetwo/commandpalette/tiddlywiki-ui/DefaultCommandPalette
-tags: $:/tags/AboveStory
+title: $:/plugins/linonetwo/commandpalette/DefaultCommandPalette
+tags: $:/tags/AboveRoot
 
 \procedure on-mask-layer-clicked() <$action-sendmessage $message="close-command-palette" $param="default"/>
 
