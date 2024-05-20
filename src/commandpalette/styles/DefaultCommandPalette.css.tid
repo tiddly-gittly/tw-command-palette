@@ -13,7 +13,7 @@ tags: $:/tags/Stylesheet
    * https://github.com/algolia/autocomplete/issues/1199
   */
   position: fixed !important;
-  top: calc(var(--position-autocomplete-panel-top) + 1em) !important;
+  top: calc(var(--position-autocomplete-panel-top) + 0.25em) !important;
   z-index: 9999;
 }
 .tw-commandpalette-default-container {
