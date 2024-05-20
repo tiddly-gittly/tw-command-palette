@@ -3,11 +3,9 @@ title: $:/plugins/linonetwo/commandpalette/styles/DefaultCommandPalette.css
 tags: $:/tags/Stylesheet
 
 \rules only filteredtranscludeinline transcludeinline macrodef macrocallinline html
-:root {
-  --palette-radius: 5px;
-}
+
 .tw-commandpalette-default-container {
-  position: fixed;
+  position: absolute;
   background:<<colour page-background>>;
   z-index: 9999;
   left: 50%;
@@ -19,6 +17,8 @@ tags: $:/tags/Stylesheet
   border-radius: var(--palette-radius);
   box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 14px;
   border: 4px solid transparent;
+
+  --palette-radius: 5px;
 }
 @media (max-width: 540px) {
   .tw-commandpalette-default-container {
