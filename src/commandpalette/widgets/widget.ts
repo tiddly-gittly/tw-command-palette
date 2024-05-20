@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { Modal } from '$:/core/modules/utils/dom/modal.js';
 import { widget as Widget } from '$:/core/modules/widgets/widget.js';
 import { autocomplete } from '@algolia/autocomplete-js';
 import type { AutocompleteNavigator } from '@algolia/autocomplete-shared/dist/esm/core/AutocompleteNavigator';
-import { IChangedTiddlers, ITiddlerFields } from 'tiddlywiki';
+import { IChangedTiddlers, IParseTreeNode, ITiddlerFields, IWidgetInitialiseOptions } from 'tiddlywiki';
 import '@algolia/autocomplete-theme-classic';
 import { AutocompleteState } from '@algolia/autocomplete-core';
 import { observe, unobserve } from '@seznam/visibility-observer';
@@ -15,6 +16,11 @@ class CommandPaletteWidget extends Widget {
   id = 'default';
   refresh(_changedTiddlers: IChangedTiddlers) {
     return false;
+  }
+
+  constructor(parseTreeNode: IParseTreeNode, options?: IWidgetInitialiseOptions) {
+    super(parseTreeNode, options);
+    this.fixPanelPosition = this.fixPanelPosition.bind(this);
   }
 
   autoCompleteInstance: ReturnType<typeof autocomplete<ITiddlerFields>> | undefined;
@@ -53,8 +59,8 @@ class CommandPaletteWidget extends Widget {
       },
     });
     this.autoCompleteInstance.setContext({ widget: this } satisfies IContext);
-    this.onCommandPaletteDetachedDOMInit(containerElement);
     this.onCommandPaletteInputDOMInit(containerElement);
+    this.onCommandPaletteDetachedDOMInit(containerElement);
   }
 
   onVisibilityChange(
@@ -146,6 +152,24 @@ class CommandPaletteWidget extends Widget {
     this.modalCount++;
     // call with this
     Modal.prototype.adjustPageClass.call(this);
+    /* eslint-disable @typescript-eslint/unbound-method */
+    this.fixPanelPosition();
+    inputElement.addEventListener('focus', this.fixPanelPosition);
+    inputElement.addEventListener('blur', this.fixPanelPosition);
+    window.addEventListener('resize', this.fixPanelPosition);
+    /* eslint-enable @typescript-eslint/unbound-method */
+  }
+
+  /**
+   * container of command input can't be position fix, otherwise need a hack
+   * @url https://github.com/algolia/autocomplete/issues/1199
+  */
+  fixPanelPosition() {
+    const defaultInputElement = document.querySelector('.tw-commandpalette-default-container');
+    if (!defaultInputElement) return;
+    const rect = defaultInputElement.getBoundingClientRect();
+    // Set css variable to be below the search box in case the search box moved when the window was resized
+    document.documentElement.style.setProperty('--position-autocomplete-panel-top', `${rect.bottom}px`);
   }
 
   handleDarkMode() {
@@ -170,6 +194,9 @@ class CommandPaletteWidget extends Widget {
     this.setCloseState();
     this.autoCompleteInstance?.destroy();
     this.autoCompleteInstance = undefined;
+    /* eslint-disable @typescript-eslint/unbound-method */
+    window.removeEventListener('resize', this.fixPanelPosition);
+    /* eslint-enable @typescript-eslint/unbound-method */
   }
 }
 
