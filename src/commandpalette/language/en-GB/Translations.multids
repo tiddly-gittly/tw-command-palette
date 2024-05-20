@@ -11,7 +11,8 @@ Configs/HideDefaultSearchBar/Description: If you only use commandpalette to sear
 UserTitle: Title of user tiddler
 UserTitlePinyin: Title Pinyin of user tiddler
 StoryHistory: Story history
-Tags: Tags
+Filter: Pick build-in filters
+UnderFilter: Further search based on filters
 Tagging: User tiddlers with tags
 Message: Trigger system message
 Layout: Switch layout

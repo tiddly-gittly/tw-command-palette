@@ -4,4 +4,4 @@ description: <<lingo Filter/Fields/Description $:/plugins/linonetwo/commandpalet
 tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/Search fields
 
-[fields[]search<commandpaletteinput>]
+[fields[]]

@@ -4,4 +4,4 @@ description: <<lingo Filter/Recent/Description $:/plugins/linonetwo/commandpalet
 tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/Recent Tiddlers Command
 
-[!is[system]!sort[created]limit[100]search<commandpaletteinput>]
+[!is[system]!sort[created]limit[100]]

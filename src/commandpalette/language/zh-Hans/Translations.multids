@@ -11,7 +11,8 @@ Configs/HideDefaultSearchBar/Description: 如果您只使用命令菜单搜索�
 UserTitle: 用户条目标题
 UserTitlePinyin: 用户条目拼音
 StoryHistory: 故事流浏览历史
-Tags: 标签
+Filter: 选择预置筛选器
+UnderFilter: 基于筛选器进一步搜索
 Tagging: 带标签的用户条目
 Message: 触发系统消息
 Layout: 切换布局

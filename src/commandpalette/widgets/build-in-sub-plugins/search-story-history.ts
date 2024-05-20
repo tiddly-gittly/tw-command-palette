@@ -1,7 +1,7 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import uniq from 'lodash/uniq';
 import { ITiddlerFields } from 'tiddlywiki';
-import { checkIsSearch } from '../utils/checkPrefix';
+import { checkIsSearch, checkIsUnderFilter } from '../utils/checkPrefix';
 import { IContext } from '../utils/context';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
@@ -9,7 +9,7 @@ import { renderTextWithCache } from '../utils/renderTextWithCache';
 export const plugin = {
   getSources(parameters) {
     const { widget } = parameters.state.context as IContext;
-    if (!checkIsSearch(parameters)) return [];
+    if (!checkIsSearch(parameters) || checkIsUnderFilter(parameters)) return [];
     return [
       {
         sourceId: 'story-history',

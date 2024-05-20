@@ -2,6 +2,10 @@ import type { Widget } from 'tiddlywiki';
 
 export interface IContext {
   /**
+   * Search under results of this filter.
+   */
+  filter?: string;
+  /**
    * Ask navigator to set query instead of navigate to a tiddler
    */
   newQuery?: string;

@@ -86,7 +86,7 @@ class CommandPaletteWidget extends Widget {
     itemUrl: string;
     state: AutocompleteState<ITiddlerFields>;
   }): void {
-    if (state.context.newQuery) {
+    if (state.context.newQuery !== undefined) {
       this.autoCompleteInstance?.setQuery?.((state.context as IContext).newQuery!);
       this.autoCompleteInstance?.setContext({ newQuery: undefined } satisfies IContext);
       void this.autoCompleteInstance?.refresh?.();
@@ -102,7 +102,7 @@ class CommandPaletteWidget extends Widget {
     if (!state.context.noClose) {
       this.setCloseState();
     }
-    this.autoCompleteInstance?.setContext({ noNavigate: undefined, newQuery: undefined, noClose: undefined } satisfies IContext);
+    this.clearContext();
   }
 
   onCtrlEnter({ itemUrl, state }: {
@@ -114,7 +114,12 @@ class CommandPaletteWidget extends Widget {
     if (!state.context.noClose) {
       this.setCloseState();
     }
-    this.autoCompleteInstance?.setContext({ noNavigate: undefined, newQuery: undefined, noClose: undefined } satisfies IContext);
+    this.clearContext();
+  }
+
+  clearContext() {
+    // don't clear filter, otherwise can't get it in next step (under-filter)
+    this.autoCompleteInstance?.setContext({ noNavigate: undefined, newQuery: undefined, noClose: undefined /* , filter: undefined */ } satisfies IContext);
   }
 
   /**
