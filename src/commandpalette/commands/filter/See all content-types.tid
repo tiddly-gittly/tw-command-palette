@@ -1,8 +1,5 @@
-command-palette-name: See all content-type
-command-palette-type: prompt-basic
 caption: 查看内容类型
 description: 在命令菜单里列出所有Wiki里涉及到的内容类型
-tags: $:/tags/CommandPaletteCommand
+tags: $:/tags/Filter
 title: $:/plugins/linonetwo/commandpalette/See all content-types
-
-[all[tiddlers+shadows]each[type]get[type]search[]]
+filter: [all[tiddlers+shadows]each[type]get[type]]

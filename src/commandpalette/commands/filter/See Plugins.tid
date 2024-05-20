@@ -1,9 +1,5 @@
-command-palette-caret: 41
-command-palette-name: See Plugins
-command-palette-type: prompt-basic
 caption: 查看插件列表
 description: 在命令菜单里列出插件列表
-tags: $:/tags/CommandPaletteCommand
+tags: $:/tags/Filter
 title: $:/plugins/linonetwo/commandpalette/See Plugins
-
-[!has[draft.of]plugin-type[plugin]search[]]
+filter: [!has[draft.of]plugin-type[plugin]search[]]

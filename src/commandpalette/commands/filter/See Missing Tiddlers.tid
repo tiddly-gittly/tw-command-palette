@@ -1,9 +1,0 @@
-command-palette-caret: 20
-command-palette-name: See Mising Tiddlers
-command-palette-type: prompt-basic
-caption: 查看缺失的Tiddler
-description: 在命令菜单里列出缺失的Tiddler
-tags: $:/tags/CommandPaletteCommand
-title: $:/plugins/linonetwo/commandpalette/See Missing Tiddlers
-
-[all[missing]search[]]

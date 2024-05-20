@@ -1,9 +1,0 @@
-command-palette-caret: 26
-command-palette-name: See Story List
-command-palette-type: prompt-basic
-caption: 查看开启的Tiddler
-description: 在命令菜单里列出开启的Tiddler
-tags: $:/tags/CommandPaletteCommand
-title: $:/plugins/linonetwo/commandpalette/See Story List
-
-[list[$:/StoryList]search[]]

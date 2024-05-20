@@ -15,10 +15,11 @@ export const plugin = {
         sourceId: 'build-in-filter',
         getItems({ query }) {
           if (query === '') return [];
-          const buildInFilters = $tw.wiki.filterTiddlers(`[all[tiddlers+shadows]tag[$:/tags/CommandPaletteCommand]field:command-palette-type[filter]]`)
+          const buildInFilters = $tw.wiki.filterTiddlers(`[all[tiddlers+shadows]tag[$:/tags/Filter]]`)
             .map((title) => $tw.wiki.getTiddler(title)?.fields)
             .filter((tiddler): tiddler is ITiddlerFields => {
               if (tiddler === undefined) return false;
+              if (!tiddler.filter || typeof tiddler.filter !== 'string') return false;
               return true;
             })
             .filter(tiddler =>
@@ -30,12 +31,12 @@ export const plugin = {
                   tiddler.title.replace('$:/plugins/linonetwo/commandpalette/', ''),
                   renderTextWithCache(tiddler.caption, widget),
                   renderTextWithCache(tiddler.description, widget),
-                  tiddler.text.trim().replaceAll('[', '').replaceAll(']', ''),
+                  (tiddler.filter as string).trim().replaceAll('[', '').replaceAll(']', ''),
                 ]),
               ).length > 0
             );
           // allow user input a custom filter to search under it
-          const userInputFilter = { text: query, title: '', type: '' } satisfies ITiddlerFields;
+          const userInputFilter = { filter: query, title: '', type: '', text: '' } satisfies ITiddlerFields;
           if (query.length > 1) {
             return [...buildInFilters, userInputFilter];
           }
@@ -45,31 +46,24 @@ export const plugin = {
           return item.title;
         },
         onSelect({ item }) {
-          parameters.setContext({ noNavigate: true, noClose: true, filter: item.text.trim(), newQuery: '' } satisfies IContext);
+          parameters.setContext({ noNavigate: true, noClose: true, filter: (item.filter as string).trim(), newQuery: '' } satisfies IContext);
         },
         templates: {
           header() {
             return lingo('Filter');
           },
           item({ item, createElement }) {
-            if (typeof item.caption === 'string' && item.caption !== '') {
-              const description = item.description
-                ? ` (${renderTextWithCache(item.description as string, widget)})`
-                : '';
-              // return `<div style="display:flex;flex-direction:column;">
-              //           <div>${renderTextWithCache(item.caption, widget)}${description}</div>
-              //           <div><em>${item.text.trim()}</em></div>
-              //         </div>`;
-              return createElement('div', {
-                style: 'display:flex;flex-direction:column;',
-              }, [
-                createElement('div', { style: 'margin-bottom:0.25em;' }, `${renderTextWithCache(item.caption, widget)}${description}`),
-                createElement('div', {}, [
-                  createElement('small', {}, item.text.trim()),
-                ]),
-              ]);
-            }
-            return item.title;
+            const description = item.description
+              ? ` (${renderTextWithCache(item.description as string, widget)})`
+              : '';
+            return createElement('div', {
+              style: 'display:flex;flex-direction:column;',
+            }, [
+              createElement('div', { style: 'margin-bottom:0.25em;' }, `${renderTextWithCache(item.caption, widget)}${description}`),
+              createElement('div', {}, [
+                createElement('small', {}, (item.filter as string).trim()),
+              ]),
+            ]);
           },
         },
       });

@@ -1,9 +1,5 @@
-command-palette-caret: 40
-command-palette-name: See Themes
-command-palette-type: prompt-basic
 caption: 查看主题
 description: 列出可用主题
-tags: $:/tags/CommandPaletteCommand
+tags: $:/tags/Filter
 title: $:/plugins/linonetwo/commandpalette/See Themes
-
-[!has[draft.of]plugin-type[theme]search[]]
+filter: [!has[draft.of]plugin-type[theme]search[]]

@@ -1,9 +1,5 @@
-command-palette-caret: 29
-command-palette-name: See untagged Tiddlers
-command-palette-type: prompt-basic
 caption: 查看未打标签的Tiddler
 description: 在命令菜单里列出未打标签的Tiddler列表
-tags: $:/tags/CommandPaletteCommand
+tags: $:/tags/Filter
 title: $:/plugins/linonetwo/commandpalette/See untagged tiddlers
-
-[untagged[]!is[system]search[]]
+filter: [untagged[]!is[system]search[]]

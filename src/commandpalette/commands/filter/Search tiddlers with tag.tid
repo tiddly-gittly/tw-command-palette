@@ -1,8 +1,0 @@
-command-palette-name: 用 @标签 搜索条目
-command-palette-type: prompt
-caption: 带某个标签的Tiddler
-description: 在命令菜单里列出带某个标签的Tiddler
-tags: $:/tags/CommandPaletteCommand
-title: $:/plugins/linonetwo/commandpalette/Search tiddlers with tag
-
-@

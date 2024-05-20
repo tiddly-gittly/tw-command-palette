@@ -1,8 +1,5 @@
-command-palette-name: Show help
-command-palette-type: prompt
-caption: 展示帮助
-description: 列出有哪些用法
-tags: $:/tags/CommandPaletteCommand
+caption: 展示命令菜单帮助
+description: 列出命令菜单有哪些用法
+tags: $:/tags/Filter
 title: $:/plugins/linonetwo/commandpalette/Show help
-
-?
+filter: [all[shadows]tag[$:/tags/CommandPaletteHelp]]

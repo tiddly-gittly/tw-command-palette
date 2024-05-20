@@ -2,7 +2,5 @@ title: $:/plugins/linonetwo/commandpalette/language/zh-Hans/
 
 ShowControlPanel: 打开命令菜单
 Server: 服务器
-Filter/Recent/Caption: 最近编辑的条目
-Filter/Recent/Description: 搜索最近编辑过的100个条目标题
 Filter/Fields/Caption: 字段名
 Filter/Fields/Description: 搜索Wiki里所有条目涉及到的所有字段名

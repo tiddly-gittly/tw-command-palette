@@ -2,7 +2,5 @@ title: $:/plugins/linonetwo/commandpalette/language/zh-Hans/
 
 ShowControlPanel: Show Control Panel
 Server:  Server
-Filter/Recent/Caption: Recently edited tiddlers
-Filter/Recent/Description: searches for titles of 100 recently edited tiddlers
 Filter/Fields/Caption: Field names
 Filter/Fields/Description: searches for all field names of all tiddlers in the wiki.

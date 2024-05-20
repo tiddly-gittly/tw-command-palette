@@ -1,9 +1,5 @@
-command-palette-caret: 43
-command-palette-name: See Languages
-command-palette-type: prompt-basic
 caption: 查看语言列表
 description: 在命令菜单里列出语言列表
-tags: $:/tags/CommandPaletteCommand
+tags: $:/tags/Filter
 title: $:/plugins/linonetwo/commandpalette/See Languages
-
-[!has[draft.of]plugin-type[language]search[]]
+filter: [!has[draft.of]plugin-type[language]]

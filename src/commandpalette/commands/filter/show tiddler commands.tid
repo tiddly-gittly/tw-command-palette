@@ -1,8 +1,5 @@
-command-palette-name: Show CommandTiddlers
-command-palette-type: prompt
 caption: 展示可用命令Tiddler列表
 description: 列出命令菜单的命令来自哪些Tiddlers
-tags: $:/tags/CommandPaletteCommand
+tags: $:/tags/Filter
 title: $:/plugins/linonetwo/commandpalette/show tiddler commands
-
-@$:/tags/CommandPaletteCommand
+filter: [all[shadows]tag[$:/tags/CommandPaletteCommand]]
