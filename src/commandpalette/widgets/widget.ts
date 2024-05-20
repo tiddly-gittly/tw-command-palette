@@ -163,7 +163,7 @@ class CommandPaletteWidget extends Widget {
   /**
    * container of command input can't be position fix, otherwise need a hack
    * @url https://github.com/algolia/autocomplete/issues/1199
-  */
+   */
   fixPanelPosition() {
     const defaultInputElement = document.querySelector('.tw-commandpalette-default-container');
     if (!defaultInputElement) return;
