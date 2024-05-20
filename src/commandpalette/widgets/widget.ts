@@ -53,8 +53,8 @@ class CommandPaletteWidget extends Widget {
       },
     });
     this.autoCompleteInstance.setContext({ widget: this } satisfies IContext);
-    this.onCommandPaletteDOMInit(containerElement);
-    observe(containerElement, this.onVisibilityChange.bind(this));
+    this.onCommandPaletteDetachedDOMInit(containerElement);
+    this.onCommandPaletteInputDOMInit(containerElement);
   }
 
   onVisibilityChange(
@@ -92,17 +92,37 @@ class CommandPaletteWidget extends Widget {
     this.autoCompleteInstance?.setContext({ noNavigate: undefined, newQuery: undefined, noClose: undefined } satisfies IContext);
   }
 
+  /**
+   * Handle full screen search mode on mobile
+   * @url https://www.algolia.com/doc/ui-libraries/autocomplete/core-concepts/detached-mode/
+   * @returns
+   */
+  onCommandPaletteDetachedDOMInit(containerElement: HTMLElement) {
+    const buttonElement = containerElement.querySelector<HTMLButtonElement>('button.aa-DetachedSearchButton');
+    if (buttonElement === null) {
+      return;
+    }
+    buttonElement.click();
+    buttonElement.style.display = 'none';
+    const detachedElement = (this.document as unknown as Document).querySelector<HTMLDivElement>('body.aa-Detached > div.aa-DetachedOverlay');
+    if (detachedElement === null) {
+      return;
+    }
+    observe(detachedElement, this.onVisibilityChange.bind(this));
+  }
+
   /** Copy from Modal, to use its logic */
   srcDocument = this.document;
   modalCount = 0;
   /**
    * Do things after command palette UI is initialized.
    */
-  onCommandPaletteDOMInit(containerElement: HTMLElement) {
-    const inputElement = containerElement.querySelector('input');
+  onCommandPaletteInputDOMInit(containerElement: HTMLElement) {
+    const inputElement = containerElement.querySelector<HTMLInputElement>('input');
     if (inputElement === null) {
       return;
     }
+    observe(containerElement, this.onVisibilityChange.bind(this));
     // autoFocus param is not working, focus manually.
     inputElement.focus();
     // no API to listen esc, listen manually
