@@ -14,7 +14,7 @@ export function getCurrentSelection() {
   }
 }
 
-export function getActiveElement(element = document.activeElement): Element | null {
+export function getActiveElement(element = document.activeElement): HTMLElement | null {
   // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
   const shadowRoot = element.shadowRoot;
   // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
@@ -28,5 +28,5 @@ export function getActiveElement(element = document.activeElement): Element | nu
     return getActiveElement(contentDocument.activeElement);
   }
 
-  return element;
+  return element as HTMLElement;
 }

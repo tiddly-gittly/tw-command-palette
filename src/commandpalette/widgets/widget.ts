@@ -9,6 +9,7 @@ import '@algolia/autocomplete-theme-classic';
 import { AutocompleteState } from '@algolia/autocomplete-core';
 import { observe, unobserve } from '@seznam/visibility-observer';
 import { IContext } from './utils/context';
+import { getActiveElement } from './utils/getFocused';
 import { getSubPlugins } from './utils/getSubPlugins';
 import { uniqSourcesBy } from './utils/uniqSourcesBy';
 
@@ -23,6 +24,9 @@ class CommandPaletteWidget extends Widget {
     this.fixPanelPosition = this.fixPanelPosition.bind(this);
   }
 
+  /** We restore focus of element when we are close */
+  // eslint-disable-next-line unicorn/no-null
+  previouslyFocusedElement: HTMLElement | null = null;
   autoCompleteInstance: ReturnType<typeof autocomplete<ITiddlerFields>> | undefined;
 
   render(parent: Element, nextSibling: Element) {
@@ -38,6 +42,7 @@ class CommandPaletteWidget extends Widget {
 
     this.handleDarkMode();
     const removeDuplicates = uniqSourcesBy<ITiddlerFields>(({ item }) => item.title);
+    this.previouslyFocusedElement = getActiveElement();
     this.autoCompleteInstance = autocomplete<ITiddlerFields>({
       container: containerElement,
       placeholder: 'Search for tiddlers',
@@ -45,7 +50,8 @@ class CommandPaletteWidget extends Widget {
       openOnFocus: true,
       ignoreCompositionEvents: true,
       navigator: {
-        navigate: this.onNavigate.bind(this) satisfies AutocompleteNavigator<ITiddlerFields>['navigate'],
+        navigate: this.onEnter.bind(this) satisfies AutocompleteNavigator<ITiddlerFields>['navigate'],
+        navigateNewTab: this.onCtrlEnter.bind(this) satisfies AutocompleteNavigator<ITiddlerFields>['navigateNewTab'],
       },
       defaultActiveItemId: 0,
       plugins: getSubPlugins(),
@@ -75,7 +81,7 @@ class CommandPaletteWidget extends Widget {
     }
   }
 
-  onNavigate({ itemUrl, state }: {
+  onEnter({ itemUrl, state }: {
     item: ITiddlerFields;
     itemUrl: string;
     state: AutocompleteState<ITiddlerFields>;
@@ -93,6 +99,18 @@ class CommandPaletteWidget extends Widget {
         navigateFromNode: this,
       });
     }
+    if (!state.context.noClose) {
+      this.setCloseState();
+    }
+    this.autoCompleteInstance?.setContext({ noNavigate: undefined, newQuery: undefined, noClose: undefined } satisfies IContext);
+  }
+
+  onCtrlEnter({ itemUrl, state }: {
+    item: ITiddlerFields;
+    itemUrl: string;
+    state: AutocompleteState<ITiddlerFields>;
+  }) {
+    $tw.utils.copyToClipboard(itemUrl);
     if (!state.context.noClose) {
       this.setCloseState();
     }
@@ -136,7 +154,7 @@ class CommandPaletteWidget extends Widget {
     inputElement.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') {
         if (inputElement.value === '') {
-          this.destroy();
+          this.setCloseState();
         } else {
           event.stopPropagation();
           event.preventDefault();
@@ -198,6 +216,7 @@ class CommandPaletteWidget extends Widget {
     /* eslint-disable @typescript-eslint/unbound-method */
     window.removeEventListener('resize', this.fixPanelPosition);
     /* eslint-enable @typescript-eslint/unbound-method */
+    this.previouslyFocusedElement?.focus?.();
   }
 }
 
