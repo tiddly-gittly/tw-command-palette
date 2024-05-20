@@ -47,6 +47,7 @@ class CommandPaletteWidget extends Widget {
       navigator: {
         navigate: this.onNavigate.bind(this) satisfies AutocompleteNavigator<ITiddlerFields>['navigate'],
       },
+      defaultActiveItemId: 0,
       plugins: getSubPlugins(),
       reshape({ sourcesBySourceId }) {
         const {
