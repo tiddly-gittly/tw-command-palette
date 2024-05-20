@@ -17,6 +17,7 @@ Tagging: User tiddlers with tags
 Message: Trigger system message
 Layout: Switch layout
 Config: Open config
+Tags: Tags
 ActionString: Trigger action string
 CurrentTiddler: Current tiddler
 CurrentLayout: Current layout
