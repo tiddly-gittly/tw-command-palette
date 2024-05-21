@@ -4,13 +4,14 @@ const isInTidGiDesktop = typeof document !== 'undefined' && document?.location?.
 // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-explicit-any
 const tidGiWorkspaceID = ((window as any).meta?.())?.workspaceID;
 
-export async function filterTiddlersAsync(filter: string): Promise<ITiddlerFields[]> {
+export async function filterTiddlersAsync(filter: string, exclude?: string[]): Promise<ITiddlerFields[]> {
   if (isInTidGiDesktop && 'service' in window) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
     const resultFromIPC = await (window.service as any).wiki.callWikiIpcServerRoute(
       tidGiWorkspaceID,
       'getTiddlersJSON',
       filter,
+      exclude,
     );
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     return resultFromIPC.data as ITiddlerFields[];
