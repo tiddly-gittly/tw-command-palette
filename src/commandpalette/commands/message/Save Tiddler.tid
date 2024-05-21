@@ -1,0 +1,7 @@
+command-palette-filter: [has:field[draft.of]]
+tags: $:/tags/Messages
+caption: {{$:/language/Buttons/Save/Caption}}
+description: {{$:/language/Buttons/Save/Hint}}
+title: $:/plugins/linonetwo/commandpalette/Save Tiddler
+
+tm-save-tiddler

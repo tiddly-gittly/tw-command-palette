@@ -1,0 +1,6 @@
+tags: $:/tags/Messages
+caption: {{$:/language/Buttons/Edit/Caption}}
+description: {{$:/language/Buttons/Edit/Hint}}
+title: $:/plugins/linonetwo/commandpalette/Edit Tiddler
+
+tm-edit-tiddler

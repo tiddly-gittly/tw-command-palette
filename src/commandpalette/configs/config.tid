@@ -1,0 +1,18 @@
+title: $:/plugins/linonetwo/commandpalette/config
+tags: $:/tags/ControlPanel/SettingsTab
+caption: <<lingo Name $:/plugins/linonetwo/commandpalette/language/>>
+
+\define lingo-base() $:/plugins/linonetwo/commandpalette/language/
+
+<<lingo ConfigDescription>>
+
+---
+
+!! <<lingo Configs/PluginConfigs/Caption>>
+
+;<<lingo Configs/HideDefaultSearchBar/Caption>>
+:<$checkbox tiddler="$:/plugins/linonetwo/commandpalette/configs/HideDefaultSearchBar" field="text" checked="yes" unchecked=""> <<lingo Configs/HideDefaultSearchBar/Description>></$checkbox>
+;<<lingo Configs/TitleAlias/Caption>>
+:<$edit-text tiddler="$:/plugins/linonetwo/commandpalette/configs/TitleAlias" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="input" /> <<lingo Configs/TitleAlias/Description>>
+;<<lingo Configs/DesktopWidth/Caption>>
+:<$edit-text tiddler="$:/plugins/linonetwo/commandpalette/configs/DesktopWidth" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="input" type="number" />% <<lingo Configs/DesktopWidth/Description>>

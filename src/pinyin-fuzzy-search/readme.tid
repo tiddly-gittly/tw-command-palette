@@ -1,0 +1,8 @@
+title: $:/plugins/linonetwo/pinyin-fuzzy-search/readme
+creator: LinOnetwo
+
+为命令菜单插件提供拼音搜索功能，一般需要安装命令菜单插件才能用，但如果你很懂筛选器的话，这个插件也提供了以下筛选器供你使用：
+
+* pinyinfuse
+* fuzzySearchWiki
+* hasPinyinMatchOrFuseMatch

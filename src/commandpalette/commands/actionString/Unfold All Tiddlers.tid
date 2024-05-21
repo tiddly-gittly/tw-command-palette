@@ -1,0 +1,6 @@
+caption: {{$:/language/Buttons/UnfoldAll/Caption}}
+description: {{$:/language/Buttons/UnfoldAll/Hint}}
+tags: $:/tags/Actions
+title: $:/plugins/linonetwo/commandpalette/Unfold All Tiddlers
+
+<$action-sendmessage $message="tm-unfold-all-tiddlers" foldedStatePrefix="$:/state/folded/"/>

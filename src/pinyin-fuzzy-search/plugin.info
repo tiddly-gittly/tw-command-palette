@@ -1,0 +1,9 @@
+{
+  "title": "$:/plugins/linonetwo/pinyin-fuzzy-search",
+  "description": "为命令菜单插件提供模糊搜索和拼音搜索的能力，并提供 `pinyinfuse` 筛选器。",
+  "author": "LinOnetwo",
+  "core-version": ">=5.1.22",
+  "plugin-type": "plugin",
+  "version": "0.2.0",
+  "list": "readme tree"
+}

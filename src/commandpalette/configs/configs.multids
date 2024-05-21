@@ -1,0 +1,6 @@
+title: $:/plugins/linonetwo/commandpalette/configs/
+
+TitleAlias: title caption alias
+TextAlias: text keywords
+HideDefaultSearchBar: no
+DesktopWidth: 80

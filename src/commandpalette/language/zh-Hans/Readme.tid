@@ -1,0 +1,15 @@
+title: $:/plugins/linonetwo/commandpalette/language/zh-Hans/Readme
+
+\define lingo-base() $:/plugins/linonetwo/commandpalette/language/
+
+! <<lingo Name>>
+
+<<lingo Description>>
+
+该插件与[[Souk21/TW-commandpalette|https://github.com/Souk21/TW-commandpalette]]兼容，但采用了 TypeScript 和[ext[algolia/autocomplete|https://github.com/algolia/autocomplete]]编写，因此功能更强大，对开发人员扩展其功能也更友好。
+
+!! 功能
+
+按下 ctrl/cmd + P 唤起搜索框，按的时候如果多加一个 Shift 可以唤起功能框。
+
+如果你还安装了[ext[linonetwo/pinyin-fuzzy-search|https://tw-cpl.netlify.app/#linonetwo%2Fpinyin-fuzzy-search:Index%20linonetwo%2Fpinyin-fuzzy-search]]插件，那么搜索的时候可以打拼音。

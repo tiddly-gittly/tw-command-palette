@@ -1,0 +1,6 @@
+tags: $:/tags/Messages
+caption: {{$:/language/Buttons/Refresh/Caption}}
+description: {{$:/language/Buttons/Refresh/Hint}}
+title: $:/plugins/linonetwo/commandpalette/Browser Refresh
+
+tm-browser-refresh

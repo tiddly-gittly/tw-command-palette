@@ -1,0 +1,4 @@
+title: $:/SiteTitle
+type: text/vnd.tiddlywiki
+
+<<lingo Name $:/plugins/linonetwo/commandpalette/language/>>

@@ -1,0 +1,5 @@
+caption: 查看语言列表
+description: 在命令菜单里列出语言列表
+tags: $:/tags/Filter
+title: $:/plugins/linonetwo/commandpalette/See Languages
+filter: [!has[draft.of]plugin-type[language]]

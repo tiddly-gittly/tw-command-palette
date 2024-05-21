@@ -1,0 +1,6 @@
+tags: $:/tags/Messages
+caption: {{$:/language/Buttons/Clone/Caption}}
+description: {{$:/language/Buttons/Clone/Hint}} <<currentTiddler>>
+title: $:/plugins/linonetwo/commandpalette/Clone Tiddler
+
+tm-new-tiddler

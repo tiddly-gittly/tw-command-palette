@@ -1,0 +1,17 @@
+title: $:/plugins/linonetwo/commandpalette/DefaultCommandPalette
+tags: $:/tags/CommandPalette
+
+\procedure on-mask-layer-clicked() <$action-sendmessage $message="close-command-palette" $param="default"/>
+
+<% if [{$:/state/commandpalette/default/opened}match[yes]] %>
+  <$eventcatcher selector=".tw-default-commandpalette-mask-layer" tag="div" $click=<<on-mask-layer-clicked>>>
+    <div class="tw-default-commandpalette-mask-layer"></div>
+  </$eventcatcher>
+  <div class="tw-commandpalette-default-container">
+    <$command-palette
+      id="default"
+      prefix={{$:/state/commandpalette/default/opened!!prefix}}
+      historyMode={{$:/state/commandpalette/default/opened!!historyMode}}
+    />
+  </div>
+<% endif %>

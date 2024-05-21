@@ -1,0 +1,16 @@
+caption: VaultTrees
+tags: $:/tags/SideBar
+title: Example Tiddlers
+type: text/vnd.tiddlywiki
+
+
+<div class="tc-tree-obv">
+<span><center><p>Obsidian Vault<sup><a target="_blank" href="https://tw-cpl.netlify.app/#whitefall%2Fobsidian-vault">p</a></sup>&nbsp;文件列表</p></center></span>
+<<tree prefix:"λ:/">>
+</div>
+
+<!-- 
+[get[obvault]unique[]]
+[field:obvault[Neural-Networks]get[vaulttree]]
+条目名必须和字段路径中的名字一致。
+-->

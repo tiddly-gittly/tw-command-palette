@@ -1,0 +1,5 @@
+caption: 查看插件列表
+description: 在命令菜单里列出插件列表
+tags: $:/tags/Filter
+title: $:/plugins/linonetwo/commandpalette/See Plugins
+filter: [!has[draft.of]plugin-type[plugin]search[]]

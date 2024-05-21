@@ -1,0 +1,6 @@
+tags: $:/tags/Messages
+caption: {{$:/language/Buttons/Print/Caption}}
+description: {{$:/language/Buttons/Print/Hint}}
+title: $:/plugins/linonetwo/commandpalette/Print
+
+tm-print

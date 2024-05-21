@@ -1,0 +1,6 @@
+tags: $:/tags/Messages
+caption: {{$:/language/Buttons/SaveWiki/Caption}}
+description: {{$:/language/Buttons/SaveWiki/Hint}}
+title: $:/plugins/linonetwo/commandpalette/Save Wiki
+
+tm-save-wiki

@@ -1,0 +1,14 @@
+[
+    {
+        "created": "20230926010148000",
+        "creator": "马不前",
+        "title": "λ:/thoughts-memo-translation-main/andy/note/Bridge notes narrowly relate two adjacent terms",
+        "text": "# 桥注紧密地联系两个相邻的术语\r\n\r\n原文：[Bridge notes narrowly relate two adjacent terms (andymatuschak.org)](https://notes.andymatuschak.org/z6eWsRsp4aWrQ8YbyYqsUNLg2g5ZXGcTy9Dpo)\r\n\r\n假设另一个人对一个与你自己的想法相似的想法进行了深入思考，他们的结论似乎大多相似。你们对该理论的各种属性都有自己的术语。你很想把对方的术语归入自己的术语，但你的概念和他们的概念之间可能存在着微妙的差异，在这个过程中它会丢失。你可以直接使用对方的术语，但有时当被固定在先前的术语上时，很难进入新的方向，因为这些术语可能带有许多内涵。然而，你也不想不断地参考两套术语。\r\n\r\n有个解决方案是创建一条笔记，将你的专业术语与类似的联系起来。这在理论之间建立了「桥梁」，描述了你们术语间的异同。用不同的主干笔记维护各自的术语体系——而桥注只是为了联系两者。比如说：[常青笔记和卡片盒笔记法的异同](https://notes.andymatuschak.org/z4AX7pHAu5uUfmrq4K4zig9x8jmmF62XgaMXm)。\r\n\r\n这样的笔记让我想起了关系型数据库多对多连接表中的记录。\r\n\r\n------\r\n\r\n## 参考文献\r\n\r\n与伊戈尔-德沃尔金的对话, 2020-05-11",
+        "type": "text/markdown",
+        "caption": " 桥注紧密地联系两个相邻的术语\r",
+        "modified": "20230930171250219",
+        "modifier": "马不前",
+        "obvault": "thoughts-memo-translation-main",
+        "original-title": "Bridge notes narrowly relate two adjacent terms"
+    }
+]

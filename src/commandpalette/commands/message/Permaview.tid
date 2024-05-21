@@ -1,0 +1,6 @@
+tags: $:/tags/Messages
+caption: {{$:/language/Buttons/Permaview/Caption}}
+description: {{$:/language/Buttons/Permaview/Hint}}
+title: $:/plugins/linonetwo/commandpalette/Permaview
+
+tm-permaview

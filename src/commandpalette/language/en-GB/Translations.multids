@@ -1,0 +1,39 @@
+title: $:/plugins/linonetwo/commandpalette/language/en-GB/
+
+Name: Command Palette
+Description: Search the text of tiddlers, and execute commands in Tiddlywiki. Beautiful omni-bar and shortcut command center.
+Configs/Description: These settings let you customise the behaviour of "Command Palette" plugin.
+Configs/PluginConfigs/Caption: Plugin Configs
+Configs/TitleAlias/Caption: Fields regarded as title to search
+Configs/TitleAlias/Description: When searching title, you may want to include more fields to search. Separate fields with spaces, note that adding too many fields can cause lag.
+Configs/HideDefaultSearchBar/Caption: Hide default search bar
+Configs/HideDefaultSearchBar/Description: If you only use commandpalette to search and don't need default search bar, check this box.
+Configs/DesktopWidth/Caption: Width on desktop mode
+Configs/DesktopWidth/Description: Width of the input and result boxes on the screen (does not affect mobile, which is full screen by default)
+SystemTitle: Title of system tiddler
+UserTitle: Title of user tiddler
+UserTitlePinyin: Title Pinyin of user tiddler
+UserText: Text of user tiddler
+StoryHistory: Story history
+Filter: Pick build-in filters
+UnderFilter: Further search based on filters
+Tagging: User tiddlers with tags
+Message: Trigger system message
+Layout: Switch layout
+Config: Open config
+Tags: Tags
+Help: Command palette usage
+ActionString: Trigger action string
+CurrentTiddler: Current tiddler
+CurrentLayout: Current layout
+NoResult: No result or no uniq result
+Help/Help/Caption: Help
+Help/Help/Description: Usage of the command menu, describes what the command menu will search when different prefixes are added to the search box.
+Help/Filter/Caption: Filters
+Help/Filter/Description: A two-step process, first search for a preset filter or a customized filter, enter to confirm the selection; then continue to search in the filter results, enter to open the tiddler. In the second step, only user entries are searched by default, and system entries can be included by adding a prefix to the system entry search.
+Help/User/Caption: User tiddlers
+Help/User/Description: Not prefixed, just typed, you can search for the title and content of your tiddlers.
+Help/System/Caption: System tiddlers
+Help/System/Description: Searches for individual micro-system features such as available system messages, layouts, settings, etc.
+Help/Tags/Caption: Tags
+Help/Tags/Description: In two steps, first search for all tags in the Knowledge Base, enter to confirm selection; then continue searching in entries with this tag added, enter to open the tiddler. In the second step, only user entries are searched by default, and system entries can be included by adding a prefix to the system entry search.

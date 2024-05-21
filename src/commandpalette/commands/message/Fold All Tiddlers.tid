@@ -1,0 +1,6 @@
+tags: $:/tags/Messages
+caption: {{$:/language/Buttons/FoldAll/Caption}}
+description: {{$:/language/Buttons/FoldAll/Hint}}
+title: $:/plugins/linonetwo/commandpalette/Fold All Tiddlers
+
+tm-fold-all-tiddlers

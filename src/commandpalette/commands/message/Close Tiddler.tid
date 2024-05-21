@@ -1,0 +1,6 @@
+tags: $:/tags/Messages
+caption: {{$:/language/Buttons/Close/Caption}}
+description: {{$:/language/Buttons/Close/Hint}} <<currentTiddler>>
+title: $:/plugins/linonetwo/commandpalette/Close Tiddler
+
+tm-close-tiddler

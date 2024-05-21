@@ -1,0 +1,23 @@
+created: 20230930164415100
+creator: 马不前
+modified: 20230930171247059
+modifier: 马不前
+tags: Configuration
+title: 替换
+
+<$button tooltip="original-title">
+<$list filter="[has[obvault]] :filter[get[text]prefix[#]]">
+<$action-setfield original-title={{!!caption}}  />
+</$list>
+替换caption为original-title
+</$button>
+
+
+<$button tooltip="替换">
+<$list filter="[has[original-title]]">
+<$let zh={{{ [<currentTiddler>get[text]splitregexp[\n]first[]removeprefix[#]] }}}>
+<$action-setfield $tiddler=<<currentTiddler>> caption=<<zh>>  />
+</$let>
+</$list>
+替换
+</$button>

@@ -1,0 +1,6 @@
+tags: $:/tags/Messages
+caption: {{$:/language/Buttons/Refresh/Caption}}<<lingo Server $:/plugins/linonetwo/commandpalette/language/>>
+description: {{$:/language/Buttons/Refresh/Hint}}<<lingo Server $:/plugins/linonetwo/commandpalette/language/>>
+title: $:/plugins/linonetwo/commandpalette/Refresh Server
+
+tm-server-refresh

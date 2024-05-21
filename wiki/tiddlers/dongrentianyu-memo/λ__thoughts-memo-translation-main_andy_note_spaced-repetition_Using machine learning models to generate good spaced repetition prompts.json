@@ -1,0 +1,14 @@
+[
+    {
+        "created": "20230926010148000",
+        "creator": "马不前",
+        "title": "λ:/thoughts-memo-translation-main/andy/note/spaced-repetition/Using machine learning models to generate good spaced repetition prompts",
+        "text": "# 使用机器学习模型来生成高质量的间隔重复卡片\r\n\r\n原文：[Using machine learning models to generate good spaced repetition prompts (andymatuschak.org)](https://notes.andymatuschak.org/z2DY7qsP5iHsiA5hxUHheV8hu7Xe96vdGyYX)\r\n\r\n一个颇具挑战的问题。一些相关笔记：\r\n\r\n- [将基于机器学习的卡片生成重新定义为过滤问题，有助于我们思考吗？](https://notes.andymatuschak.org/zQ4E1DXZoZTTitsik89ZcvXMu8dQMkJzRUS)\r\n\r\n- [语言模型可以基于卡片生成有用的变体问题](https://notes.andymatuschak.org/zEhne31FD53eNQw3bpcuomfxMYL3s1qkhbF)\r\n\r\n- [语言模型可以基于填空卡生成高质量的问答卡](https://notes.andymatuschak.org/z4A7LCXBAkAUH2uZ21JnNrBhJHCjkobFMyn)\r\n\r\n## 模型\r\n\r\n大多数人都在使用通用语言模型。\r\n\r\n## 阅读队列\r\n\r\n- Lidiya Murakhovs’ ka, Chien-Sheng Wu, Tong Niu, Wenhao Liu, and Caiming Xiong. 2021. MixQG: Neural Question Generation with Mixed Answer Types. arXiv preprint arXiv:2110.08175 (2021).",
+        "type": "text/markdown",
+        "caption": " 使用机器学习模型来生成高质量的间隔重复卡片\r",
+        "modified": "20230930171250224",
+        "modifier": "马不前",
+        "obvault": "thoughts-memo-translation-main",
+        "original-title": "Using machine learning models to generate good spaced repetition prompts"
+    }
+]

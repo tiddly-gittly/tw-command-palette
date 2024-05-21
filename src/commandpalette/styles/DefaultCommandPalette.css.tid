@@ -1,0 +1,66 @@
+tags: $:/tags/CommandPaletteTheme
+title: $:/plugins/linonetwo/commandpalette/styles/DefaultCommandPalette.css
+tags: $:/tags/Stylesheet
+
+\rules only filteredtranscludeinline transcludeinline macrodef macrocallinline html
+
+:root {
+  --position-autocomplete-panel-top: 5em;
+}
+.aa-Panel {
+  /**
+   * container of command input can't be position fix, otherwise need a hack
+   * https://github.com/algolia/autocomplete/issues/1199
+  */
+  position: fixed !important;
+  top: calc(var(--position-autocomplete-panel-top) + 0.25em) !important;
+  z-index: 9999;
+}
+.tw-commandpalette-default-container {
+  position: fixed;
+  background: <<colour page-background>>;
+  z-index: 9998;
+  top: 5em;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  /** fallback to 80% of root widget */
+  width: 80%;
+  width: {{$:/plugins/linonetwo/commandpalette/configs/DesktopWidth}}%;
+  flex-direction: column;
+}
+div.aa-DetachedContainer div.aa-Panel {
+  /** height of .aa-DetachedFormContainer */
+  top: 65px !important;
+  width: 100%;
+  height: 100%;
+}
+.tw-default-commandpalette-mask-layer {
+  position: fixed;
+  z-index: 9997;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background: <<colour background>>;
+  opacity: 0.5;
+  filter: contrast(130%);
+  min-width: 200px !important;
+  transition: opacity {{$:/config/AnimationDuration}}ms;
+  backdrop-filter: blur(10px);
+  overscroll-behavior: contain;
+  overscroll-behavior: none;
+}
+
+div.aa-SourceHeader {
+  border-bottom: 1px solid;
+  padding-bottom: 0.3em;
+  padding-top: 0.3em;
+  opacity: 0.5;
+}
+div.tw-commandpalette-layout-result {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}

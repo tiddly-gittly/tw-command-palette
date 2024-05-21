@@ -1,0 +1,5 @@
+key: ((open-command-palette))
+tags: $:/tags/KeyboardShortcut
+title: $:/plugins/linonetwo/commandpalette/CommandPalette
+
+<$action-sendmessage $message="open-command-palette"/>

@@ -1,0 +1,6 @@
+tags: $:/tags/Messages
+caption: {{$:/language/Buttons/Delete/Caption}}
+description: {{$:/language/Buttons/Delete/Hint}}
+title: $:/plugins/linonetwo/commandpalette/Delete Tiddler
+
+tm-delete-tiddler

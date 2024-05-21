@@ -1,0 +1,6 @@
+tags: $:/tags/Messages
+caption: {{$:/language/Buttons/Home/Caption}}
+description: {{$:/language/Buttons/Home/Hint}}
+title: $:/plugins/linonetwo/commandpalette/Home
+
+tm-home

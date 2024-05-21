@@ -1,0 +1,5 @@
+caption: 展示可用命令Tiddler列表
+description: 列出命令菜单的命令来自哪些Tiddlers
+tags: $:/tags/Filter
+title: $:/plugins/linonetwo/commandpalette/show tiddler commands
+filter: [all[shadows]tag[$:/tags/CommandPaletteCommand]]

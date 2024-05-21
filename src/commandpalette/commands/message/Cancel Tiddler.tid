@@ -1,0 +1,7 @@
+command-palette-filter: [has:field[draft.of]]
+tags: $:/tags/Messages
+caption: {{$:/language/Buttons/Cancel/Caption}}
+description: {{$:/language/Buttons/Cancel/Hint}} <<currentTiddler>>
+title: $:/plugins/linonetwo/commandpalette/Cancel Tiddler
+
+tm-cancel-tiddler

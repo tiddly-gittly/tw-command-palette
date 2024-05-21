@@ -1,0 +1,5 @@
+caption: 查看主题
+description: 列出可用主题
+tags: $:/tags/Filter
+title: $:/plugins/linonetwo/commandpalette/See Themes
+filter: [!has[draft.of]plugin-type[theme]search[]]
