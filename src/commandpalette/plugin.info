@@ -1,8 +1,8 @@
 {
     "title": "$:/plugins/linonetwo/commandpalette",
-    "description": "Command palette Chinese translated",
+    "description": "Best Command Palette, search everything, extensible, delightful.",
     "author": "LinOnetwo",
-    "version": "0.4.0",
+    "version": "1.0.0",
     "core-version": ">=5.0.8",
     "source": "https://github.com/tiddly-gittly/tiddlywiki-plugins",
     "dependents": "$:/plugins/Gk0Wk/focused-tiddler",
