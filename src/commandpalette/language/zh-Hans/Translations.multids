@@ -6,6 +6,8 @@ Configs/Description: 通过这些设置，您可以自定义「命令菜单」�
 Configs/PluginConfigs/Caption: 插件设置
 Configs/TitleAlias/Caption: 视为标题的字段
 Configs/TitleAlias/Description: 搜索标题时，您可能希望包含更多的字段加入搜索。字段之间用空格隔开，注意加入过多字段会变卡。
+Configs/TextAlias/Caption: 视为正文文本的字段
+Configs/TextAlias/Description: 搜索正文文本时，您可能希望包含更多的字段加入搜索。字段之间用空格隔开，注意加入过多字段会变卡。
 Configs/HideDefaultSearchBar/Caption: 隐藏默认搜索栏
 Configs/HideDefaultSearchBar/Description: 如果您只使用命令菜单搜索，不需要默认搜索栏，请选中此复选框。
 Configs/DesktopWidth/Caption: 桌面模式宽度
