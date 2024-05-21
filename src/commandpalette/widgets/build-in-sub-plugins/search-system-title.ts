@@ -1,6 +1,7 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
+import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
 
 export const plugin = {
@@ -10,11 +11,9 @@ export const plugin = {
     return [
       {
         sourceId: 'system-title',
-        getItems({ query }) {
+        async getItems({ query }) {
           if (query === '') return [];
-          return $tw.wiki.filterTiddlers(`[all[tiddlers]is[system]search[${query}]]`)
-            .map((title) => $tw.wiki.getTiddler(title)?.fields)
-            .filter(Boolean) as ITiddlerFields[];
+          return await filterTiddlersAsync(`[all[tiddlers]is[system]search[${query}]]`);
         },
         getItemUrl({ item }) {
           return item.title;

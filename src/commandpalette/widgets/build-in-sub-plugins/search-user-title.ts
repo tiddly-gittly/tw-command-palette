@@ -1,6 +1,7 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsSearchUser, checkIsUnderFilter } from '../utils/checkPrefix';
+import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { getFieldsAsTitle } from '../utils/getFieldsAsTitle';
 import { lingo } from '../utils/lingo';
 
@@ -11,11 +12,9 @@ export const plugin = {
     return [
       {
         sourceId: 'title',
-        getItems({ query }) {
+        async getItems({ query }) {
           if (query === '') return [];
-          return $tw.wiki.filterTiddlers(`[all[tiddlers]!is[system]search:${getFieldsAsTitle()}[${query}]]`)
-            .map((title) => $tw.wiki.getTiddler(title)?.fields)
-            .filter(Boolean) as ITiddlerFields[];
+          return await filterTiddlersAsync(`[all[tiddlers]!is[system]search:${getFieldsAsTitle()}[${query}]]`);
         },
         getItemUrl({ item }) {
           return item.title;

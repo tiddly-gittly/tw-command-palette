@@ -3,6 +3,7 @@ import type { AutocompletePlugin, GetSources } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsFilter, checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
 import { IContext } from '../utils/context';
+import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
 
@@ -13,10 +14,9 @@ export const plugin = {
       const { widget } = parameters.state.context as IContext;
       sources.push({
         sourceId: 'build-in-filter',
-        getItems({ query }) {
+        async getItems({ query }) {
           if (query === '') return [];
-          const buildInFilters = $tw.wiki.filterTiddlers(`[all[tiddlers+shadows]tag[$:/tags/Filter]]`)
-            .map((title) => $tw.wiki.getTiddler(title)?.fields)
+          const buildInFilters = (await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Filter]]`))
             .filter((tiddler): tiddler is ITiddlerFields => {
               if (tiddler === undefined) return false;
               if (!tiddler.filter || typeof tiddler.filter !== 'string') return false;
@@ -72,10 +72,8 @@ export const plugin = {
     if (checkIsSearchSystem(parameters) && checkIsUnderFilter(parameters)) {
       sources.push({
         sourceId: 'filter',
-        getItems({ query, state }) {
-          return $tw.wiki.filterTiddlers(`${(state.context as IContext).filter} +[search[${query}]]`)
-            .map((title) => $tw.wiki.getTiddler(title)?.fields)
-            .filter(Boolean) as ITiddlerFields[];
+        async getItems({ query, state }) {
+          return await filterTiddlersAsync(`${(state.context as IContext).filter} +[search[${query}]]`);
         },
         getItemUrl({ item }) {
           return item.title;

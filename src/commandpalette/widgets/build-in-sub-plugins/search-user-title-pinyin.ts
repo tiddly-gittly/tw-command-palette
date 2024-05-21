@@ -1,6 +1,7 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsSearchUser, checkIsUnderFilter } from '../utils/checkPrefix';
+import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { getFieldsAsTitle } from '../utils/getFieldsAsTitle';
 import { lingo } from '../utils/lingo';
 
@@ -19,11 +20,9 @@ export const plugin = {
     return [
       {
         sourceId: 'title-pinyin',
-        getItems({ query }) {
+        async getItems({ query }) {
           if (query === '') return [];
-          return $tw.wiki.filterTiddlers(`[all[tiddlers]!is[system]pinyinfuse:${getFieldsAsTitle()}[${query}]]`)
-            .map((title) => $tw.wiki.getTiddler(title)?.fields)
-            .filter(Boolean) as ITiddlerFields[];
+          return await filterTiddlersAsync(`[all[tiddlers]!is[system]pinyinfuse:${getFieldsAsTitle()}[${query}]]`);
         },
         getItemUrl({ item }) {
           return item.title;

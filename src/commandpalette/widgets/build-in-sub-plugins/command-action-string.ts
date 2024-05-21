@@ -4,6 +4,7 @@ import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
 import { IContext } from '../utils/context';
+import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
 
@@ -17,11 +18,9 @@ export const plugin = {
     return [
       {
         sourceId: 'actionString',
-        getItems({ query }) {
+        async getItems({ query }) {
           if (query === '') return [];
-          return $tw.wiki.filterTiddlers(`[all[tiddlers+shadows]tag[$:/tags/CommandPaletteCommand]field:command-palette-type[actionString]]`)
-            .map((title) => $tw.wiki.getTiddler(title)?.fields)
-            .filter((tiddler): tiddler is ITiddlerFields => tiddler !== undefined)
+          return (await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/CommandPaletteCommand]field:command-palette-type[actionString]]`))
             .filter(tiddler =>
               // TODO: add pinyinfuse
               $tw.wiki.filterTiddlers(

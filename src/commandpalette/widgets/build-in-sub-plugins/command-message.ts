@@ -3,6 +3,7 @@ import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
 import { IContext } from '../utils/context';
+import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
 
@@ -16,12 +17,10 @@ export const plugin = {
     return [
       {
         sourceId: 'message',
-        getItems({ query }) {
+        async getItems({ query }) {
           if (query === '') return [];
-          return $tw.wiki.filterTiddlers(`[all[tiddlers+shadows]tag[$:/tags/CommandPaletteCommand]field:command-palette-type[message]]`)
-            .map((title) => $tw.wiki.getTiddler(title)?.fields)
+          return (await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/CommandPaletteCommand]field:command-palette-type[message]]`))
             .filter((tiddler): tiddler is ITiddlerFields => {
-              if (tiddler === undefined) return false;
               const filter = tiddler['command-palette-filter'] as string | undefined;
               // if no filter, just pass. If user didn't install `$:/plugins/Gk0Wk/focused-tiddler`, also pass.
               if (!filter || !focusedTiddler) return true;

@@ -2,6 +2,7 @@ import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsSearchTags } from '../utils/checkPrefix';
 import { IContext } from '../utils/context';
+import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
 
 export const plugin = {
@@ -13,11 +14,9 @@ export const plugin = {
     return [{
       // suggest tags for user to search
       sourceId: 'tags',
-      getItems({ query }) {
+      async getItems({ query }) {
         // similar to $:/core/Filters/AllTags
-        return $tw.wiki.filterTiddlers(`[tags[]search[${query.slice(1)}]]`)
-          .map((title) => $tw.wiki.getTiddler(title)?.fields)
-          .filter(Boolean) as ITiddlerFields[];
+        return await filterTiddlersAsync(`[tags[]search[${query.slice(1)}]]`);
       },
       getItemUrl({ item }) {
         return item.title;

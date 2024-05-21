@@ -3,6 +3,7 @@ import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsSearchSystem } from '../utils/checkPrefix';
 import { IContext } from '../utils/context';
+import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
 
@@ -14,11 +15,9 @@ export const plugin = {
     return [
       {
         sourceId: 'config',
-        getItems({ query }) {
-          return $tw.wiki.filterTiddlers(`[all[shadows]tag[$:/tags/ControlPanel/SettingsTab]]`)
-            .map((title) => $tw.wiki.getTiddler(title)?.fields)
+        async getItems({ query }) {
+          return (await filterTiddlersAsync(`[all[shadows]tag[$:/tags/ControlPanel/SettingsTab]]`))
             .filter((tiddler): tiddler is ITiddlerFields => {
-              if (tiddler === undefined) return false;
               // TODO: add pinyinfuse
               return $tw.wiki.filterTiddlers(
                 `[search[${query.slice(1)}]]`,
