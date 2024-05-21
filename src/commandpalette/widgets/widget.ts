@@ -176,7 +176,20 @@ class CommandPaletteWidget extends Widget {
         event.stopPropagation();
         event.preventDefault();
       }
+      // when use ctrl+tab to switch between history, when release tab (while still holding ctrl), do nothing after palette open.
+      if (event.key === 'Tab' && event.ctrlKey) {
+        // this.autoCompleteInstance?.setActiveItemId(this.autoCompleteInstance.)
+        event.stopPropagation();
+        event.preventDefault();
+      }
     });
+    inputElement.addEventListener('keyup', (event) => {
+      // when release ctrl, open the tiddler.
+      if (event.key === 'Tab') {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+    })
     this.modalCount++;
     // call with this
     Modal.prototype.adjustPageClass.call(this);
