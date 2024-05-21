@@ -8,6 +8,6 @@ tags: $:/tags/CommandPalette
     <div class="tw-default-commandpalette-mask-layer"></div>
   </$eventcatcher>
   <div class="tw-commandpalette-default-container">
-    <$command-palette id="default" />
+    <$command-palette id="default" prefix={{$:/state/commandpalette/default/prefix}} />
   </div>
 <% endif %>

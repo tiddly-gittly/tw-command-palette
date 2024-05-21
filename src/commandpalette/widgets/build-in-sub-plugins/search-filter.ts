@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import type { AutocompletePlugin, GetSources } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
-import { checkIsFilter, checkIsSearch, checkIsUnderFilter } from '../utils/checkPrefix';
+import { checkIsFilter, checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
 import { IContext } from '../utils/context';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
@@ -69,7 +69,7 @@ export const plugin = {
       });
     }
     // When filter in context is set by previous step, and no prefix, we search under result of that filter
-    if (checkIsSearch(parameters) && checkIsUnderFilter(parameters)) {
+    if (checkIsSearchSystem(parameters) && checkIsUnderFilter(parameters)) {
       sources.push({
         sourceId: 'filter',
         getItems({ query, state }) {

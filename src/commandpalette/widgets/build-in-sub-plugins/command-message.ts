@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
-import { checkIsCommand, checkIsUnderFilter } from '../utils/checkPrefix';
+import { checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
 import { IContext } from '../utils/context';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
@@ -9,7 +9,7 @@ import { renderTextWithCache } from '../utils/renderTextWithCache';
 export const plugin = {
   getSources(parameters) {
     if (parameters.query.length === 0) return [];
-    if (!checkIsCommand(parameters) || checkIsUnderFilter(parameters)) return [];
+    if (!checkIsSearchSystem(parameters) || checkIsUnderFilter(parameters)) return [];
     const focusedTiddler = $tw.wiki.getTiddlerText('$:/temp/focussedTiddler');
     const variables = { currentTiddler: focusedTiddler ?? '' };
     const { widget } = parameters.state.context as IContext;

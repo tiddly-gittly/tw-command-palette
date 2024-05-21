@@ -2,4 +2,4 @@ key: ((open-command-palette-command-mode))
 tags: $:/tags/KeyboardShortcut
 title: $:/plugins/linonetwo/commandpalette/CommandPaletteCommandMode
 
-<$action-sendmessage $message="open-command-palette" $param=">" />
+<$action-sendmessage $message="open-command-palette" prefix="$" />

@@ -1,6 +1,0 @@
-command-palette-type: help
-command-palette-prefix: > 》
-caption: <<lingo Help/Command/Caption $:/plugins/linonetwo/commandpalette/language/>>
-description: <<lingo Help/Command/Description $:/plugins/linonetwo/commandpalette/language/>>
-tags: $:/tags/CommandPaletteHelp
-title: $:/plugins/linonetwo/commandpalette/commands/help/Command

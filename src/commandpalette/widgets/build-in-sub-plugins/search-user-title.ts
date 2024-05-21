@@ -1,13 +1,13 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
-import { checkIsSearch, checkIsUnderFilter } from '../utils/checkPrefix';
+import { checkIsSearchUser, checkIsUnderFilter } from '../utils/checkPrefix';
 import { getFieldsAsTitle } from '../utils/getFieldsAsTitle';
 import { lingo } from '../utils/lingo';
 
 export const plugin = {
   getSources(parameters) {
     if (parameters.query.length === 0) return [];
-    if (!checkIsSearch(parameters) || checkIsUnderFilter(parameters)) return [];
+    if (!checkIsSearchUser(parameters) || checkIsUnderFilter(parameters)) return [];
     return [
       {
         sourceId: 'title',

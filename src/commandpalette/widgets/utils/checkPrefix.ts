@@ -3,17 +3,17 @@ import { GetSourcesParams } from '@algolia/autocomplete-core';
 import { ITiddlerFields } from 'tiddlywiki';
 import { IContext } from './context';
 
-const commandPrefixes = ($tw.wiki.getTiddler('$:/plugins/linonetwo/commandpalette/commands/help/Command')?.fields?.['command-palette-prefix'] as string | undefined)
+const systemPrefixes = ($tw.wiki.getTiddler('$:/plugins/linonetwo/commandpalette/commands/help/System')?.fields?.['command-palette-prefix'] as string | undefined)
   ?.split(' ')?.filter(Boolean);
 const filterPrefix = $tw.wiki.getTiddler('$:/plugins/linonetwo/commandpalette/commands/help/Filter')?.fields?.['command-palette-prefix'] as string | undefined;
 const tagsPrefix = $tw.wiki.getTiddler('$:/plugins/linonetwo/commandpalette/commands/help/Tags')?.fields?.['command-palette-prefix'] as string | undefined;
-export function checkIsCommand(parameters: GetSourcesParams<ITiddlerFields>) {
-  return commandPrefixes?.includes(parameters.query[0]);
+export function checkIsSearchSystem(parameters: GetSourcesParams<ITiddlerFields>) {
+  return systemPrefixes?.includes(parameters.query[0]);
 }
 
-export function checkIsSearch(parameters: GetSourcesParams<ITiddlerFields>) {
+export function checkIsSearchUser(parameters: GetSourcesParams<ITiddlerFields>) {
   const firstChar = parameters.query[0];
-  return !(commandPrefixes?.includes(firstChar)) && !(firstChar === filterPrefix) && !(firstChar === tagsPrefix);
+  return !(systemPrefixes?.includes(firstChar)) && !(firstChar === filterPrefix) && !(firstChar === tagsPrefix);
 }
 
 export function checkIsFilter(parameters: GetSourcesParams<ITiddlerFields>) {

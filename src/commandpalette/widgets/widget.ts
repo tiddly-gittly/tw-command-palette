@@ -34,6 +34,7 @@ class CommandPaletteWidget extends Widget {
     this.computeAttributes();
     this.execute();
     this.id = this.getAttribute('id', 'default');
+    const initialPrefix = this.getAttribute('prefix', '');
     const containerElement = $tw.utils.domMaker('nav', {
       class: 'tw-commandpalette-container',
     });
@@ -46,6 +47,9 @@ class CommandPaletteWidget extends Widget {
     this.autoCompleteInstance = autocomplete<ITiddlerFields>({
       container: containerElement,
       placeholder: 'Search for tiddlers',
+      initialState: {
+        query: initialPrefix,
+      },
       autoFocus: true,
       openOnFocus: true,
       ignoreCompositionEvents: true,
@@ -209,6 +213,7 @@ class CommandPaletteWidget extends Widget {
 
   setCloseState() {
     $tw.wiki.deleteTiddler(`$:/state/commandpalette/${this.id}/opened`);
+    $tw.wiki.deleteTiddler(`$:/state/commandpalette/${this.id}/prefix`);
     this.autoCompleteInstance?.setIsOpen(false);
     this.modalCount = 0;
     Modal.prototype.adjustPageClass.call(this);
