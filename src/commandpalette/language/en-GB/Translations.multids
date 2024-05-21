@@ -10,6 +10,7 @@ Configs/HideDefaultSearchBar/Caption: Hide default search bar
 Configs/HideDefaultSearchBar/Description: If you only use commandpalette to search and don't need default search bar, check this box.
 Configs/DesktopWidth/Caption: Width on desktop mode
 Configs/DesktopWidth/Description: Width of the input and result boxes on the screen (does not affect mobile, which is full screen by default)
+SystemTitle: Title of system tiddler
 UserTitle: Title of user tiddler
 UserTitlePinyin: Title Pinyin of user tiddler
 UserText: Text of user tiddler

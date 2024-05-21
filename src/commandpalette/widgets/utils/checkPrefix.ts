@@ -8,7 +8,7 @@ const systemPrefixes = ($tw.wiki.getTiddler('$:/plugins/linonetwo/commandpalette
 const filterPrefix = $tw.wiki.getTiddler('$:/plugins/linonetwo/commandpalette/commands/help/Filter')?.fields?.['command-palette-prefix'] as string | undefined;
 const tagsPrefix = $tw.wiki.getTiddler('$:/plugins/linonetwo/commandpalette/commands/help/Tags')?.fields?.['command-palette-prefix'] as string | undefined;
 export function checkIsSearchSystem(parameters: GetSourcesParams<ITiddlerFields>) {
-  return systemPrefixes?.includes(parameters.query[0]);
+  return Boolean(systemPrefixes?.includes(parameters.query[0]));
 }
 
 export function checkIsSearchUser(parameters: GetSourcesParams<ITiddlerFields>) {

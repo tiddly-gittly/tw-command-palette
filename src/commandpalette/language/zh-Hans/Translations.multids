@@ -11,6 +11,7 @@ Configs/HideDefaultSearchBar/Description: 如果您只使用命令菜单搜索�
 Configs/DesktopWidth/Caption: 桌面模式宽度
 Configs/DesktopWidth/Description: 输入框和结果框占屏幕的宽度（不影响移动端，移动端默认全屏）
 UserTitle: 用户条目标题
+SystemTitle: 系统条目标题
 UserTitlePinyin: 用户条目标题拼音
 UserText: 用户条目内容文本
 StoryHistory: 故事流浏览历史
