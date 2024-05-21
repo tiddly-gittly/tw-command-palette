@@ -6,7 +6,9 @@ title: $:/plugins/linonetwo/commandpalette/language/zh-Hans/Readme
 
 <<lingo Description>>
 
-该插件与[[Souk21/TW-commandpalette|https://github.com/Souk21/TW-commandpalette]]兼容，但采用了 TypeScript 和[ext[algolia/autocomplete|https://github.com/algolia/autocomplete]]编写，因此功能更强大，对开发人员扩展其功能也更友好。
+!! 致谢
+
+该插件参考了[[Souk21/TW-commandpalette|https://github.com/Souk21/TW-commandpalette]]的设计，感谢他制作的第一版！本插件升级并采用了 TypeScript 和[ext[algolia/autocomplete|https://github.com/algolia/autocomplete]]编写，因此功能更强大，对开发人员扩展其功能也更友好。
 
 !! 功能
 
