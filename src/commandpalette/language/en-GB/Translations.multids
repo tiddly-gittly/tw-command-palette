@@ -12,6 +12,7 @@ Configs/DesktopWidth/Caption: Width on desktop mode
 Configs/DesktopWidth/Description: Width of the input and result boxes on the screen (does not affect mobile, which is full screen by default)
 UserTitle: Title of user tiddler
 UserTitlePinyin: Title Pinyin of user tiddler
+UserText: Text of user tiddler
 StoryHistory: Story history
 Filter: Pick build-in filters
 UnderFilter: Further search based on filters

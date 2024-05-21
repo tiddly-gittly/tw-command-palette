@@ -6,3 +6,9 @@ export function getFieldsAsTitle(): string {
   const fieldsAsTitle = TitleAliasConfig.split(' ').filter(Boolean).join(',');
   return fieldsAsTitle;
 }
+
+export function getFieldsAsText(): string {
+  const TextAliasConfig = $tw.wiki.getTiddlerText('$:/plugins/linonetwo/commandpalette/configs/TextAlias', 'text');
+  const fieldsAsText = TextAliasConfig.split(' ').filter(Boolean).join(',');
+  return fieldsAsText;
+}

@@ -50,6 +50,7 @@ class CommandPaletteWidget extends Widget {
       this.autoCompleteState = nextState;
     };
     this.autoCompleteInstance = autocomplete<ITiddlerFields>({
+      id: this.id,
       container: containerElement,
       placeholder: 'Search for tiddlers',
       initialState: {
@@ -72,9 +73,11 @@ class CommandPaletteWidget extends Widget {
           'title': titleSource,
           'title-pinyin': titlePinyinSource,
           'story-history': storyHistorySource,
+          'text': textSource,
           ...rest
         } = sourcesBySourceId;
-        return [...removeDuplicates(...[titleSource, titlePinyinSource, storyHistorySource].filter(Boolean)), ...Object.values(rest)];
+        // this will also affect `priority` field. The order here is more important than `priority` field.
+        return [...removeDuplicates(...[textSource, titleSource, titlePinyinSource, storyHistorySource].filter(Boolean)), ...Object.values(rest)];
       },
     });
     this.autoCompleteInstance.setContext({ widget: this } satisfies IContext);
