@@ -23,7 +23,11 @@ export const plugin = {
               return $tw.wiki.filterTiddlers(
                 `[search[${query.slice(1)}]]`,
                 undefined,
-                $tw.wiki.makeTiddlerIterator([renderTextWithCache(tiddler.name, widget), renderTextWithCache(tiddler.description, widget)]),
+                $tw.wiki.makeTiddlerIterator([
+                  renderTextWithCache(tiddler.name, widget),
+                  renderTextWithCache(tiddler.description, widget),
+                  tiddler.title.replace('$:/plugins/', ''),
+                ]),
               ).length > 0;
             });
         },

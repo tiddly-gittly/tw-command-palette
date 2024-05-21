@@ -22,7 +22,7 @@ export const plugin = {
               return $tw.wiki.filterTiddlers(
                 `[search[${query.slice(1)}]]`,
                 undefined,
-                $tw.wiki.makeTiddlerIterator([renderTextWithCache(tiddler.caption, widget), tiddler.text]),
+                $tw.wiki.makeTiddlerIterator([renderTextWithCache(tiddler.caption, widget), tiddler.text, tiddler.title.replace('$:/plugins/', '')]),
               ).length > 0;
             });
         },

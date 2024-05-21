@@ -20,14 +20,14 @@ export const plugin = {
         sourceId: 'actionString',
         async getItems({ query }) {
           if (query === '') return [];
-          return (await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/CommandPaletteCommand]field:command-palette-type[actionString]]`, true))
+          return (await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Actions]]`, true))
             .filter(tiddler =>
               // TODO: add pinyinfuse
               $tw.wiki.filterTiddlers(
                 `[search[${query.slice(1)}]]`,
                 undefined,
                 $tw.wiki.makeTiddlerIterator([
-                  tiddler.title.replace('$:/plugins/linonetwo/commandpalette/', ''),
+                  tiddler.title.replace('$:/plugins/', '').replace('linonetwo/commandpalette/', ''),
                   renderTextWithCache(tiddler.caption, widget),
                   renderTextWithCache(tiddler.description, widget),
                 ]),
@@ -53,13 +53,10 @@ export const plugin = {
             return `${lingo('ActionString')} - ${lingo('CurrentTiddler')}: ${focusedTiddler} ${caption}`;
           },
           item({ item }) {
-            if (typeof item.caption === 'string' && item.caption !== '') {
-              const description = item.description
-                ? ` (${renderTextWithCache(item.description as string, widget, variables)})`
-                : '';
-              return `${renderTextWithCache(item.caption, widget, variables)}${description}`;
-            }
-            return item.title;
+            const description = item.description
+              ? ` (${renderTextWithCache(item.description as string, widget, variables)})`
+              : '';
+            return `${renderTextWithCache(item.caption, widget, variables)}${description}` || item.title;
           },
         },
       },

@@ -63,13 +63,10 @@ export const plugin = {
             return `${lingo('Message')} - ${lingo('CurrentTiddler')}: ${focusedTiddler} ${caption}`;
           },
           item({ item }) {
-            if (typeof item.caption === 'string' && item.caption !== '') {
-              const description = item.description
-                ? ` (${renderTextWithCache(item.description as string, widget, variables)})`
-                : '';
-              return `${renderTextWithCache(item.caption, widget, variables)}${description}`;
-            }
-            return item.title;
+            const description = item.description
+              ? ` (${renderTextWithCache(item.description as string, widget, variables)})`
+              : '';
+            return `${renderTextWithCache(item.caption, widget, variables)}${description}` || item.title;
           },
         },
       },

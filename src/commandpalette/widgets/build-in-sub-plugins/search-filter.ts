@@ -28,7 +28,7 @@ export const plugin = {
                 `[search[${query.slice(1)}]]`,
                 undefined,
                 $tw.wiki.makeTiddlerIterator([
-                  tiddler.title.replace('$:/plugins/linonetwo/commandpalette/', ''),
+                  tiddler.title.replace('$:/plugins/', '').replace('linonetwo/commandpalette/', ''),
                   renderTextWithCache(tiddler.caption, widget),
                   renderTextWithCache(tiddler.description, widget),
                   (tiddler.filter as string).trim().replaceAll('[', '').replaceAll(']', ''),

@@ -1,7 +1,0 @@
-command-palette-type: actionString
-caption: {{$:/language/Buttons/NewJournal/Caption}}
-description: {{$:/language/Buttons/NewJournal/Hint}}
-tags: $:/tags/CommandPaletteCommand
-title: $:/plugins/linonetwo/commandpalette/New Journal Command
-
-{{$:/core/ui/Actions/new-journal}}
