@@ -16,7 +16,7 @@ export const plugin = {
       {
         sourceId: 'config',
         async getItems({ query }) {
-          return (await filterTiddlersAsync(`[all[shadows]tag[$:/tags/ControlPanel/SettingsTab]]`))
+          return (await filterTiddlersAsync(`[all[shadows]tag[$:/tags/ControlPanel/SettingsTab]]`, true))
             .filter((tiddler): tiddler is ITiddlerFields => {
               // TODO: add pinyinfuse
               return $tw.wiki.filterTiddlers(

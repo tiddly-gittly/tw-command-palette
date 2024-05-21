@@ -17,7 +17,7 @@ export const plugin = {
       {
         sourceId: 'layout',
         async getItems({ query }) {
-          return (await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Layout]] [[$:/core/ui/PageTemplate]] +[!is[draft]sort[name]]`))
+          return (await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Layout]] [[$:/core/ui/PageTemplate]] +[!is[draft]sort[name]]`, true))
             .filter((tiddler): tiddler is ITiddlerFields => {
               // TODO: add pinyinfuse
               return $tw.wiki.filterTiddlers(

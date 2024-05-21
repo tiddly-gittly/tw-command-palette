@@ -20,7 +20,7 @@ export const plugin = {
         sourceId: 'actionString',
         async getItems({ query }) {
           if (query === '') return [];
-          return (await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/CommandPaletteCommand]field:command-palette-type[actionString]]`))
+          return (await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/CommandPaletteCommand]field:command-palette-type[actionString]]`, true))
             .filter(tiddler =>
               // TODO: add pinyinfuse
               $tw.wiki.filterTiddlers(

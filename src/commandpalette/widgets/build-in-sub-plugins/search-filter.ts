@@ -16,7 +16,7 @@ export const plugin = {
         sourceId: 'build-in-filter',
         async getItems({ query }) {
           if (query === '') return [];
-          const buildInFilters = (await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Filter]]`))
+          const buildInFilters = (await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Filter]]`, true))
             .filter((tiddler): tiddler is ITiddlerFields => {
               if (tiddler === undefined) return false;
               if (!tiddler.filter || typeof tiddler.filter !== 'string') return false;
@@ -73,7 +73,7 @@ export const plugin = {
       sources.push({
         sourceId: 'filter',
         async getItems({ query, state }) {
-          return await filterTiddlersAsync(`${(state.context as IContext).filter} +[search[${query}]]`);
+          return await filterTiddlersAsync(`${(state.context as IContext).filter} +[search[${query}]]`, true);
         },
         getItemUrl({ item }) {
           return item.title;

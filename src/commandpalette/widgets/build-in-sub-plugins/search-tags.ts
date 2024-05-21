@@ -16,7 +16,7 @@ export const plugin = {
       sourceId: 'tags',
       async getItems({ query }) {
         // similar to $:/core/Filters/AllTags
-        return await filterTiddlersAsync(`[tags[]search[${query.slice(1)}]]`);
+        return await filterTiddlersAsync(`[tags[]search[${query.slice(1)}]]`, true);
       },
       getItemUrl({ item }) {
         return item.title;

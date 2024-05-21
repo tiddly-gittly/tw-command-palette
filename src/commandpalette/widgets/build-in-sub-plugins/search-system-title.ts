@@ -13,7 +13,7 @@ export const plugin = {
         sourceId: 'system-title',
         async getItems({ query }) {
           if (query === '') return [];
-          return await filterTiddlersAsync(`[all[tiddlers+shadows]is[system]search[${query}]]`);
+          return await filterTiddlersAsync(`[all[tiddlers+shadows]is[system]search[${query}]]`, true);
         },
         getItemUrl({ item }) {
           return item.title;
