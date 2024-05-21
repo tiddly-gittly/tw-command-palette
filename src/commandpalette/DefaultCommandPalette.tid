@@ -11,7 +11,7 @@ tags: $:/tags/CommandPalette
     <$command-palette
       id="default"
       prefix={{$:/state/commandpalette/default/opened!!prefix}}
-      index={{$:/state/commandpalette/default/opened!!index}}
+      historyMode={{$:/state/commandpalette/default/opened!!historyMode}}
     />
   </div>
 <% endif %>

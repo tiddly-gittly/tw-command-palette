@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { Modal } from '$:/core/modules/utils/dom/modal.js';
 import { widget as Widget } from '$:/core/modules/widgets/widget.js';
-import { autocomplete } from '@algolia/autocomplete-js';
+import { autocomplete, OnStateChangeProps } from '@algolia/autocomplete-js';
 import type { AutocompleteNavigator } from '@algolia/autocomplete-shared/dist/esm/core/AutocompleteNavigator';
 import { IChangedTiddlers, ITiddlerFields } from 'tiddlywiki';
 import '@algolia/autocomplete-theme-classic';
@@ -25,6 +25,9 @@ class CommandPaletteWidget extends Widget {
   // eslint-disable-next-line unicorn/no-null
   previouslyFocusedElement: HTMLElement | null = null;
   autoCompleteInstance: ReturnType<typeof autocomplete<ITiddlerFields>> | undefined;
+  /** Can't get state from its instance, so use this as a way to get state */
+  autoCompleteState?: OnStateChangeProps<ITiddlerFields>;
+  historyMode = false;
 
   render(parent: Element, nextSibling: Element) {
     this.parentDomNode = parent;
@@ -33,7 +36,7 @@ class CommandPaletteWidget extends Widget {
     this.id = this.getAttribute('id', 'default');
     // params are get from `$:/plugins/linonetwo/commandpalette/DefaultCommandPalette` using transclusion from `$:/state/commandpalette/default/opened`
     const initialPrefix = this.getAttribute('prefix', '');
-    const initialIndex = this.getAttribute('index', '0');
+    this.historyMode = this.getAttribute('historyMode', 'no') === 'yes';
     const containerElement = $tw.utils.domMaker('nav', {
       class: 'tw-commandpalette-container',
     });
@@ -43,11 +46,18 @@ class CommandPaletteWidget extends Widget {
     handleDarkMode();
     const removeDuplicates = uniqSourcesBy<ITiddlerFields>(({ item }) => item.title);
     this.previouslyFocusedElement = getActiveElement();
+    const updateState = (nextState: OnStateChangeProps<ITiddlerFields>) => {
+      this.autoCompleteState = nextState;
+    };
     this.autoCompleteInstance = autocomplete<ITiddlerFields>({
       container: containerElement,
       placeholder: 'Search for tiddlers',
       initialState: {
         query: initialPrefix,
+      },
+      defaultActiveItemId: 0,
+      onStateChange(nextState) {
+        updateState(nextState);
       },
       autoFocus: true,
       openOnFocus: true,
@@ -56,7 +66,6 @@ class CommandPaletteWidget extends Widget {
         navigate: this.onEnter.bind(this) satisfies AutocompleteNavigator<ITiddlerFields>['navigate'],
         navigateNewTab: this.onCtrlEnter.bind(this) satisfies AutocompleteNavigator<ITiddlerFields>['navigateNewTab'],
       },
-      defaultActiveItemId: 0,
       plugins: getSubPlugins(),
       reshape({ sourcesBySourceId }) {
         const {
@@ -92,6 +101,7 @@ class CommandPaletteWidget extends Widget {
     if (state.context.newQuery !== undefined) {
       this.autoCompleteInstance?.setQuery?.((state.context as IContext).newQuery!);
       this.autoCompleteInstance?.setContext({ newQuery: undefined } satisfies IContext);
+      // use query to re-search, and will set activeItemId to defaultActiveItemId
       void this.autoCompleteInstance?.refresh?.();
     }
     if (!state.context.noNavigate) {
@@ -156,6 +166,7 @@ class CommandPaletteWidget extends Widget {
       return;
     }
     observe(containerElement, this.onVisibilityChange.bind(this));
+    this.registerHistoryKeyboardHandlers(inputElement);
     // autoFocus param is not working, focus manually.
     inputElement.focus();
     // no API to listen esc, listen manually
@@ -175,19 +186,6 @@ class CommandPaletteWidget extends Widget {
         event.stopPropagation();
         event.preventDefault();
       }
-      // when use ctrl+tab to switch between history, when release tab (while still holding ctrl), do nothing after palette open.
-      if (event.key === 'Tab' && event.ctrlKey) {
-        // this.autoCompleteInstance?.setActiveItemId(this.autoCompleteInstance.)
-        event.stopPropagation();
-        event.preventDefault();
-      }
-    });
-    inputElement.addEventListener('keyup', (event) => {
-      // when release ctrl, open the tiddler.
-      if (event.key === 'Tab') {
-        event.stopPropagation();
-        event.preventDefault();
-      }
     });
     this.modalCount++;
     // call with this
@@ -200,9 +198,47 @@ class CommandPaletteWidget extends Widget {
     /* eslint-enable @typescript-eslint/unbound-method */
   }
 
+  historySwitchActiveItemId?: number;
+
+  registerHistoryKeyboardHandlers(inputElement: HTMLInputElement) {
+    if (!this.historyMode) return;
+    inputElement.addEventListener('keydown', (event) => {
+      if (this.autoCompleteInstance === undefined) return;
+      // when use ctrl+tab to switch between history, when release tab (while still holding ctrl), do nothing after palette open.
+      if (event.key === 'Tab' && event.ctrlKey) {
+        this.historySwitchActiveItemId = (this.historySwitchActiveItemId ?? this.autoCompleteState?.state?.activeItemId ?? 0) + (event.shiftKey ? -1 : 1);
+        const collectionLength = this.autoCompleteState?.state?.collections?.[0]?.items?.length ?? 0;
+        if (this.historySwitchActiveItemId === -1) {
+          this.historySwitchActiveItemId = Math.max(collectionLength - 1, 0);
+        } else if (this.historySwitchActiveItemId >= collectionLength) {
+          this.historySwitchActiveItemId = 0;
+        }
+        this.autoCompleteInstance.setActiveItemId(this.historySwitchActiveItemId);
+        this.autoCompleteInstance.setIsOpen(true);
+        event.stopPropagation();
+        event.preventDefault();
+      }
+    });
+    inputElement.addEventListener('keyup', (event) => {
+      if (this.autoCompleteInstance === undefined) return;
+      if (event.key === 'Tab' && event.ctrlKey) {
+        event.stopPropagation();
+        event.preventDefault();
+        return;
+      }
+      // when release ctrl, and we are in history mode (no query), open the tiddler.
+      if (event.key === 'Control' && this.autoCompleteState?.state?.query === '') {
+        event.stopPropagation();
+        event.preventDefault();
+        const item = this.autoCompleteState?.state?.collections.find(({ source }) => source.sourceId === 'story-history')?.items[this.autoCompleteState?.state?.activeItemId ?? 0];
+        if (!item) return;
+        this.autoCompleteInstance.navigator.navigate({ item, itemUrl: item.title, state: this.autoCompleteState?.state });
+      }
+    });
+  }
+
   setCloseState() {
     $tw.wiki.deleteTiddler(`$:/state/commandpalette/${this.id}/opened`);
-    $tw.wiki.deleteTiddler(`$:/state/commandpalette/${this.id}/prefix`);
     this.autoCompleteInstance?.setIsOpen(false);
     this.modalCount = 0;
     Modal.prototype.adjustPageClass.call(this);

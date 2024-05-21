@@ -15,8 +15,10 @@ exports.startup = function() {
     // message can provide a command palette ID to open, default to 'default', which is used on the default command palette's widget.
     const commandPaletteID = event?.paramObject?.id as string || 'default';
     const prefix = event?.paramObject?.prefix as string || '';
-    const index = event?.paramObject?.index as string || '1';
-    $tw.wiki.addTiddler({ title: `$:/state/commandpalette/${commandPaletteID}/opened`, text: 'yes', prefix, index });
+    /** For ctrl-tab handling */
+    const historyMode = event?.paramObject?.historyMode as string || 'no';
+    // Don't forget add transclusion in `src/commandpalette/DefaultCommandPalette.tid` for new param
+    $tw.wiki.addTiddler({ title: `$:/state/commandpalette/${commandPaletteID}/opened`, text: 'yes', prefix, historyMode });
     return false;
   });
   $tw.rootWidget.addEventListener('close-command-palette', (originalEvent: IWidgetEvent) => {
