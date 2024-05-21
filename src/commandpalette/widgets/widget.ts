@@ -4,24 +4,21 @@ import { Modal } from '$:/core/modules/utils/dom/modal.js';
 import { widget as Widget } from '$:/core/modules/widgets/widget.js';
 import { autocomplete } from '@algolia/autocomplete-js';
 import type { AutocompleteNavigator } from '@algolia/autocomplete-shared/dist/esm/core/AutocompleteNavigator';
-import { IChangedTiddlers, IParseTreeNode, ITiddlerFields, IWidgetInitialiseOptions } from 'tiddlywiki';
+import { IChangedTiddlers, ITiddlerFields } from 'tiddlywiki';
 import '@algolia/autocomplete-theme-classic';
 import { AutocompleteState } from '@algolia/autocomplete-core';
 import { observe, unobserve } from '@seznam/visibility-observer';
 import { IContext } from './utils/context';
+import { fixPanelPosition } from './utils/fixPanelPosition';
 import { getActiveElement } from './utils/getFocused';
 import { getSubPlugins } from './utils/getSubPlugins';
+import { handleDarkMode } from './utils/handleDarkMode';
 import { uniqSourcesBy } from './utils/uniqSourcesBy';
 
 class CommandPaletteWidget extends Widget {
   id = 'default';
   refresh(_changedTiddlers: IChangedTiddlers) {
     return false;
-  }
-
-  constructor(parseTreeNode: IParseTreeNode, options?: IWidgetInitialiseOptions) {
-    super(parseTreeNode, options);
-    this.fixPanelPosition = this.fixPanelPosition.bind(this);
   }
 
   /** We restore focus of element when we are close */
@@ -41,7 +38,7 @@ class CommandPaletteWidget extends Widget {
     parent.insertBefore(containerElement, nextSibling);
     this.domNodes.push(containerElement);
 
-    this.handleDarkMode();
+    handleDarkMode();
     const removeDuplicates = uniqSourcesBy<ITiddlerFields>(({ item }) => item.title);
     this.previouslyFocusedElement = getActiveElement();
     this.autoCompleteInstance = autocomplete<ITiddlerFields>({
@@ -189,39 +186,16 @@ class CommandPaletteWidget extends Widget {
         event.stopPropagation();
         event.preventDefault();
       }
-    })
+    });
     this.modalCount++;
     // call with this
     Modal.prototype.adjustPageClass.call(this);
     /* eslint-disable @typescript-eslint/unbound-method */
-    this.fixPanelPosition();
-    inputElement.addEventListener('focus', this.fixPanelPosition);
-    inputElement.addEventListener('blur', this.fixPanelPosition);
-    window.addEventListener('resize', this.fixPanelPosition);
+    fixPanelPosition();
+    inputElement.addEventListener('focus', fixPanelPosition);
+    inputElement.addEventListener('blur', fixPanelPosition);
+    window.addEventListener('resize', fixPanelPosition);
     /* eslint-enable @typescript-eslint/unbound-method */
-  }
-
-  /**
-   * container of command input can't be position fix, otherwise need a hack
-   * @url https://github.com/algolia/autocomplete/issues/1199
-   */
-  fixPanelPosition() {
-    const defaultInputElement = document.querySelector('.tw-commandpalette-default-container');
-    if (!defaultInputElement) return;
-    const rect = defaultInputElement.getBoundingClientRect();
-    // Set css variable to be below the search box in case the search box moved when the window was resized
-    document.documentElement.style.setProperty('--position-autocomplete-panel-top', `${rect.bottom}px`);
-  }
-
-  handleDarkMode() {
-    const isDark = $tw.wiki.getTiddlerText('$:/info/darkmode') === 'yes';
-    if (isDark) {
-      // https://www.algolia.com/doc/ui-libraries/autocomplete/api-reference/autocomplete-theme-classic/#dark-mode
-      const dataset = (this.document as unknown as Document).body?.dataset;
-      if (dataset !== undefined) {
-        dataset.theme = 'dark';
-      }
-    }
   }
 
   setCloseState() {
@@ -237,7 +211,7 @@ class CommandPaletteWidget extends Widget {
     this.autoCompleteInstance?.destroy();
     this.autoCompleteInstance = undefined;
     /* eslint-disable @typescript-eslint/unbound-method */
-    window.removeEventListener('resize', this.fixPanelPosition);
+    window.removeEventListener('resize', fixPanelPosition);
     /* eslint-enable @typescript-eslint/unbound-method */
     this.previouslyFocusedElement?.focus?.();
   }
