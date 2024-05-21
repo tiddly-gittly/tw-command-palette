@@ -1,7 +1,6 @@
-command-palette-type: message
+tags: $:/tags/Messages
 caption: {{$:/language/Buttons/FoldAll/Caption}}
 description: {{$:/language/Buttons/FoldAll/Hint}}
-tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/Fold All Tiddlers
 
 tm-fold-all-tiddlers

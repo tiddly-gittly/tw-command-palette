@@ -1,7 +1,6 @@
-command-palette-type: message
+tags: $:/tags/Messages
 caption: {{$:/language/Buttons/NewTiddler/Caption}}
 description: {{$:/language/Buttons/NewTiddler/Hint}}
-tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/New Tiddler
 
 tm-new-tiddler

@@ -19,7 +19,7 @@ export const plugin = {
         sourceId: 'message',
         async getItems({ query }) {
           if (query === '') return [];
-          return (await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/CommandPaletteCommand]field:command-palette-type[message]]`, true))
+          return (await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Messages]]`, true))
             .filter((tiddler): tiddler is ITiddlerFields => {
               const filter = tiddler['command-palette-filter'] as string | undefined;
               // if no filter, just pass. If user didn't install `$:/plugins/Gk0Wk/focused-tiddler`, also pass.

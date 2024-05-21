@@ -1,7 +1,6 @@
-command-palette-type: message
+tags: $:/tags/Messages
 caption: {{$:/language/Buttons/Permaview/Caption}}
 description: {{$:/language/Buttons/Permaview/Hint}}
-tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/Permaview
 
 tm-permaview

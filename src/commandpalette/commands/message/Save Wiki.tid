@@ -1,7 +1,6 @@
-command-palette-type: message
+tags: $:/tags/Messages
 caption: {{$:/language/Buttons/SaveWiki/Caption}}
 description: {{$:/language/Buttons/SaveWiki/Hint}}
-tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/Save Wiki
 
 tm-save-wiki

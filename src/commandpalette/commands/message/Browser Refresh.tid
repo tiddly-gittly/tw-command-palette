@@ -1,7 +1,6 @@
-command-palette-type: message
+tags: $:/tags/Messages
 caption: {{$:/language/Buttons/Refresh/Caption}}
 description: {{$:/language/Buttons/Refresh/Hint}}
-tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/Browser Refresh
 
 tm-browser-refresh

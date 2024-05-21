@@ -1,7 +1,6 @@
-command-palette-type: message
+tags: $:/tags/Messages
 caption: {{$:/language/Buttons/Close/Caption}}
 description: {{$:/language/Buttons/Close/Hint}} <<currentTiddler>>
-tags: $:/tags/CommandPaletteCommand
 title: $:/plugins/linonetwo/commandpalette/Close Tiddler
 
 tm-close-tiddler
