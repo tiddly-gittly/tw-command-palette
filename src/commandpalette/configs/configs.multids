@@ -2,3 +2,4 @@ title: $:/plugins/linonetwo/commandpalette/configs/
 
 TitleAlias: title caption alias
 HideDefaultSearchBar: no
+DesktopWidth: 80

@@ -23,7 +23,9 @@ tags: $:/tags/Stylesheet
   top: 5em;
   left: 50%;
   transform: translate(-50%, 0%);
+  /** fallback to 80% of root widget */
   width: 80%;
+  width: {{$:/plugins/linonetwo/commandpalette/configs/DesktopWidth}}%;
   flex-direction: column;
 }
 @media (max-width: 540px) {
