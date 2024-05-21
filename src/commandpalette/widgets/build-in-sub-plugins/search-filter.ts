@@ -69,11 +69,12 @@ export const plugin = {
       });
     }
     // When filter in context is set by previous step, and no prefix, we search under result of that filter
-    if (checkIsSearchSystem(parameters) && checkIsUnderFilter(parameters)) {
+    if (checkIsUnderFilter(parameters)) {
       sources.push({
         sourceId: 'filter',
         async getItems({ query, state }) {
-          return await filterTiddlersAsync(`${(state.context as IContext).filter} +[search[${query}]]`, true);
+          const isSystem = checkIsSearchSystem(parameters);
+          return await filterTiddlersAsync(`[all[tiddlers+shadows]]+${(state.context as IContext).filter} +[search[${isSystem ? query.slice(1) : query}]]`, isSystem);
         },
         getItemUrl({ item }) {
           return item.title;

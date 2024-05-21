@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
-import { checkIsSearchSystem } from '../utils/checkPrefix';
+import { checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
 import { IContext } from '../utils/context';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
@@ -10,7 +10,7 @@ import { renderTextWithCache } from '../utils/renderTextWithCache';
 export const plugin = {
   getSources(parameters) {
     if (parameters.query.length === 0) return [];
-    if (!checkIsSearchSystem(parameters)) return [];
+    if (!checkIsSearchSystem(parameters) || checkIsUnderFilter(parameters)) return [];
     const { widget } = parameters.state.context as IContext;
     return [
       {

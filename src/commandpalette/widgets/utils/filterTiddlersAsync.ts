@@ -30,6 +30,7 @@ export async function filterTiddlersAsync(filter: string, system?: boolean, excl
     }
     return resultFromIPC.data as ITiddlerFields[];
   } else {
+    // FIXME: this prevent [all[tiddlers+shadows]]+[fields[]]+[search[]] to work
     return $tw.wiki.filterTiddlers(filter)
       .map((title) => $tw.wiki.getTiddler(title)?.fields)
       .filter(Boolean) as ITiddlerFields[];
