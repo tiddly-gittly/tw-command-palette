@@ -15,8 +15,8 @@ exports.startup = function() {
     // message can provide a command palette ID to open, default to 'default', which is used on the default command palette's widget.
     const commandPaletteID = event?.paramObject?.id as string || 'default';
     const prefix = event?.paramObject?.prefix as string || '';
-    $tw.wiki.addTiddler({ title: `$:/state/commandpalette/${commandPaletteID}/opened`, text: 'yes' });
-    $tw.wiki.addTiddler({ title: `$:/state/commandpalette/${commandPaletteID}/prefix`, text: prefix });
+    const index = event?.paramObject?.index as string || '1';
+    $tw.wiki.addTiddler({ title: `$:/state/commandpalette/${commandPaletteID}/opened`, text: 'yes', prefix, index });
     return false;
   });
   $tw.rootWidget.addEventListener('close-command-palette', (originalEvent: IWidgetEvent) => {
@@ -24,7 +24,6 @@ exports.startup = function() {
     // message can provide a command palette ID to close, default to 'default', which is used on the default command palette's widget.
     const commandPaletteID = event?.param || 'default';
     $tw.wiki.deleteTiddler(`$:/state/commandpalette/${commandPaletteID}/opened`);
-    $tw.wiki.deleteTiddler(`$:/state/commandpalette/${commandPaletteID}/prefix`);
     return false;
   });
 };

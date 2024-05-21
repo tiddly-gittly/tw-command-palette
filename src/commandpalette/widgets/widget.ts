@@ -31,7 +31,9 @@ class CommandPaletteWidget extends Widget {
     this.computeAttributes();
     this.execute();
     this.id = this.getAttribute('id', 'default');
+    // params are get from `$:/plugins/linonetwo/commandpalette/DefaultCommandPalette` using transclusion from `$:/state/commandpalette/default/opened`
     const initialPrefix = this.getAttribute('prefix', '');
+    const initialIndex = this.getAttribute('index', '0');
     const containerElement = $tw.utils.domMaker('nav', {
       class: 'tw-commandpalette-container',
     });
