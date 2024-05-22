@@ -4,6 +4,12 @@ import { ITiddlerFields } from 'tiddlywiki';
 const isInTidGiDesktop = typeof document !== 'undefined' && document?.location?.protocol?.startsWith('tidgi');
 const tidGiWorkspaceID = ((window as any).meta?.())?.workspaceID;
 
+/**
+ * @param filter need to add `all[tiddlers+shadows]` by your self.
+ * @param system Are you searching system tiddlers? Default is `false`
+ * @param exclude need to set to `[]`, otherwise it will exclude text field by default (only return skinny tiddlers)
+ * @returns
+ */
 export async function filterTiddlersAsync(filter: string, system?: boolean, exclude?: string[]): Promise<ITiddlerFields[]> {
   if (isInTidGiDesktop && 'service' in window) {
     // by default tiddlyweb protocol omit all system tiddlers, need to turn off this // TODO: add param to turn off this in TidGi

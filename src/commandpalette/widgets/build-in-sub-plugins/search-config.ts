@@ -22,6 +22,7 @@ export const plugin = {
               return $tw.wiki.filterTiddlers(
                 `[search[${query.slice(1)}]]`,
                 undefined,
+                // note that `tiddler.text` is undefined on TidGi desktop, but it is OK to not search its text
                 $tw.wiki.makeTiddlerIterator([renderTextWithCache(tiddler.caption, widget), tiddler.text, tiddler.title.replace('$:/plugins/', '')]),
               ).length > 0;
             });
