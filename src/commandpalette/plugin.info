@@ -2,7 +2,7 @@
     "title": "$:/plugins/linonetwo/commandpalette",
     "description": "Best Command Palette, search everything, extensible, delightful.",
     "author": "LinOnetwo",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "core-version": ">=5.0.8",
     "source": "https://github.com/tiddly-gittly/tiddlywiki-plugins",
     "dependents": "$:/plugins/Gk0Wk/focused-tiddler",
