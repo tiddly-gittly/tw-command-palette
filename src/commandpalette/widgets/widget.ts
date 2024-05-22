@@ -34,7 +34,7 @@ class CommandPaletteWidget extends Widget {
     this.computeAttributes();
     this.execute();
     this.id = this.getAttribute('id', 'default');
-    // params are get from `$:/plugins/linonetwo/commandpalette/DefaultCommandPalette` using transclusion from `$:/state/commandpalette/default/opened`
+    // params are get from `$:/plugins/linonetwo/commandpalette/DefaultCommandPalette` using transclusion from `$:/temp/commandpalette/default/opened`
     const initialPrefix = this.getAttribute('prefix', '');
     this.historyMode = this.getAttribute('historyMode', 'no') === 'yes';
     const containerElement = $tw.utils.domMaker('nav', {
@@ -241,7 +241,7 @@ class CommandPaletteWidget extends Widget {
   }
 
   setCloseState() {
-    $tw.wiki.deleteTiddler(`$:/state/commandpalette/${this.id}/opened`);
+    $tw.wiki.deleteTiddler(`$:/temp/commandpalette/${this.id}/opened`);
     this.autoCompleteInstance?.setIsOpen(false);
     this.modalCount = 0;
     Modal.prototype.adjustPageClass.call(this);
