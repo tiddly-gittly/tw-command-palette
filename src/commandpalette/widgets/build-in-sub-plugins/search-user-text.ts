@@ -26,17 +26,18 @@ export const plugin = {
           },
           item({ item, createElement, state }) {
             const title = typeof item.caption === 'string' && item.caption !== '' ? `${item.caption} (${item.title})` : item.title;
-            const match = item.text.match(state.query);
             const textCountAroundHit = 30;
             let contextNearText = '';
-            if (match !== null) {
-              const start = Math.max(0, (match.index ?? 0) - textCountAroundHit);
-              const end = Math.min(item.text.length, (match.index ?? 0) + match[0].length + textCountAroundHit);
+
+            const index = item.text.indexOf(state.query);
+            if (index !== -1) {
+              const start = Math.max(0, index - textCountAroundHit);
+              const end = Math.min(item.text.length, index + state.query.length + textCountAroundHit);
               const prefix = start > 0 ? '...' : '';
               const suffix = end < item.text.length ? '...' : '';
-              const beforeMatch = item.text.slice(start, match.index ?? 0);
-              const matchedText = match[0];
-              const afterMatch = item.text.slice((match.index ?? 0) + matchedText.length, end);
+              const beforeMatch = item.text.slice(start, index);
+              const matchedText = item.text.slice(index, index + state.query.length);
+              const afterMatch = item.text.slice(index + state.query.length, end);
 
               contextNearText = `${prefix}${beforeMatch}<mark>${matchedText}</mark>${afterMatch}${suffix}`;
             }
