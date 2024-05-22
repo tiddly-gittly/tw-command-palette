@@ -12,6 +12,8 @@ Configs/HideDefaultSearchBar/Caption: 隐藏默认搜索栏
 Configs/HideDefaultSearchBar/Description: 如果您只使用命令菜单搜索，不需要默认搜索栏，请选中此复选框。
 Configs/DesktopWidth/Caption: 桌面模式宽度
 Configs/DesktopWidth/Description: 输入框和结果框占屏幕的宽度（不影响移动端，移动端默认全屏）
+Configs/TitlePriorityText/Caption: 标题高于内容
+Configs/TitlePriorityText/Description: 勾选后，在搜索用户内容时，将标题搜索结果排在上面，内容搜索结果排在下面。（下面的内容可以通过按↑上方向键转到搜索结果的底部来选择）
 UserTitle: 用户条目标题
 SystemTitle: 系统条目标题
 UserTitlePinyin: 用户条目标题拼音

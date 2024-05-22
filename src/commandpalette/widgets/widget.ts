@@ -37,6 +37,7 @@ class CommandPaletteWidget extends Widget {
     // params are get from `$:/plugins/linonetwo/commandpalette/DefaultCommandPalette` using transclusion from `$:/temp/commandpalette/default/opened`
     const initialPrefix = this.getAttribute('prefix', '');
     this.historyMode = this.getAttribute('historyMode', 'no') === 'yes';
+    const titlePriorityText = this.wiki.getTiddlerText('$:/plugins/linonetwo/commandpalette/configs/TitlePriorityText', 'no') === 'yes';
     const containerElement = $tw.utils.domMaker('nav', {
       class: 'tw-commandpalette-container',
     });
@@ -77,7 +78,10 @@ class CommandPaletteWidget extends Widget {
           ...rest
         } = sourcesBySourceId;
         // this will also affect `priority` field. The order here is more important than `priority` field.
-        return [...removeDuplicates(...[textSource, titleSource, titlePinyinSource, storyHistorySource].filter(Boolean)), ...Object.values(rest)];
+        return [
+          ...removeDuplicates(...[...(titlePriorityText ? [titleSource, textSource] : [textSource, titleSource]), titlePinyinSource, storyHistorySource].filter(Boolean)),
+          ...Object.values(rest),
+        ];
       },
     });
     this.autoCompleteInstance.setContext({ widget: this } satisfies IContext);
