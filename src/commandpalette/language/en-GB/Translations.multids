@@ -14,6 +14,8 @@ Configs/DesktopWidth/Caption: Width on desktop mode
 Configs/DesktopWidth/Description: Width of the input and result boxes on the screen (does not affect mobile, which is full screen by default)
 Configs/TitlePriorityText/Caption: Title higher than text.
 Configs/TitlePriorityText/Description: When checked, title search results will be listed on the top, and text search results will be listed below, when searching user tiddlers. (The result on the bottom can be selected by pressing the ↑ up arrow key to circle go to the bottom of the search results)
+Configs/DebounceDuration/Caption: Search debounce duration
+Configs/DebounceDuration/Description: Pressing a key to search once will lead to lagging, here set the search anti-shake duration, meaning two consecutive key presses within this duration will be judged as inputting, and will wait for you to finish typing before searching, in milliseconds.
 SystemTitle: Title of system tiddler
 UserTitle: Title of user tiddler
 UserTitlePinyin: Title Pinyin of user tiddler

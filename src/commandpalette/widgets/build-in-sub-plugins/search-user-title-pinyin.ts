@@ -1,12 +1,13 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsSearchUser, checkIsUnderFilter } from '../utils/checkPrefix';
+import { debounced } from '../utils/debounce';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { getFieldsAsTitle } from '../utils/getFieldsAsTitle';
 import { lingo } from '../utils/lingo';
 
 export const plugin = {
-  getSources(parameters) {
+  async getSources(parameters) {
     if (!checkIsSearchUser(parameters) || checkIsUnderFilter(parameters)) return [];
     if (
       // check `pinyinfuse` operator is installed
@@ -17,7 +18,7 @@ export const plugin = {
       return [];
     }
     if (parameters.query.length === 0) return [];
-    return [
+    return await debounced([
       {
         sourceId: 'title-pinyin',
         async getItems({ query }) {
@@ -39,6 +40,6 @@ export const plugin = {
           },
         },
       },
-    ];
+    ]);
   },
 } satisfies AutocompletePlugin<ITiddlerFields, unknown>;

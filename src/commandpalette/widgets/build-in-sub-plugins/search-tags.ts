@@ -2,16 +2,17 @@ import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsSearchTags } from '../utils/checkPrefix';
 import { IContext } from '../utils/context';
+import { debounced } from '../utils/debounce';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
 
 export const plugin = {
-  getSources(parameters) {
+  async getSources(parameters) {
     if (parameters.query.length === 0) return [];
     if (!checkIsSearchTags(parameters)) {
       return [];
     }
-    return [{
+    return await debounced([{
       // suggest tags for user to search
       sourceId: 'tags',
       async getItems({ query }) {
@@ -39,6 +40,6 @@ export const plugin = {
           return lingo('NoResult');
         },
       },
-    }];
+    }]);
   },
 } satisfies AutocompletePlugin<ITiddlerFields, unknown>;

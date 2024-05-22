@@ -20,3 +20,5 @@ caption: <<lingo Name $:/plugins/linonetwo/commandpalette/language/>>
 :<$edit-text tiddler="$:/plugins/linonetwo/commandpalette/configs/TextAlias" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="input" /> <<lingo Configs/TextAlias/Description>>
 ;<<lingo Configs/DesktopWidth/Caption>>
 :<$edit-text tiddler="$:/plugins/linonetwo/commandpalette/configs/DesktopWidth" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="input" type="number" />% <<lingo Configs/DesktopWidth/Description>>
+;<<lingo Configs/DebounceDuration/Caption>>
+:<$edit-text tiddler="$:/plugins/linonetwo/commandpalette/configs/DebounceDuration" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="input" type="number" />ms <<lingo Configs/DebounceDuration/Description>>

@@ -5,3 +5,4 @@ TextAlias: text keywords
 HideDefaultSearchBar: no
 TitlePriorityText: no
 DesktopWidth: 80
+DebounceDuration: 300

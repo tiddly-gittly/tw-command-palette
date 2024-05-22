@@ -4,18 +4,19 @@ import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
 import { IContext } from '../utils/context';
+import { debounced } from '../utils/debounce';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
 
 export const plugin = {
-  getSources(parameters) {
+  async getSources(parameters) {
     if (parameters.query.length === 0) return [];
     if (!checkIsSearchSystem(parameters) || checkIsUnderFilter(parameters)) return [];
     const focusedTiddler = $tw.wiki.getTiddlerText('$:/temp/focussedTiddler');
     const variables = { currentTiddler: focusedTiddler ?? '', commandpaletteinput: parameters.query.slice(1) };
     const { widget } = parameters.state.context as IContext;
-    return [
+    return await debounced([
       {
         sourceId: 'actionString',
         async getItems({ query }) {
@@ -60,6 +61,6 @@ export const plugin = {
           },
         },
       },
-    ];
+    ]);
   },
 } satisfies AutocompletePlugin<ITiddlerFields, unknown>;

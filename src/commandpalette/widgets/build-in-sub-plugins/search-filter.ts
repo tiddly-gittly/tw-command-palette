@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import type { AutocompletePlugin, GetSources } from '@algolia/autocomplete-js';
+import type { AutocompletePlugin, AutocompleteSource } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsFilter, checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
 import { IContext } from '../utils/context';
+import { debounced } from '../utils/debounce';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
 
 export const plugin = {
-  getSources(parameters) {
-    const sources: ReturnType<GetSources<ITiddlerFields>> = [];
+  async getSources(parameters) {
+    const sources: Array<AutocompleteSource<ITiddlerFields>> = [];
     if (checkIsFilter(parameters)) {
       const { widget } = parameters.state.context as IContext;
       sources.push({
@@ -96,6 +97,6 @@ export const plugin = {
         },
       });
     }
-    return sources;
+    return await debounced(sources);
   },
 } satisfies AutocompletePlugin<ITiddlerFields, unknown>;
