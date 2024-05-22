@@ -34,7 +34,7 @@ Help/Help/Description: Usage of the command menu, describes what the command men
 Help/Filter/Caption: Filters
 Help/Filter/Description: A two-step process, first search for a preset filter or a customized filter, enter to confirm the selection; then continue to search in the filter results, enter to open the tiddler. In the second step, only user tiddlers are searched by default, and system tiddlers can be included by adding a prefix to the system entry search.
 Help/User/Caption: User tiddlers
-Help/User/Description: Not prefixed, just typed, you can search for the title and content of your tiddlers.
+Help/User/Description: Not prefixed, just typed, you can search for the title and content of your tiddlers. Enter to select (currently mouse isn't available), Ctrl + Enter will copy the selected content to the clipboard, easy to paste.
 Help/System/Caption: System tiddlers
 Help/System/Description: Searches for individual micro-system features such as available system messages, layouts, settings, etc.
 Help/Tags/Caption: Tags
