@@ -8,10 +8,10 @@ export async function filterTiddlersAsync(filter: string, system?: boolean, excl
   if (isInTidGiDesktop && 'service' in window) {
     // by default tiddlyweb protocol omit all system tiddlers, need to turn off this // TODO: add param to turn off this in TidGi
     const wikiServer = (window.service as any).wiki;
-    let previousServerConfigValue = 'no';
+    let previousServerConfigValue: string | undefined;
     if (system === true) {
       previousServerConfigValue = await wikiServer.wikiOperationInServer('wiki-get-tiddler-text', tidGiWorkspaceID, ['$:/config/SyncSystemTiddlersFromServer']);
-      await wikiServer.wikiOperationInServer('wiki-set-tiddler-text', tidGiWorkspaceID, [
+      await wikiServer.wikiOperationInServer('wiki-add-tiddler', tidGiWorkspaceID, [
         '$:/config/SyncSystemTiddlersFromServer',
         'yes',
       ]);
@@ -23,10 +23,16 @@ export async function filterTiddlersAsync(filter: string, system?: boolean, excl
       exclude,
     );
     if (system === true) {
-      await wikiServer.wikiOperationInServer('wiki-set-tiddler-text', tidGiWorkspaceID, [
-        '$:/config/SyncSystemTiddlersFromServer',
-        previousServerConfigValue,
-      ]);
+      if (previousServerConfigValue === undefined) {
+        await wikiServer.wikiOperationInServer('wiki-delete-tiddler', tidGiWorkspaceID, [
+          '$:/config/SyncSystemTiddlersFromServer',
+        ]);
+      } else {
+        await wikiServer.wikiOperationInServer('wiki-add-tiddler', tidGiWorkspaceID, [
+          '$:/config/SyncSystemTiddlersFromServer',
+          previousServerConfigValue,
+        ]);
+      }
     }
     return resultFromIPC.data as ITiddlerFields[];
   } else {
