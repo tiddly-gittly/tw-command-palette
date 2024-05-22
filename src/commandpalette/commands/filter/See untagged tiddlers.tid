@@ -1,5 +1,5 @@
-caption: 查看未打标签的Tiddler
-description: 在命令菜单里列出未打标签的Tiddler列表
+caption: <<lingo Filter/Untagged/Caption $:/plugins/linonetwo/commandpalette/language/>>
+description: <<lingo Filter/Untagged/Description $:/plugins/linonetwo/commandpalette/language/>>
 tags: $:/tags/Filter
 title: $:/plugins/linonetwo/commandpalette/See untagged tiddlers
 filter: [untagged[]!is[system]search[]]

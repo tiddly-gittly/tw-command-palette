@@ -1,5 +1,5 @@
-caption: 查看主题
-description: 列出可用主题
+caption: <<lingo Filter/Themes/Caption $:/plugins/linonetwo/commandpalette/language/>>
+description: <<lingo Filter/Themes/Description $:/plugins/linonetwo/commandpalette/language/>>
 tags: $:/tags/Filter
 title: $:/plugins/linonetwo/commandpalette/See Themes
 filter: [!has[draft.of]plugin-type[theme]search[]]

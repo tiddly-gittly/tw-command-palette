@@ -1,6 +1,16 @@
-title: $:/plugins/linonetwo/commandpalette/language/zh-Hans/
+title: $:/plugins/linonetwo/commandpalette/language/en-GB/
 
 ShowControlPanel: Show Control Panel
 Server:  Server
 Filter/Fields/Caption: Field names
 Filter/Fields/Description: searches for all field names of all tiddlers in the wiki.
+Filter/ContentType/Caption: View the content type.
+Filter/ContentType/Description: lists the content types of all entries in the Wiki.
+Filter/Languages/Caption: list of languages
+Filter/Languages/Description: Lists the installed languages.
+Filter/Plugins/Caption: List of plugins.
+Filter/Plugins/Description: List of installed plugins.
+Filter/Themes/Caption: List of themes.
+Filter/Themes/Description: List of installed themes.
+Filter/Untagged/Caption: Untagged
+Filter/Untagged/Description: lists untagged entries, which can be difficult to find without tags

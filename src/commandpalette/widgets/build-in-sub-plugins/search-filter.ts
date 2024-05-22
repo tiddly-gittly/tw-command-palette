@@ -53,13 +53,14 @@ export const plugin = {
             return lingo('Filter');
           },
           item({ item, createElement }) {
+            const caption = renderTextWithCache(item.caption, widget);
             const description = item.description
-              ? ` (${renderTextWithCache(item.description as string, widget)})`
+              ? `${caption ? ' - ' : ''}${renderTextWithCache(item.description as string, widget)}`
               : '';
             return createElement('div', {
               style: 'display:flex;flex-direction:column;',
             }, [
-              createElement('div', { style: 'margin-bottom:0.25em;' }, `${renderTextWithCache(item.caption, widget)}${description}`),
+              createElement('div', { style: 'margin-bottom:0.25em;' }, `${caption}${description}`),
               createElement('div', {}, [
                 createElement('small', {}, (item.filter as string).trim()),
               ]),

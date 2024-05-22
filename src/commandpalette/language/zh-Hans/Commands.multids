@@ -4,3 +4,13 @@ ShowControlPanel: 打开命令菜单
 Server: 服务器
 Filter/Fields/Caption: 字段名
 Filter/Fields/Description: 搜索Wiki里所有条目涉及到的所有字段名
+Filter/ContentType/Caption: 查看内容类型
+Filter/ContentType/Description: 列出所有Wiki里涉及到的条目的内容类型
+Filter/Languages/Caption: 语言列表
+Filter/Languages/Description: 列出已安装的语言的列表
+Filter/Plugins/Caption: 插件列表
+Filter/Plugins/Description: 列出已安装的插件的列表
+Filter/Themes/Caption: 主题列表
+Filter/Themes/Description: 列出已安装的主题的列表
+Filter/Untagged/Caption: 未打标签
+Filter/Untagged/Description: 列出未打标签的条目，无标签会让它们难以找到

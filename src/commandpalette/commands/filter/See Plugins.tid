@@ -1,5 +1,5 @@
-caption: 查看插件列表
-description: 在命令菜单里列出插件列表
+caption: <<lingo Filter/Plugins/Caption $:/plugins/linonetwo/commandpalette/language/>>
+description: <<lingo Filter/Plugins/Description $:/plugins/linonetwo/commandpalette/language/>>
 tags: $:/tags/Filter
 title: $:/plugins/linonetwo/commandpalette/See Plugins
 filter: [!has[draft.of]plugin-type[plugin]search[]]

@@ -1,5 +1,5 @@
-caption: 查看内容类型
-description: 在命令菜单里列出所有Wiki里涉及到的内容类型
+caption: <<lingo Filter/ContentType/Caption $:/plugins/linonetwo/commandpalette/language/>>
+description: <<lingo Filter/ContentType/Description $:/plugins/linonetwo/commandpalette/language/>>
 tags: $:/tags/Filter
 title: $:/plugins/linonetwo/commandpalette/See all content-types
 filter: [all[tiddlers+shadows]each[type]get[type]]
