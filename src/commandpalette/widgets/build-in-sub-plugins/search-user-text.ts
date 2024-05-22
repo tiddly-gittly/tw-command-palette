@@ -28,19 +28,22 @@ export const plugin = {
             const title = typeof item.caption === 'string' && item.caption !== '' ? `${item.caption} (${item.title})` : item.title;
             const textCountAroundHit = 30;
             let contextNearText = '';
+            const keywords = state.query.split(' ').filter(Boolean);
 
-            const index = item.text.indexOf(state.query);
-            if (index !== -1) {
-              const start = Math.max(0, index - textCountAroundHit);
-              const end = Math.min(item.text.length, index + state.query.length + textCountAroundHit);
-              const prefix = start > 0 ? '...' : '';
-              const suffix = end < item.text.length ? '...' : '';
-              const beforeMatch = item.text.slice(start, index);
-              const matchedText = item.text.slice(index, index + state.query.length);
-              const afterMatch = item.text.slice(index + state.query.length, end);
+            keywords.forEach(keyword => {
+              const index = item.text.indexOf(keyword);
+              if (index !== -1) {
+                const start = Math.max(0, index - textCountAroundHit);
+                const end = Math.min(item.text.length, index + keyword.length + textCountAroundHit);
+                const prefix = start > 0 ? '...' : '';
+                const suffix = end < item.text.length ? '...' : '';
+                const beforeMatch = item.text.slice(start, index);
+                const matchedText = item.text.slice(index, index + keyword.length);
+                const afterMatch = item.text.slice(index + keyword.length, end);
 
-              contextNearText = `${prefix}${beforeMatch}<mark>${matchedText}</mark>${afterMatch}${suffix}`;
-            }
+                contextNearText += `${prefix}${beforeMatch}<mark>${matchedText}</mark>${afterMatch}${suffix}`;
+              }
+            });
 
             return createElement('div', {
               style: 'display:flex;flex-direction:column;',
