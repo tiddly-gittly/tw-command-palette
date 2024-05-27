@@ -19,6 +19,18 @@ caption: <<lingo Name $:/plugins/linonetwo/commandpalette/language/>>
 ;<<lingo Configs/TextAlias/Caption>>
 :<$edit-text tiddler="$:/plugins/linonetwo/commandpalette/configs/TextAlias" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="input" /> <<lingo Configs/TextAlias/Description>>
 ;<<lingo Configs/DesktopWidth/Caption>>
-:<$edit-text tiddler="$:/plugins/linonetwo/commandpalette/configs/DesktopWidth" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="input" type="number" />% <<lingo Configs/DesktopWidth/Description>>
+:<$edit-text
+  tiddler="$:/plugins/linonetwo/commandpalette/configs/DesktopWidth"
+  tabindex=-1
+  focus=false
+  cancelPopups="yes"
+  fileDrop=no
+  tag="input"
+  type="number"
+/><$select tiddler="$:/plugins/linonetwo/commandpalette/configs/DesktopWidthUnit" tooltip='Desktop Width Unit'>
+  <option>%</option>
+  <option>px</option>
+  <option>em</option>
+</$select> <<lingo Configs/DesktopWidth/Description>>
 ;<<lingo Configs/DebounceDuration/Caption>>
 :<$edit-text tiddler="$:/plugins/linonetwo/commandpalette/configs/DebounceDuration" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="input" type="number" />ms <<lingo Configs/DebounceDuration/Description>>

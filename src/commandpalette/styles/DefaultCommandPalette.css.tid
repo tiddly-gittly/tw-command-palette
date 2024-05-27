@@ -25,7 +25,7 @@ tags: $:/tags/Stylesheet
   transform: translate(-50%, 0%);
   /** fallback to 80% of root widget */
   width: 80%;
-  width: {{$:/plugins/linonetwo/commandpalette/configs/DesktopWidth}}%;
+  width: {{$:/plugins/linonetwo/commandpalette/configs/DesktopWidth}}{{$:/plugins/linonetwo/commandpalette/configs/DesktopWidthUnit}};
   flex-direction: column;
 }
 div.aa-DetachedContainer div.aa-Panel {
