@@ -179,13 +179,8 @@ class CommandPaletteWidget extends Widget {
     // no API to listen esc, listen manually
     inputElement.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') {
-        if (inputElement.value === '') {
-          this.setCloseState();
-        } else {
-          event.stopPropagation();
-          event.preventDefault();
-          inputElement.value = '';
-        }
+        this.setCloseState();
+        return;
       }
       // pressing enter is useless (it auto searches), and will cause dropdown to close, so ignore it.
       if (event.key === 'Enter') {
