@@ -1,6 +1,6 @@
 # Typescript plugin template for TiddlyWiki5
 
-此插件基于[[Souk21/TW-commandpalette|https://github.com/Souk21/TW-commandpalette]]，非常感谢他的工作，在过去的一年里这个插件极大地为我提高了工作效率。我将它主要源码复制过来汉化并加入拼音搜索功能，以便我们更灵活地在中文环境下使用。
+此插件基于[[Souk21/TW-commandpalette|https://github.com/Souk21/TW-commandpalette]] ，非常感谢他的工作，在过去的一年里这个插件极大地为我提高了工作效率。我将它主要源码复制过来汉化并加入拼音搜索功能，以便我们更灵活地在中文环境下使用。
 
 ## 功能
 
