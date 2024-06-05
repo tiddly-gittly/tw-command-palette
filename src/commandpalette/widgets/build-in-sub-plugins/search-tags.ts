@@ -23,7 +23,7 @@ export const plugin = {
         return item.title;
       },
       onSelect({ item }) {
-        const filter = `[tag[${item.title}]]`;
+        const filter = `[[${item.title}]] [tag[${item.title}]]`;
         parameters.setContext({ newQuery: '', noClose: true, noNavigate: true, filter } satisfies IContext);
       },
       templates: {
