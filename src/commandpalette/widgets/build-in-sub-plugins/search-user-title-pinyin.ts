@@ -1,6 +1,7 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsSearchUser, checkIsUnderFilter } from '../utils/checkPrefix';
+import { titleTextExclusionFilter } from '../utils/configs';
 import { debounced } from '../utils/debounce';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { getFieldsAsTitle } from '../utils/getFieldsAsTitle';
@@ -23,8 +24,7 @@ export const plugin = {
         sourceId: 'title-pinyin',
         async getItems({ query }) {
           if (query === '') return [];
-          const exclusionFilter = $tw.wiki.getTiddlerText('$:/plugins/linonetwo/commandpalette/configs/TitleTextIgnoreFilter', '');
-          return await filterTiddlersAsync(`[all[tiddlers]!is[system]] ${exclusionFilter} +[pinyinfuse:${getFieldsAsTitle()}[${query}]]`);
+          return await filterTiddlersAsync(`[all[tiddlers]!is[system]] ${titleTextExclusionFilter()} +[pinyinfuse:${getFieldsAsTitle()}[${query}]]`);
         },
         getItemUrl({ item }) {
           return item.title;

@@ -1,6 +1,7 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsSearchUser, checkIsUnderFilter } from '../utils/checkPrefix';
+import { titleTextExclusionFilter } from '../utils/configs';
 import { debounced } from '../utils/debounce';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { getFieldsAsText } from '../utils/getFieldsAsTitle';
@@ -15,8 +16,7 @@ export const plugin = {
         sourceId: 'text',
         async getItems({ query }) {
           if (query === '') return [];
-          const exclusionFilter = $tw.wiki.getTiddlerText('$:/plugins/linonetwo/commandpalette/configs/TitleTextIgnoreFilter', '');
-          const filter = `[all[tiddlers]!is[system]] ${exclusionFilter} :filter[has[text]get[text]!compare:string:eq[]]+[search:${getFieldsAsText()}[${query}]]`;
+          const filter = `[all[tiddlers]!is[system]] ${titleTextExclusionFilter()} :filter[has[text]get[text]!compare:string:eq[]]+[search:${getFieldsAsText()}[${query}]]`;
           return await filterTiddlersAsync(filter, false, []);
         },
         getItemUrl({ item }) {
