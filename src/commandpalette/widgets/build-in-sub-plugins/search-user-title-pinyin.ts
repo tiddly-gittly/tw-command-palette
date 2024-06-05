@@ -24,7 +24,7 @@ export const plugin = {
         sourceId: 'title-pinyin',
         async getItems({ query }) {
           if (query === '') return [];
-          return await filterTiddlersAsync(`[all[tiddlers]!is[system]] ${titleTextExclusionFilter()} +[pinyinfuse:${getFieldsAsTitle()}[${query}]]`);
+          return await filterTiddlersAsync(`[all[tiddlers]!is[system]] ${titleTextExclusionFilter()} +[pinyinfuse:${getFieldsAsTitle()}[${query}]]`, {});
         },
         getItemUrl({ item }) {
           return item.title;

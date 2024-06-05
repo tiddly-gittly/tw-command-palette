@@ -19,14 +19,15 @@ export const plugin = {
     if (checkIsFilter(parameters)) {
       const { widget } = parameters.state.context as IContext;
       const onSelect = (item: ITiddlerFields) => {
-        parameters.setContext({ noNavigate: true, noClose: true, filter: (item.filter as string).trim(), newQuery: '' } satisfies IContext);
+        const filterGetTiddler = item['command-palette-get-tiddler'] !== 'no';
+        parameters.setContext({ noNavigate: true, noClose: true, filter: (item.filter as string).trim(), newQuery: '', filterGetTiddler } satisfies IContext);
       };
       sources.push({
         sourceId: 'build-in-filter',
         async getItems({ query }) {
           if (query === '') return [];
           if (cachedTiddlers.length === 0 || !cacheSystemTiddlers()) {
-            cachedTiddlers = await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Filter]]`, true);
+            cachedTiddlers = await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Filter]]`, { system: true });
           }
           const buildInFilters = cachedTiddlers
             .filter((tiddler): tiddler is ITiddlerFields => {
@@ -64,7 +65,7 @@ export const plugin = {
           header() {
             return lingo('Filter');
           },
-          item({ item, createElement, state }) {
+          item({ item, createElement }) {
             const caption = renderTextWithCache(item.caption, widget);
             const description = item.description
               ? `${caption ? ' - ' : ''}${renderTextWithCache(item.description as string, widget)}`
@@ -89,8 +90,11 @@ export const plugin = {
       sources.push({
         sourceId: 'filter',
         async getItems({ query, state }) {
-          const isSystem = checkIsSearchSystem(parameters);
-          return await filterTiddlersAsync(`[all[tiddlers+shadows]]+${(state.context as IContext).filter} +[search[${isSystem ? query.slice(1) : query}]]`, isSystem);
+          const system = checkIsSearchSystem(parameters);
+          return await filterTiddlersAsync(`[all[tiddlers+shadows]]+${(state.context as IContext).filter} +[search[${system ? query.slice(1) : query}]]`, {
+            system,
+            toTiddler: ((state.context as IContext).filterGetTiddler ?? true),
+          });
         },
         getItemUrl({ item }) {
           return item.title;

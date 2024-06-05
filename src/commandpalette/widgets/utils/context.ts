@@ -5,6 +5,8 @@ export interface IContext {
    * Search under results of this filter.
    */
   filter?: string;
+  /** Undefined means true. If is false, then it ask filter not to call `$tw.wiki.getTiddler(title)` */
+  filterGetTiddler?: boolean;
   /**
    * Ask navigator to set query instead of navigate to a tiddler
    */

@@ -20,7 +20,7 @@ export const plugin = {
         async getItems({ query }) {
           if (query === '') return [];
           if (cachedTiddlers.length === 0 || !cacheSystemTiddlers()) {
-            cachedTiddlers = await filterTiddlersAsync(`[all[tiddlers+shadows]is[system]search[${query}]]`, true);
+            cachedTiddlers = await filterTiddlersAsync(`[all[tiddlers+shadows]is[system]search[${query}]]`, { system: true });
           }
           return cachedTiddlers;
         },

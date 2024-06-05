@@ -27,7 +27,7 @@ export const plugin = {
         sourceId: 'layout',
         async getItems({ query }) {
           if (cachedTiddlers.length === 0 || !cacheSystemTiddlers()) {
-            cachedTiddlers = await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Layout]] [[$:/core/ui/PageTemplate]] +[!is[draft]sort[name]]`, true);
+            cachedTiddlers = await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Layout]] [[$:/core/ui/PageTemplate]] +[!is[draft]sort[name]]`, { system: true });
           }
           return cachedTiddlers.filter((tiddler): tiddler is ITiddlerFields => {
             // TODO: add pinyinfuse
@@ -57,7 +57,7 @@ export const plugin = {
               : $tw.wiki.getTiddlerText('$:/language/PageTemplate/Name');
             return `${lingo('Layout')} - ${lingo('CurrentLayout')}: ${currentLayoutName}`;
           },
-          item({ item, createElement, state }) {
+          item({ item, createElement }) {
             if (typeof item.name === 'string' && item.name !== '') {
               const name = renderTextWithCache(item.name, widget);
               const description = renderTextWithCache(item.description, widget);

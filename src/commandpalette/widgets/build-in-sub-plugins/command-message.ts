@@ -35,7 +35,7 @@ export const plugin = {
         async getItems({ query }) {
           if (query === '') return [];
           if (cachedTiddlers.length === 0 || !cacheSystemTiddlers()) {
-            cachedTiddlers = await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Messages]]`, true, []);
+            cachedTiddlers = await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Messages]]`, { system: true });
           }
           return cachedTiddlers
             .filter((tiddler): tiddler is ITiddlerFields => {

@@ -23,7 +23,7 @@ export const plugin = {
         sourceId: 'config',
         async getItems({ query }) {
           if (cachedTiddlers.length === 0 || !cacheSystemTiddlers()) {
-            cachedTiddlers = await filterTiddlersAsync(`[all[shadows]tag[$:/tags/ControlPanel/SettingsTab]]`, true);
+            cachedTiddlers = await filterTiddlersAsync(`[all[shadows]tag[$:/tags/ControlPanel/SettingsTab]]`, { system: true });
           }
           return cachedTiddlers
             .filter((tiddler): tiddler is ITiddlerFields => {

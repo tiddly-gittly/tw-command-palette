@@ -17,7 +17,7 @@ export const plugin = {
         async getItems({ query }) {
           if (query === '') return [];
           const filter = `[all[tiddlers]!is[system]] ${titleTextExclusionFilter()} :filter[has[text]get[text]!compare:string:eq[]]+[search:${getFieldsAsText()}[${query}]]`;
-          return await filterTiddlersAsync(filter, false, []);
+          return await filterTiddlersAsync(filter, { system: false, exclude: [] });
         },
         getItemUrl({ item }) {
           return item.title;

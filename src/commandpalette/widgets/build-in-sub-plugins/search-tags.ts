@@ -21,7 +21,7 @@ export const plugin = {
       sourceId: 'tags',
       async getItems({ query }) {
         // similar to $:/core/Filters/AllTags
-        return await filterTiddlersAsync(`[tags[]search[${query.slice(1)}]]`, true);
+        return await filterTiddlersAsync(`[tags[]search[${query.slice(1)}]]`, { system: true });
       },
       getItemUrl({ item }) {
         return item.title;
@@ -33,7 +33,7 @@ export const plugin = {
         header() {
           return lingo('Tags');
         },
-        item({ item, createElement, state }) {
+        item({ item, createElement }) {
           if (typeof item.caption === 'string' && item.caption !== '') {
             return createElement('div', {
               onclick: () => {

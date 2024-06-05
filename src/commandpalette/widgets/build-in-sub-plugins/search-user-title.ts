@@ -16,7 +16,7 @@ export const plugin = {
         sourceId: 'title',
         async getItems({ query }) {
           if (query === '') return [];
-          return await filterTiddlersAsync(`[all[tiddlers]!is[system]] ${titleTextExclusionFilter()} +[search:${getFieldsAsTitle()}[${query}]]`);
+          return await filterTiddlersAsync(`[all[tiddlers]!is[system]] ${titleTextExclusionFilter()} +[search:${getFieldsAsTitle()}[${query}]]`, {});
         },
         getItemUrl({ item }) {
           return item.title;

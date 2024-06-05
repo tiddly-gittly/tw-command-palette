@@ -3,3 +3,4 @@ description: <<lingo Filter/Fields/Description $:/plugins/linonetwo/commandpalet
 tags: $:/tags/Filter
 title: $:/plugins/linonetwo/commandpalette/Search fields
 filter: [fields[]]
+command-palette-get-tiddler: no
