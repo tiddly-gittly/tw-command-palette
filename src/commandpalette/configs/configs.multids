@@ -5,6 +5,7 @@ TextAlias: text keywords
 TitleTextIgnoreFilter: -[field:calendarEntry[yes]]
 HideDefaultSearchBar: no
 TitlePriorityText: no
+SearchSystemTitle: no
 CacheSystemTiddlers: yes
 DesktopWidth: 80
 DesktopWidthUnit: %

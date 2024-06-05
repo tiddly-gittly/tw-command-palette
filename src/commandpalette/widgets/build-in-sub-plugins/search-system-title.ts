@@ -1,7 +1,7 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
-import { cacheSystemTiddlers } from '../utils/configs';
+import { cacheSystemTiddlers, searchSystemTitle } from '../utils/configs';
 import { debounced } from '../utils/debounce';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
@@ -13,7 +13,7 @@ let cachedTiddlers: ITiddlerFields[] = [];
 export const plugin = {
   async getSources(parameters) {
     if (parameters.query.length === 0) return [];
-    if (!checkIsSearchSystem(parameters) || checkIsUnderFilter(parameters)) return [];
+    if (!searchSystemTitle() || !checkIsSearchSystem(parameters) || checkIsUnderFilter(parameters)) return [];
     return await debounced([
       {
         sourceId: 'system-title',

@@ -26,6 +26,8 @@ caption: <<lingo Name $:/plugins/linonetwo/commandpalette/language/>>
 
 !!! <<lingo Configs/SystemTiddler/Caption>>
 
+;<<lingo Configs/SearchSystemTitle/Caption>>
+:<$checkbox tiddler="$:/plugins/linonetwo/commandpalette/configs/SearchSystemTitle" field="text" checked="yes" unchecked=""> <<lingo Configs/SearchSystemTitle/Description>></$checkbox>
 ;<<lingo Configs/CacheSystemTiddlers/Caption>>
 :<$checkbox tiddler="$:/plugins/linonetwo/commandpalette/configs/CacheSystemTiddlers" field="text" checked="yes" unchecked=""> <<lingo Configs/CacheSystemTiddlers/Description>></$checkbox>
 
