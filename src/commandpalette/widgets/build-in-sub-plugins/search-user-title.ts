@@ -15,7 +15,8 @@ export const plugin = {
         sourceId: 'title',
         async getItems({ query }) {
           if (query === '') return [];
-          return await filterTiddlersAsync(`[all[tiddlers]!is[system]search:${getFieldsAsTitle()}[${query}]]`);
+          const exclusionFilter = $tw.wiki.getTiddlerText('$:/plugins/linonetwo/commandpalette/configs/TitleTextIgnoreFilter', '');
+          return await filterTiddlersAsync(`[all[tiddlers]!is[system]] ${exclusionFilter} +[search:${getFieldsAsTitle()}[${query}]]`);
         },
         getItemUrl({ item }) {
           return item.title;

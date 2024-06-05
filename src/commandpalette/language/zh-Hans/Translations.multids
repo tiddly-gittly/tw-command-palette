@@ -16,6 +16,10 @@ Configs/TitlePriorityText/Caption: 标题高于内容
 Configs/TitlePriorityText/Description: 勾选后，在搜索用户内容时，将标题搜索结果排在上面，内容搜索结果排在下面。（下面的内容可以通过按↑上方向键转到搜索结果的底部来选择）
 Configs/DebounceDuration/Caption: 搜索防抖时长
 Configs/DebounceDuration/Description: 按一个键就搜一次会导致卡顿，这里设置搜索防抖时长，意思是两次连续按键在这个时长内就判定为输入中，就会等你输入完再搜索，单位毫秒。
+Configs/TitleTextIgnoreFilter/Caption: 标题和内容搜索时需要忽略的条目
+Configs/TitleTextIgnoreFilter/Description: 通过筛选器指定不想在命令菜单里搜到的条目，例如可以通过日历搜索功能去搜的日记条目、可以通过别的插件专门管理的条目等。
+Configs/Appearance/Caption: 样式
+Configs/TitleText/Caption: 标题和内容搜索
 UserTitle: 用户条目标题
 SystemTitle: 系统条目标题
 UserTitlePinyin: 用户条目标题拼音

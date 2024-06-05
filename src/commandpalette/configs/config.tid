@@ -10,14 +10,21 @@ caption: <<lingo Name $:/plugins/linonetwo/commandpalette/language/>>
 
 !! <<lingo Configs/PluginConfigs/Caption>>
 
-;<<lingo Configs/HideDefaultSearchBar/Caption>>
-:<$checkbox tiddler="$:/plugins/linonetwo/commandpalette/configs/HideDefaultSearchBar" field="text" checked="yes" unchecked=""> <<lingo Configs/HideDefaultSearchBar/Description>></$checkbox>
+!!! <<lingo Configs/TitleText/Caption>>
+
 ;<<lingo Configs/TitlePriorityText/Caption>>
 :<$checkbox tiddler="$:/plugins/linonetwo/commandpalette/configs/TitlePriorityText" field="text" checked="yes" unchecked=""> <<lingo Configs/TitlePriorityText/Description>></$checkbox>
 ;<<lingo Configs/TitleAlias/Caption>>
 :<$edit-text tiddler="$:/plugins/linonetwo/commandpalette/configs/TitleAlias" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="input" /> <<lingo Configs/TitleAlias/Description>>
 ;<<lingo Configs/TextAlias/Caption>>
 :<$edit-text tiddler="$:/plugins/linonetwo/commandpalette/configs/TextAlias" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="input" /> <<lingo Configs/TextAlias/Description>>
+;<<lingo Configs/TitleTextIgnoreFilter/Caption>>
+:<$edit-text tiddler="$:/plugins/linonetwo/commandpalette/configs/TitleTextIgnoreFilter" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="input" /> <<lingo Configs/TitleTextIgnoreFilter/Description>>
+
+!!! <<lingo Configs/Appearance/Caption>>
+
+;<<lingo Configs/HideDefaultSearchBar/Caption>>
+:<$checkbox tiddler="$:/plugins/linonetwo/commandpalette/configs/HideDefaultSearchBar" field="text" checked="yes" unchecked=""> <<lingo Configs/HideDefaultSearchBar/Description>></$checkbox>
 ;<<lingo Configs/DesktopWidth/Caption>>
 :<$edit-text
   tiddler="$:/plugins/linonetwo/commandpalette/configs/DesktopWidth"

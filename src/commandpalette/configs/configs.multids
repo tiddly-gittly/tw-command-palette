@@ -2,6 +2,7 @@ title: $:/plugins/linonetwo/commandpalette/configs/
 
 TitleAlias: title caption alias
 TextAlias: text keywords
+TitleTextIgnoreFilter: -[field:calendarEntry[yes]]
 HideDefaultSearchBar: no
 TitlePriorityText: no
 DesktopWidth: 80
