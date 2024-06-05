@@ -63,11 +63,15 @@ export const plugin = {
             // show original title + caption
             return `${lingo('Message')} - ${lingo('CurrentTiddler')}: ${focusedTiddler} ${caption}`;
           },
-          item({ item }) {
+          item({ item, createElement, state }) {
             const description = item.description
               ? ` (${renderTextWithCache(item.description as string, widget, variables)})`
               : '';
-            return `${renderTextWithCache(item.caption, widget, variables)}${description}` || item.title;
+            return createElement('div', {
+              onclick: () => {
+                parameters.navigator.navigate({ item, itemUrl: item.title, state });
+              },
+            }, `${renderTextWithCache(item.caption, widget, variables)}${description}` || item.title);
           },
         },
       },

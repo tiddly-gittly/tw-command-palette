@@ -40,12 +40,15 @@ export const plugin = {
           header() {
             return lingo('Help');
           },
-          item({ item, createElement }) {
+          item({ item, state, createElement }) {
             const description = item.description
               ? ` ${renderTextWithCache(item.description as string, widget)}`
               : '';
             return createElement('div', {
               style: 'display:flex;flex-direction:column;',
+              onclick: () => {
+                parameters.navigator.navigate({ item, itemUrl: item.title, state });
+              },
             }, [
               createElement('div', { style: 'margin-bottom:0.25em;' }, [
                 createElement('em', { style: 'margin-right:0.25em;' }, [item['command-palette-prefix'] as string]),

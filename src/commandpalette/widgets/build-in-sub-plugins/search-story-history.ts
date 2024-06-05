@@ -38,11 +38,19 @@ export const plugin = {
           header() {
             return lingo('StoryHistory');
           },
-          item({ item }) {
+          item({ item, createElement, state }) {
             if (typeof item.caption === 'string' && item.caption !== '') {
-              return `${renderTextWithCache(item.caption, widget)} (${item.title})`;
+              return createElement('div', {
+                onclick: () => {
+                  parameters.navigator.navigate({ item, itemUrl: item.title, state });
+                },
+              }, `${renderTextWithCache(item.caption, widget)} (${item.title})`);
             }
-            return item.title;
+            return createElement('div', {
+              onclick: () => {
+                parameters.navigator.navigate({ item, itemUrl: item.title, state });
+              },
+            }, item.title);
           },
         },
       },

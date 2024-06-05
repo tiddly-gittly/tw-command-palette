@@ -47,17 +47,24 @@ export const plugin = {
               : $tw.wiki.getTiddlerText('$:/language/PageTemplate/Name');
             return `${lingo('Layout')} - ${lingo('CurrentLayout')}: ${currentLayoutName}`;
           },
-          item({ item, createElement }) {
+          item({ item, createElement, state }) {
             if (typeof item.name === 'string' && item.name !== '') {
               const name = renderTextWithCache(item.name, widget);
               const description = renderTextWithCache(item.description, widget);
               const icon = getIconSvg(item.icon as string, widget);
               return createElement('div', {
                 class: 'tw-commandpalette-layout-result',
+                onclick: () => {
+                  parameters.navigator.navigate({ item, itemUrl: item.title, state });
+                },
                 innerHTML: `${icon}${name}${description ? ` - ${description}` : ''}`,
               });
             }
-            return item.title;
+            return createElement('div', {
+              onclick: () => {
+                parameters.navigator.navigate({ item, itemUrl: item.title, state });
+              },
+            }, item.title);
           },
         },
       },

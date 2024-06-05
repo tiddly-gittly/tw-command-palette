@@ -53,13 +53,16 @@ export const plugin = {
           header() {
             return lingo('Filter');
           },
-          item({ item, createElement }) {
+          item({ item, createElement, state }) {
             const caption = renderTextWithCache(item.caption, widget);
             const description = item.description
               ? `${caption ? ' - ' : ''}${renderTextWithCache(item.description as string, widget)}`
               : '';
             return createElement('div', {
               style: 'display:flex;flex-direction:column;',
+              onclick: () => {
+                parameters.navigator.navigate({ item, itemUrl: item.title, state });
+              },
             }, [
               createElement('div', { style: 'margin-bottom:0.25em;' }, `${caption}${description}`),
               createElement('div', {}, [

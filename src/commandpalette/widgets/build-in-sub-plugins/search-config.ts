@@ -35,11 +35,19 @@ export const plugin = {
           header() {
             return lingo('Config');
           },
-          item({ item }) {
+          item({ item, createElement, state }) {
             if (typeof item.caption === 'string' && item.caption !== '') {
-              return renderTextWithCache(item.caption, widget);
+              return createElement('div', {
+                onclick: () => {
+                  parameters.navigator.navigate({ item, itemUrl: item.title, state });
+                },
+              }, renderTextWithCache(item.caption, widget));
             }
-            return item.title;
+            return createElement('div', {
+              onclick: () => {
+                parameters.navigator.navigate({ item, itemUrl: item.title, state });
+              },
+            }, item.title);
           },
         },
       },
