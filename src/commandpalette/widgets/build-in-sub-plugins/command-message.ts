@@ -20,6 +20,15 @@ export const plugin = {
     const focusedTiddler = $tw.wiki.getTiddlerText('$:/temp/focussedTiddler');
     const variables = { currentTiddler: focusedTiddler ?? '' };
     const { widget } = parameters.state.context as IContext;
+    const onSelect = (item: ITiddlerFields) => {
+      parameters.setContext({ noNavigate: true } satisfies IContext);
+      widget?.dispatchEvent?.({
+        type: item.text.trim(),
+        tiddlerTitle: focusedTiddler,
+        // TODO: if need param, into param input mode like vscode does. Or Listen on right arrow key in onActive, and open a side panel to input params.
+        // param
+      });
+    };
     return await debounced([
       {
         sourceId: 'message',
@@ -53,13 +62,7 @@ export const plugin = {
           return item.title;
         },
         onSelect({ item }) {
-          parameters.setContext({ noNavigate: true } satisfies IContext);
-          widget?.dispatchEvent?.({
-            type: item.text.trim(),
-            tiddlerTitle: focusedTiddler,
-            // TODO: if need param, into param input mode like vscode does. Or Listen on right arrow key in onActive, and open a side panel to input params.
-            // param
-          });
+          onSelect(item);
         },
         templates: {
           header() {
@@ -71,13 +74,13 @@ export const plugin = {
             // show original title + caption
             return `${lingo('Message')} - ${lingo('CurrentTiddler')}: ${focusedTiddler} ${caption}`;
           },
-          item({ item, createElement, state }) {
+          item({ item, createElement }) {
             const description = item.description
               ? ` (${renderTextWithCache(item.description as string, widget, variables)})`
               : '';
             return createElement('div', {
               onclick: () => {
-                parameters.navigator.navigate({ item, itemUrl: item.title, state });
+                onSelect(item);
               },
             }, `${renderTextWithCache(item.caption, widget, variables)}${description}` || item.title);
           },

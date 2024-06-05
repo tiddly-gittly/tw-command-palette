@@ -15,6 +15,9 @@ export const plugin = {
   getSources(parameters) {
     const { widget } = parameters.state.context as IContext;
     if (!checkIsHelp(parameters) || checkIsUnderFilter(parameters)) return [];
+    const onSelect = (item: ITiddlerFields) => {
+      parameters.setContext({ noNavigate: true, noClose: true, newQuery: (item['command-palette-prefix'] as string).charAt(0) } satisfies IContext);
+    };
     return [
       {
         sourceId: 'help',
@@ -42,20 +45,20 @@ export const plugin = {
           return item.title;
         },
         onSelect({ item }) {
-          parameters.setContext({ noNavigate: true, noClose: true, newQuery: (item['command-palette-prefix'] as string).charAt(0) } satisfies IContext);
+          onSelect(item);
         },
         templates: {
           header() {
             return lingo('Help');
           },
-          item({ item, state, createElement }) {
+          item({ item, createElement }) {
             const description = item.description
               ? ` ${renderTextWithCache(item.description as string, widget)}`
               : '';
             return createElement('div', {
               style: 'display:flex;flex-direction:column;',
               onclick: () => {
-                parameters.navigator.navigate({ item, itemUrl: item.title, state });
+                onSelect(item);
               },
             }, [
               createElement('div', { style: 'margin-bottom:0.25em;' }, [

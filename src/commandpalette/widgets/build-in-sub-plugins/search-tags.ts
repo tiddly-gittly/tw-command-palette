@@ -12,6 +12,10 @@ export const plugin = {
     if (!checkIsSearchTags(parameters)) {
       return [];
     }
+    const onSelect = (item: ITiddlerFields) => {
+      const filter = `[[${item.title}]] [tag[${item.title}]]`;
+      parameters.setContext({ newQuery: '', noClose: true, noNavigate: true, filter } satisfies IContext);
+    };
     return await debounced([{
       // suggest tags for user to search
       sourceId: 'tags',
@@ -23,8 +27,7 @@ export const plugin = {
         return item.title;
       },
       onSelect({ item }) {
-        const filter = `[[${item.title}]] [tag[${item.title}]]`;
-        parameters.setContext({ newQuery: '', noClose: true, noNavigate: true, filter } satisfies IContext);
+        onSelect(item);
       },
       templates: {
         header() {
@@ -34,13 +37,13 @@ export const plugin = {
           if (typeof item.caption === 'string' && item.caption !== '') {
             return createElement('div', {
               onclick: () => {
-                parameters.navigator.navigate({ item, itemUrl: item.title, state });
+                onSelect(item);
               },
             }, `${item.caption} (${item.title})`);
           }
           return createElement('div', {
             onclick: () => {
-              parameters.navigator.navigate({ item, itemUrl: item.title, state });
+              onSelect(item);
             },
           }, item.title);
         },

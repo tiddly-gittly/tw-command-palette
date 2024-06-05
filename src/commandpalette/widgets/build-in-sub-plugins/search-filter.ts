@@ -18,6 +18,9 @@ export const plugin = {
     const sources: Array<AutocompleteSource<ITiddlerFields>> = [];
     if (checkIsFilter(parameters)) {
       const { widget } = parameters.state.context as IContext;
+      const onSelect = (item: ITiddlerFields) => {
+        parameters.setContext({ noNavigate: true, noClose: true, filter: (item.filter as string).trim(), newQuery: '' } satisfies IContext);
+      };
       sources.push({
         sourceId: 'build-in-filter',
         async getItems({ query }) {
@@ -55,7 +58,7 @@ export const plugin = {
           return item.title;
         },
         onSelect({ item }) {
-          parameters.setContext({ noNavigate: true, noClose: true, filter: (item.filter as string).trim(), newQuery: '' } satisfies IContext);
+          onSelect(item);
         },
         templates: {
           header() {
@@ -69,7 +72,7 @@ export const plugin = {
             return createElement('div', {
               style: 'display:flex;flex-direction:column;',
               onclick: () => {
-                parameters.navigator.navigate({ item, itemUrl: item.title, state });
+                onSelect(item);
               },
             }, [
               createElement('div', { style: 'margin-bottom:0.25em;' }, `${caption}${description}`),
@@ -96,11 +99,19 @@ export const plugin = {
           header() {
             return `${lingo('UnderFilter')} - ${(parameters.state.context as IContext).filter}`;
           },
-          item({ item }) {
+          item({ item, createElement, state }) {
             if (typeof item.caption === 'string' && item.caption !== '') {
-              return `${item.caption} (${item.title})`;
+              return createElement('div', {
+                onclick: () => {
+                  parameters.navigator.navigate({ item, itemUrl: item.title, state });
+                },
+              }, `${item.caption} (${item.title})`);
             }
-            return item.title;
+            return createElement('div', {
+              onclick: () => {
+                parameters.navigator.navigate({ item, itemUrl: item.title, state });
+              },
+            }, item.title);
           },
           noResults() {
             return lingo('NoResult');

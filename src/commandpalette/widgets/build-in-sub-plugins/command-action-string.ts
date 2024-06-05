@@ -21,6 +21,11 @@ export const plugin = {
     const focusedTiddler = $tw.wiki.getTiddlerText('$:/temp/focussedTiddler');
     const variables = { currentTiddler: focusedTiddler ?? '', commandpaletteinput: parameters.query.slice(1) };
     const { widget } = parameters.state.context as IContext;
+    const onSelect = (item: ITiddlerFields) => {
+      parameters.setContext({ noNavigate: true } satisfies IContext);
+      // this calls `invokeActions` under the hood
+      widget?.invokeActionString(item.text, widget, null, variables);
+    };
     return await debounced([
       {
         sourceId: 'actionString',
@@ -47,9 +52,7 @@ export const plugin = {
           return item.title;
         },
         onSelect({ item }) {
-          parameters.setContext({ noNavigate: true } satisfies IContext);
-          // this calls `invokeActions` under the hood
-          widget?.invokeActionString(item.text, widget, null, variables);
+          onSelect(item);
         },
         templates: {
           header() {
@@ -61,13 +64,13 @@ export const plugin = {
             // show original title + caption
             return `${lingo('ActionString')} - ${lingo('CurrentTiddler')}: ${focusedTiddler} ${caption}`;
           },
-          item({ item, createElement, state }) {
+          item({ item, createElement }) {
             const description = item.description
               ? ` (${renderTextWithCache(item.description as string, widget, variables)})`
               : '';
             return createElement('div', {
               onclick: () => {
-                parameters.navigator.navigate({ item, itemUrl: item.title, state });
+                onSelect(item);
               },
             }, `${renderTextWithCache(item.caption, widget, variables)}${description}` || item.title);
           },

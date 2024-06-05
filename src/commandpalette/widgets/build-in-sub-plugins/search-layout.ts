@@ -18,6 +18,10 @@ export const plugin = {
     if (parameters.query.length === 0) return [];
     if (!checkIsSearchSystem(parameters) || checkIsUnderFilter(parameters)) return [];
     const { widget } = parameters.state.context as IContext;
+    const onSelect = (item: ITiddlerFields) => {
+      parameters.setContext({ noNavigate: true } satisfies IContext);
+      $tw.wiki.setText('$:/layout', 'text', undefined, item.title, { suppressTimestamp: true });
+    };
     return [
       {
         sourceId: 'layout',
@@ -42,8 +46,7 @@ export const plugin = {
           return item.title;
         },
         onSelect({ item }) {
-          parameters.setContext({ noNavigate: true } satisfies IContext);
-          $tw.wiki.setText('$:/layout', 'text', undefined, item.title, { suppressTimestamp: true });
+          onSelect(item);
         },
         templates: {
           header() {
@@ -62,14 +65,14 @@ export const plugin = {
               return createElement('div', {
                 class: 'tw-commandpalette-layout-result',
                 onclick: () => {
-                  parameters.navigator.navigate({ item, itemUrl: item.title, state });
+                  onSelect(item);
                 },
                 innerHTML: `${icon}${name}${description ? ` - ${description}` : ''}`,
               });
             }
             return createElement('div', {
               onclick: () => {
-                parameters.navigator.navigate({ item, itemUrl: item.title, state });
+                onSelect(item);
               },
             }, item.title);
           },
