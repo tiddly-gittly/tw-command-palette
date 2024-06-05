@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
-import { Modal } from '$:/core/modules/utils/dom/modal.js';
 import { widget as Widget } from '$:/core/modules/widgets/widget.js';
 import { autocomplete, OnStateChangeProps } from '@algolia/autocomplete-js';
 import type { AutocompleteNavigator } from '@algolia/autocomplete-shared/dist/esm/core/AutocompleteNavigator';
@@ -161,9 +160,6 @@ class CommandPaletteWidget extends Widget {
     observe(detachedElement, this.onVisibilityChange.bind(this));
   }
 
-  /** Copy from Modal, to use its logic */
-  srcDocument = this.document;
-  modalCount = 0;
   /**
    * Do things after command palette UI is initialized.
    */
@@ -189,10 +185,6 @@ class CommandPaletteWidget extends Widget {
         event.preventDefault();
       }
     });
-    this.modalCount++;
-    // call with this
-    Modal.prototype.adjustPageClass.call(this);
-    /* eslint-disable @typescript-eslint/unbound-method */
     fixPanelPosition();
     inputElement.addEventListener('focus', fixPanelPosition);
     inputElement.addEventListener('blur', fixPanelPosition);
@@ -242,8 +234,6 @@ class CommandPaletteWidget extends Widget {
   setCloseState() {
     $tw.wiki.deleteTiddler(`$:/temp/commandpalette/${this.id}/opened`);
     this.autoCompleteInstance?.setIsOpen(false);
-    this.modalCount = 0;
-    Modal.prototype.adjustPageClass.call(this);
   }
 
   destroy() {
