@@ -2,12 +2,17 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
+import { cacheSystemTiddlers } from '../utils/configs';
 import { IContext } from '../utils/context';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { getIconSvg } from '../utils/getIconSvg';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
 
+/**
+ * This list won't change during wiki use, so we can only fetch it once.
+ */
+let cachedTiddlers: ITiddlerFields[] = [];
 export const plugin = {
   getSources(parameters) {
     if (parameters.query.length === 0) return [];
@@ -17,19 +22,21 @@ export const plugin = {
       {
         sourceId: 'layout',
         async getItems({ query }) {
-          return (await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Layout]] [[$:/core/ui/PageTemplate]] +[!is[draft]sort[name]]`, true))
-            .filter((tiddler): tiddler is ITiddlerFields => {
-              // TODO: add pinyinfuse
-              return $tw.wiki.filterTiddlers(
-                `[search[${query.slice(1)}]]`,
-                undefined,
-                $tw.wiki.makeTiddlerIterator([
-                  renderTextWithCache(tiddler.name, widget),
-                  renderTextWithCache(tiddler.description, widget),
-                  tiddler.title.replace('$:/plugins/', ''),
-                ]),
-              ).length > 0;
-            });
+          if (cachedTiddlers.length === 0 || !cacheSystemTiddlers()) {
+            cachedTiddlers = await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Layout]] [[$:/core/ui/PageTemplate]] +[!is[draft]sort[name]]`, true);
+          }
+          return cachedTiddlers.filter((tiddler): tiddler is ITiddlerFields => {
+            // TODO: add pinyinfuse
+            return $tw.wiki.filterTiddlers(
+              `[search[${query.slice(1)}]]`,
+              undefined,
+              $tw.wiki.makeTiddlerIterator([
+                renderTextWithCache(tiddler.name, widget),
+                renderTextWithCache(tiddler.description, widget),
+                tiddler.title.replace('$:/plugins/', ''),
+              ]),
+            ).length > 0;
+          });
         },
         getItemUrl({ item }) {
           return item.title;

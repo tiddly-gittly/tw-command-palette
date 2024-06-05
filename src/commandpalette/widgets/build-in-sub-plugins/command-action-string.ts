@@ -3,12 +3,17 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
+import { cacheSystemTiddlers } from '../utils/configs';
 import { IContext } from '../utils/context';
 import { debounced } from '../utils/debounce';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
 
+/**
+ * This list won't change during wiki use, so we can only fetch it once.
+ */
+let cachedTiddlers: ITiddlerFields[] = [];
 export const plugin = {
   async getSources(parameters) {
     if (parameters.query.length === 0) return [];
@@ -21,7 +26,10 @@ export const plugin = {
         sourceId: 'actionString',
         async getItems({ query }) {
           if (query === '') return [];
-          return (await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Actions]]`, true, []))
+          if (cachedTiddlers.length === 0 || !cacheSystemTiddlers()) {
+            cachedTiddlers = await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Actions]]`, true, []);
+          }
+          return cachedTiddlers
             .filter(tiddler =>
               // TODO: add pinyinfuse
               $tw.wiki.filterTiddlers(

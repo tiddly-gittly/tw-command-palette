@@ -2,12 +2,17 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
+import { cacheSystemTiddlers } from '../utils/configs';
 import { IContext } from '../utils/context';
 import { debounced } from '../utils/debounce';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
 
+/**
+ * This list won't change during wiki use, so we can only fetch it once.
+ */
+let cachedTiddlers: ITiddlerFields[] = [];
 export const plugin = {
   async getSources(parameters) {
     if (parameters.query.length === 0) return [];
@@ -20,7 +25,10 @@ export const plugin = {
         sourceId: 'message',
         async getItems({ query }) {
           if (query === '') return [];
-          return (await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Messages]]`, true, []))
+          if (cachedTiddlers.length === 0 || !cacheSystemTiddlers()) {
+            cachedTiddlers = await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Messages]]`, true, []);
+          }
+          return cachedTiddlers
             .filter((tiddler): tiddler is ITiddlerFields => {
               const filter = tiddler['command-palette-filter'] as string | undefined;
               // if no filter, just pass. If user didn't install `$:/plugins/Gk0Wk/focused-tiddler`, also pass.

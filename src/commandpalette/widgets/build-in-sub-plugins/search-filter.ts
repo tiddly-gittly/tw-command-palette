@@ -2,12 +2,17 @@
 import type { AutocompletePlugin, AutocompleteSource } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsFilter, checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
+import { cacheSystemTiddlers } from '../utils/configs';
 import { IContext } from '../utils/context';
 import { debounced } from '../utils/debounce';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
 
+/**
+ * This list won't change during wiki use, so we can only fetch it once.
+ */
+let cachedTiddlers: ITiddlerFields[] = [];
 export const plugin = {
   async getSources(parameters) {
     const sources: Array<AutocompleteSource<ITiddlerFields>> = [];
@@ -17,7 +22,10 @@ export const plugin = {
         sourceId: 'build-in-filter',
         async getItems({ query }) {
           if (query === '') return [];
-          const buildInFilters = (await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Filter]]`, true))
+          if (cachedTiddlers.length === 0 || !cacheSystemTiddlers()) {
+            cachedTiddlers = await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Filter]]`, true);
+          }
+          const buildInFilters = cachedTiddlers
             .filter((tiddler): tiddler is ITiddlerFields => {
               if (tiddler === undefined) return false;
               if (!tiddler.filter || typeof tiddler.filter !== 'string') return false;

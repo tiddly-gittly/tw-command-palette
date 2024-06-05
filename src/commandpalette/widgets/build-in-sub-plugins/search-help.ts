@@ -2,10 +2,15 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsHelp, checkIsUnderFilter } from '../utils/checkPrefix';
+import { cacheSystemTiddlers } from '../utils/configs';
 import { IContext } from '../utils/context';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
 
+/**
+ * This list won't change during wiki use, so we can only fetch it once.
+ */
+let cachedTiddlers: string[] = [];
 export const plugin = {
   getSources(parameters) {
     const { widget } = parameters.state.context as IContext;
@@ -14,7 +19,10 @@ export const plugin = {
       {
         sourceId: 'help',
         getItems({ query }) {
-          return ($tw.wiki.filterTiddlers('[all[shadows]tag[$:/tags/CommandPaletteHelp]]')
+          if (cachedTiddlers.length === 0 || !cacheSystemTiddlers()) {
+            cachedTiddlers = $tw.wiki.filterTiddlers('[all[shadows]tag[$:/tags/CommandPaletteHelp]]');
+          }
+          return (cachedTiddlers
             .map((title) => $tw.wiki.getTiddler(title)?.fields)
             .filter(Boolean) as ITiddlerFields[])
             .filter((tiddler) =>
