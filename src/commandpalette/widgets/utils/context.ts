@@ -2,6 +2,10 @@ import type { Widget } from 'tiddlywiki';
 
 export interface IContext {
   /**
+   * Apply the `TitleTextIgnoreFilter` to the filter.
+   */
+  applyExclusion?: boolean;
+  /**
    * Search under results of this filter.
    */
   filter?: string;

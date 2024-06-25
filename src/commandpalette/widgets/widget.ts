@@ -137,7 +137,7 @@ class CommandPaletteWidget extends Widget {
   }
 
   clearContext() {
-    // don't clear filter, otherwise can't get it in next step (under-filter)
+    // don't clear filter and applyExclusion that is used in `search-filter.ts`, otherwise can't get it in next step (under-filter), because we will "Enter" before go to next step
     this.autoCompleteInstance?.setContext({ noNavigate: undefined, newQuery: undefined, noClose: undefined /* , filter: undefined */ } satisfies IContext);
   }
 

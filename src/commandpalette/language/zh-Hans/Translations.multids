@@ -18,6 +18,8 @@ Configs/DebounceDuration/Caption: 搜索防抖时长
 Configs/DebounceDuration/Description: 按一个键就搜一次会导致卡顿，这里设置搜索防抖时长，意思是两次连续按键在这个时长内就判定为输入中，就会等你输入完再搜索，单位毫秒。
 Configs/TitleTextIgnoreFilter/Caption: 标题和内容搜索时需要忽略的条目
 Configs/TitleTextIgnoreFilter/Description: 通过筛选器指定不想在命令菜单里搜到的条目，例如可以通过日历搜索功能去搜的日记条目、可以通过别的插件专门管理的条目等。
+Configs/ApplyIgnoreFilterToTag/Caption: 搜标签时也应用忽略
+Configs/ApplyIgnoreFilterToTag/Description: 勾选时，通过 `#` 模式搜索某个标签的子条目时，也应用上述筛选器。
 Configs/CacheSystemTiddlers/Caption: 缓存系统条目
 Configs/CacheSystemTiddlers/Description: 假设在知识库使用过程中，系统条目不会发生变化，所以只在初次搜索时加载一次到前端快取，之后再搜索时不再加载最新数据。注意此选项包括所有使用 {{$:/plugins/linonetwo/commandpalette/commands/help/System!!command-palette-prefix}} 搜索的结果。如果您是太微的开发者的一员，系统条目经常变化，那可以取消勾选此选项。
 Configs/SearchSystemTitle/Caption: 搜索系统条目标题

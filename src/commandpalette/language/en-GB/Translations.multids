@@ -16,6 +16,8 @@ Configs/TitlePriorityText/Caption: Title higher than text.
 Configs/TitlePriorityText/Description: When checked, title search results will be listed on the top, and text search results will be listed below, when searching user tiddlers. (The result on the bottom can be selected by pressing the ↑ up arrow key to circle go to the bottom of the search results)
 Configs/TitleTextIgnoreFilter/Caption: Tiddlers to be ignored for title and content search.
 Configs/TitleTextIgnoreFilter/Description: Filter to specify tiddlers you don't want to be searched in the command palette, e.g. calendar tiddlers that can be searched by the calendar search feature, or tiddlers that can be managed by other specialized plugins, etc.
+Configs/ApplyIgnoreFilterToTag/Caption: Apply Ignore when searching for tags.
+Configs/ApplyIgnoreFilterToTag/Description: When checked, the above filters are also applied when searching for sub-tiddlers of a tag through `#` mode. 
 Configs/DebounceDuration/Caption: Search debounce duration
 Configs/DebounceDuration/Description: Pressing a key to search once will lead to lagging, here set the search anti-shake duration, meaning two consecutive key presses within this duration will be judged as inputting, and will wait for you to finish typing before searching, in milliseconds.
 Configs/CacheSystemTiddlers/Caption: Caching system tiddlers

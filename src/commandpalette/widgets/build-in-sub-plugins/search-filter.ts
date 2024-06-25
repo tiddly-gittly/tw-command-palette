@@ -2,7 +2,7 @@
 import type { AutocompletePlugin, AutocompleteSource } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsFilter, checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
-import { cacheSystemTiddlers, missingFilterOnTop } from '../utils/configs';
+import { cacheSystemTiddlers, missingFilterOnTop, titleTextExclusionFilter } from '../utils/configs';
 import { IContext } from '../utils/context';
 import { debounced } from '../utils/debounce';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
@@ -91,17 +91,22 @@ export const plugin = {
         sourceId: 'filter',
         async getItems({ query, state }) {
           const system = checkIsSearchSystem(parameters);
-          return await filterTiddlersAsync(`[all[tiddlers+shadows]]+${(state.context as IContext).filter} +[search[${system ? query.slice(1) : query}]]`, {
-            system,
-            toTiddler: ((state.context as IContext).filterGetTiddler ?? true),
-          });
+          return await filterTiddlersAsync(
+            `[all[tiddlers+shadows]]+${(state.context as IContext).filter} ${(state.context as IContext).applyExclusion ? titleTextExclusionFilter() : ''} +[search[${
+              system ? query.slice(1) : query
+            }]]`,
+            {
+              system,
+              toTiddler: ((state.context as IContext).filterGetTiddler ?? true),
+            },
+          );
         },
         getItemUrl({ item }) {
           return item.title;
         },
         templates: {
           header() {
-            return `${lingo('UnderFilter')} - ${(parameters.state.context as IContext).filter}`;
+            return `${lingo('UnderFilter')} - ${(parameters.state.context as IContext).filter} ${(parameters.state.context as IContext).applyExclusion ? '(ignore)' : ''}`;
           },
           item({ item, createElement, state }) {
             if (typeof item.caption === 'string' && item.caption !== '') {

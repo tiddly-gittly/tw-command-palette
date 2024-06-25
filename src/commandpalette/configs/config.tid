@@ -23,6 +23,8 @@ caption: <<lingo Name $:/plugins/linonetwo/commandpalette/language/>>
 :<$edit-text tiddler="$:/plugins/linonetwo/commandpalette/configs/TextAlias" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="input" /> <<lingo Configs/TextAlias/Description>>
 ;<<lingo Configs/TitleTextIgnoreFilter/Caption>>
 :<$edit-text tiddler="$:/plugins/linonetwo/commandpalette/configs/TitleTextIgnoreFilter" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="input" /> <<lingo Configs/TitleTextIgnoreFilter/Description>>
+;<<lingo Configs/ApplyIgnoreFilterToTag/Caption>>
+:<$checkbox tiddler="$:/plugins/linonetwo/commandpalette/configs/ApplyIgnoreFilterToTag" field="text" checked="yes" unchecked=""> <<lingo Configs/ApplyIgnoreFilterToTag/Description>></$checkbox>
 
 !!! <<lingo Configs/SystemTiddler/Caption>>
 
