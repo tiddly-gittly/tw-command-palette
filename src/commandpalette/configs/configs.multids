@@ -2,7 +2,7 @@ title: $:/plugins/linonetwo/commandpalette/configs/
 
 TitleAlias: title caption alias
 TextAlias: text keywords
-TitleTextIgnoreFilter: -[field:calendarEntry[yes]]
+TitleTextIgnoreFilter: -[field:calendarEntry[yes]] :filter[!field:tmo_taskState[Completed]!field:tmo_taskState[Archived]!field:tmo_taskState[Terminated]!field:tmo_taskState[Suspended]]
 HideDefaultSearchBar: no
 TitlePriorityText: no
 SearchSystemTitle: no

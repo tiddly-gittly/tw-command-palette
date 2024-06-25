@@ -1,6 +1,7 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsSearchTags } from '../utils/checkPrefix';
+import { titleTextExclusionFilter } from '../utils/configs';
 import { IContext } from '../utils/context';
 import { debounced } from '../utils/debounce';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
@@ -13,7 +14,7 @@ export const plugin = {
       return [];
     }
     const onSelect = (item: ITiddlerFields) => {
-      const filter = `[[${item.title}]] [tag[${item.title}]]`;
+      const filter = `[[${item.title}]] [tag[${item.title}]] ${titleTextExclusionFilter()}`;
       parameters.setContext({ newQuery: '', noClose: true, noNavigate: true, filter } satisfies IContext);
     };
     return await debounced([{
