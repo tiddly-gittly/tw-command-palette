@@ -106,7 +106,7 @@ export const plugin = {
         },
         templates: {
           header() {
-            return `${lingo('UnderFilter')} - ${(parameters.state.context as IContext).filter} ${(parameters.state.context as IContext).applyExclusion ? '(ignore)' : ''}`;
+            return `${lingo('UnderFilter')} - ${(parameters.state.context as IContext).filter} ${(parameters.state.context as IContext).applyExclusion ? '- ...' : ''}`;
           },
           item({ item, createElement, state }) {
             if (typeof item.caption === 'string' && item.caption !== '') {
