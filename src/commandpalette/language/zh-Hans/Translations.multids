@@ -22,6 +22,8 @@ Configs/CacheSystemTiddlers/Caption: 缓存系统条目
 Configs/CacheSystemTiddlers/Description: 假设在知识库使用过程中，系统条目不会发生变化，所以只在初次搜索时加载一次到前端快取，之后再搜索时不再加载最新数据。注意此选项包括所有使用 {{$:/plugins/linonetwo/commandpalette/commands/help/System!!command-palette-prefix}} 搜索的结果。如果您是太微的开发者的一员，系统条目经常变化，那可以取消勾选此选项。
 Configs/SearchSystemTitle/Caption: 搜索系统条目标题
 Configs/SearchSystemTitle/Description: 知识库中有大量的系统条目，组成了太微操作系统，搜索它们会比较慢。如果您是太微的开发者的一员，经常搜索系统条目，那可以勾选此选项。
+Configs/MissingFilterOnTop/Caption: 缺失筛选器置顶
+Configs/MissingFilterOnTop/Description: 勾选时，使用 `[` 筛选器搜索模式时，如果没有匹配的筛选器，则将其置顶显示，方便您直接使用刚输入的新筛选器来搜索。不勾选时则是置底，方便搜索加了 `$:/tags/Filter` 标签的筛选器条目。
 Configs/Appearance/Caption: 样式
 Configs/TitleText/Caption: 标题和内容搜索
 Configs/SystemTiddler/Caption: 系统条目搜索

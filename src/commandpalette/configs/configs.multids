@@ -7,6 +7,7 @@ HideDefaultSearchBar: no
 TitlePriorityText: no
 SearchSystemTitle: no
 CacheSystemTiddlers: yes
+MissingFilterOnTop: no
 DesktopWidth: 80
 DesktopWidthUnit: %
 DebounceDuration: 300

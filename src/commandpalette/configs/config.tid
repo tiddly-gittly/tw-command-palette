@@ -49,3 +49,5 @@ caption: <<lingo Name $:/plugins/linonetwo/commandpalette/language/>>
   <option>px</option>
   <option>em</option>
 </$select> <<lingo Configs/DesktopWidth/Description>>
+;<<lingo Configs/MissingFilterOnTop/Caption>>
+:<$checkbox tiddler="$:/plugins/linonetwo/commandpalette/configs/MissingFilterOnTop" field="text" checked="yes" unchecked=""> <<lingo Configs/MissingFilterOnTop/Description>></$checkbox>

@@ -2,7 +2,7 @@
 import type { AutocompletePlugin, AutocompleteSource } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsFilter, checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
-import { cacheSystemTiddlers } from '../utils/configs';
+import { cacheSystemTiddlers, missingFilterOnTop } from '../utils/configs';
 import { IContext } from '../utils/context';
 import { debounced } from '../utils/debounce';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
@@ -51,7 +51,7 @@ export const plugin = {
           // allow user input a custom filter to search under it
           const userInputFilter = { filter: query, title: '', type: '', text: '' } satisfies ITiddlerFields;
           if (query.length > 1) {
-            return [...buildInFilters, userInputFilter];
+            return missingFilterOnTop() ? [userInputFilter, ...buildInFilters] : [...buildInFilters, userInputFilter];
           }
           return buildInFilters;
         },

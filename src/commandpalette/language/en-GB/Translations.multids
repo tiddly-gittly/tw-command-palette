@@ -22,6 +22,8 @@ Configs/CacheSystemTiddlers/Caption: Caching system tiddlers
 Configs/CacheSystemTiddlers/Description: Assumed system tiddlers don't change during wiki usage, so they are only loaded to the front-end cache once for the initial search, and then no longer loaded with the latest data for subsequent searches. Note that this option includes all results from searches done with {{$:/plugins/linonetwo/commandpalette/commands/help/System!!command-palette-prefix}}. If you are part of the developers of Tiddlywiki and the system tiddlers change frequently, then you can uncheck this option.
 Configs/SearchSystemTitle/Caption: Search System Tiddler Title
 Configs/SearchSystemTitle/Description: There are a large number of system titles in the wiki that make up the Tiddlywiki operating system, and searching for them can be slow. Check this option if you are one of Tiddlywiki's developers and often search for system titles.
+Configs/MissingFilterOnTop/Caption: Missing Filter On Top
+Configs/MissingFilterOnTop/Description: When checked, when using `[` filter search mode, if there is no matching filter, it will be displayed on top, so that you can directly use the new filter you just entered to search. When unchecked, it will be at the bottom, so that you can search for the filter tiddlers tagged with `$:/tags/Filter`.
 Configs/Appearance/Caption: Appearance
 Configs/TitleText/Caption: Search Title & Text
 Configs/SystemTiddler/Caption: Search System Tiddlers
