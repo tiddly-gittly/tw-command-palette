@@ -20,10 +20,10 @@ Configs/TitleTextIgnoreFilter/Caption: 标题和内容搜索时需要忽略的�
 Configs/TitleTextIgnoreFilter/Description: 通过筛选器指定不想在命令菜单里搜到的条目，例如可以通过日历搜索功能去搜的日记条目、可以通过别的插件专门管理的条目等。
 Configs/ApplyIgnoreFilterToTag/Caption: 搜标签时也应用忽略
 Configs/ApplyIgnoreFilterToTag/Description: 勾选时，通过 `#` 模式搜索某个标签的子条目时，也应用上述筛选器。忽略生效时，将显示 `- ...` 提示。
+Configs/SearchSystemTitle/Caption: 自由搜索系统条目标题
+Configs/SearchSystemTitle/Description: 知识库中有大量的系统条目，组成了太微操作系统，搜索它们会比较慢。如果您是太微的开发者的一员，经常搜索系统条目，那可以勾选此选项。（仅涉及自由搜索系统条目，所以不勾选此选项也可以搜索布局、系统动作等等）
 Configs/CacheSystemTiddlers/Caption: 缓存系统条目
-Configs/CacheSystemTiddlers/Description: 假设在知识库使用过程中，系统条目不会发生变化，所以只在初次搜索时加载一次到前端快取，之后再搜索时不再加载最新数据。注意此选项包括所有使用 {{$:/plugins/linonetwo/commandpalette/commands/help/System!!command-palette-prefix}} 搜索的结果。如果您是太微的开发者的一员，系统条目经常变化，那可以取消勾选此选项。
-Configs/SearchSystemTitle/Caption: 搜索系统条目标题
-Configs/SearchSystemTitle/Description: 知识库中有大量的系统条目，组成了太微操作系统，搜索它们会比较慢。如果您是太微的开发者的一员，经常搜索系统条目，那可以勾选此选项。
+Configs/CacheSystemTiddlers/Description: 假设在知识库使用过程中，系统条目不会发生变化，所以只在初次搜索时加载一次到前端快取，之后再搜索时不再加载最新数据。注意此选项包括所有使用 {{$:/plugins/linonetwo/commandpalette/commands/help/System!!command-palette-prefix}} 搜索的结果。如果您是太微的开发者的一员，系统条目经常变化，那可以取消勾选此选项。（仅涉及搜索布局、系统动作等等，不涉及自由搜索系统条目）
 Configs/MissingFilterOnTop/Caption: 缺失筛选器置顶
 Configs/MissingFilterOnTop/Description: 勾选时，使用 `[` 筛选器搜索模式时，如果没有匹配的筛选器，则将其置顶显示，方便您直接使用刚输入的新筛选器来搜索。不勾选时则是置底，方便搜索加了 `$:/tags/Filter` 标签的筛选器条目。
 Configs/Appearance/Caption: 样式

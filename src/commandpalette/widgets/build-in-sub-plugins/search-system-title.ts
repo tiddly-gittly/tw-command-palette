@@ -1,15 +1,11 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
-import { cacheSystemTiddlers, searchSystemTitle } from '../utils/configs';
+import { searchSystemTitle } from '../utils/configs';
 import { debounced } from '../utils/debounce';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
 
-/**
- * This list won't change during wiki use, so we can only fetch it once.
- */
-let cachedTiddlers: ITiddlerFields[] = [];
 export const plugin = {
   async getSources(parameters) {
     if (parameters.query.length === 0) return [];
@@ -19,10 +15,8 @@ export const plugin = {
         sourceId: 'system-title',
         async getItems({ query }) {
           if (query === '') return [];
-          if (cachedTiddlers.length === 0 || !cacheSystemTiddlers()) {
-            cachedTiddlers = await filterTiddlersAsync(`[all[tiddlers+shadows]is[system]search[${query}]]`, { system: true });
-          }
-          return cachedTiddlers;
+          const result = await filterTiddlersAsync(`[all[tiddlers+shadows]is[system]search[${query.substring(1)}]]`, { system: true });
+          return result;
         },
         getItemUrl({ item }) {
           return item.title;
