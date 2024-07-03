@@ -3,7 +3,7 @@ import type { AutocompletePlugin, AutocompleteSource } from '@algolia/autocomple
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsFilter, checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
 import { cacheSystemTiddlers, missingFilterOnTop, titleTextExclusionFilter } from '../utils/configs';
-import { IContext } from '../utils/context';
+import { emptyContext, IContext } from '../utils/context';
 import { debounced } from '../utils/debounce';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
@@ -74,6 +74,10 @@ export const plugin = {
               style: 'display:flex;flex-direction:column;',
               onclick: () => {
                 onSelect(item);
+                parameters.setQuery('');
+                void parameters.refresh().catch(error => {
+                  console.error('Error in search-filter step1 refresh', error);
+                });
               },
             }, [
               createElement('div', { style: 'margin-bottom:0.25em;' }, `${caption}${description}`),
@@ -109,17 +113,17 @@ export const plugin = {
             return `${lingo('UnderFilter')} - ${(parameters.state.context as IContext).filter} ${(parameters.state.context as IContext).applyExclusion ? '- ...' : ''}`;
           },
           item({ item, createElement, state }) {
+            const onclick = () => {
+              // parameters.setContext(emptyContext); is not working here. But need to clear the context
+              parameters.navigator.navigate({ item, itemUrl: item.title, state: { ...state, context: { ...state.context, ...emptyContext } } });
+            };
             if (typeof item.caption === 'string' && item.caption !== '') {
               return createElement('div', {
-                onclick: () => {
-                  parameters.navigator.navigate({ item, itemUrl: item.title, state });
-                },
+                onclick,
               }, `${item.caption} (${item.title})`);
             }
             return createElement('div', {
-              onclick: () => {
-                parameters.navigator.navigate({ item, itemUrl: item.title, state });
-              },
+              onclick,
             }, item.title);
           },
           noResults() {

@@ -27,16 +27,15 @@ export const plugin = {
           },
           item({ item, createElement, state }) {
             if (typeof item.caption === 'string' && item.caption !== '') {
+              const onclick = () => {
+                parameters.navigator.navigate({ item, itemUrl: item.title, state });
+              };
               return createElement('div', {
-                onclick: () => {
-                  parameters.navigator.navigate({ item, itemUrl: item.title, state });
-                },
+                onclick,
               }, `${item.caption} (${item.title})`);
             }
             return createElement('div', {
-              onclick: () => {
-                parameters.navigator.navigate({ item, itemUrl: item.title, state });
-              },
+              onclick,
             }, item.title);
           },
         },

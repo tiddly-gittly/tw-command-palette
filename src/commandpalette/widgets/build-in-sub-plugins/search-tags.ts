@@ -35,17 +35,20 @@ export const plugin = {
           return lingo('Tags');
         },
         item({ item, createElement }) {
+          const onclick = () => {
+            onSelect(item);
+            parameters.setQuery('');
+            void parameters.refresh().catch(error => {
+              console.error('Error in search-tags refresh', error);
+            });
+          };
           if (typeof item.caption === 'string' && item.caption !== '') {
             return createElement('div', {
-              onclick: () => {
-                onSelect(item);
-              },
+              onclick,
             }, `${item.caption} (${item.title})`);
           }
           return createElement('div', {
-            onclick: () => {
-              onSelect(item);
-            },
+            onclick,
           }, item.title);
         },
         noResults() {

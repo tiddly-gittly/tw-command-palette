@@ -15,9 +15,6 @@ export const plugin = {
   getSources(parameters) {
     const { widget } = parameters.state.context as IContext;
     if (!checkIsHelp(parameters) || checkIsUnderFilter(parameters)) return [];
-    const onSelect = (item: ITiddlerFields) => {
-      parameters.setContext({ noNavigate: true, noClose: true, newQuery: (item['command-palette-prefix'] as string).charAt(0) } satisfies IContext);
-    };
     return [
       {
         sourceId: 'help',
@@ -45,7 +42,8 @@ export const plugin = {
           return item.title;
         },
         onSelect({ item }) {
-          onSelect(item);
+          const newQuery = (item['command-palette-prefix'] as string).charAt(0);
+          parameters.setContext({ noNavigate: true, noClose: true, newQuery } satisfies IContext);
         },
         templates: {
           header() {
@@ -58,7 +56,11 @@ export const plugin = {
             return createElement('div', {
               style: 'display:flex;flex-direction:column;',
               onclick: () => {
-                onSelect(item);
+                const newQuery = (item['command-palette-prefix'] as string).charAt(0);
+                parameters.setQuery(newQuery);
+                void parameters.refresh().catch(error => {
+                  console.error('Error in search-help refresh', error);
+                });
               },
             }, [
               createElement('div', { style: 'margin-bottom:0.25em;' }, [

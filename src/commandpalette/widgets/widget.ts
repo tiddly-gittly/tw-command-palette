@@ -7,7 +7,7 @@ import { IChangedTiddlers, ITiddlerFields } from 'tiddlywiki';
 import '@algolia/autocomplete-theme-classic';
 import { AutocompleteState } from '@algolia/autocomplete-core';
 import { observe, unobserve } from '@seznam/visibility-observer';
-import { IContext } from './utils/context';
+import { emptyContext, IContext } from './utils/context';
 import { fixPanelPosition } from './utils/fixPanelPosition';
 import { getActiveElement } from './utils/getFocused';
 import { getSubPlugins } from './utils/getSubPlugins';
@@ -104,6 +104,8 @@ class CommandPaletteWidget extends Widget {
     itemUrl: string;
     state: AutocompleteState<ITiddlerFields>;
   }): void {
+    // DEBUG: console state
+    console.log(`state`, state);
     if (state.context.newQuery !== undefined) {
       this.autoCompleteInstance?.setQuery?.((state.context as IContext).newQuery!);
       this.autoCompleteInstance?.setContext({ newQuery: undefined } satisfies IContext);
@@ -138,8 +140,7 @@ class CommandPaletteWidget extends Widget {
   }
 
   clearContext() {
-    // don't clear filter and applyExclusion that is used in `search-filter.ts`, otherwise can't get it in next step (under-filter), because we will "Enter" before go to next step
-    this.autoCompleteInstance?.setContext({ noNavigate: undefined, newQuery: undefined, noClose: undefined /* , filter: undefined */ } satisfies IContext);
+    this.autoCompleteInstance?.setContext(emptyContext);
   }
 
   /**
