@@ -1,5 +1,5 @@
 title: $:/plugins/linonetwo/commandpalette/DefaultCommandPalette
-tags: $:/tags/CommandPalette
+tags: $:/tags/RootTemplate
 
 \procedure on-mask-layer-clicked() <$action-sendmessage $message="close-command-palette" $param="default"/>
 
