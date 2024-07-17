@@ -66,6 +66,7 @@ class CommandPaletteWidget extends Widget {
       navigator: {
         navigate: this.onEnter.bind(this) satisfies AutocompleteNavigator<ITiddlerFields>['navigate'],
         navigateNewTab: this.onCtrlEnter.bind(this) satisfies AutocompleteNavigator<ITiddlerFields>['navigateNewTab'],
+        navigateNewWindow: this.onShiftEnter.bind(this) satisfies AutocompleteNavigator<ITiddlerFields>['navigateNewWindow'],
       },
       plugins: getSubPlugins(),
       reshape({ sourcesBySourceId }) {
@@ -104,8 +105,6 @@ class CommandPaletteWidget extends Widget {
     itemUrl: string;
     state: AutocompleteState<ITiddlerFields>;
   }): void {
-    // DEBUG: console state
-    console.log(`state`, state);
     if (state.context.newQuery !== undefined) {
       this.autoCompleteInstance?.setQuery?.((state.context as IContext).newQuery!);
       this.autoCompleteInstance?.setContext({ newQuery: undefined } satisfies IContext);
@@ -133,6 +132,18 @@ class CommandPaletteWidget extends Widget {
     state: AutocompleteState<ITiddlerFields>;
   }) {
     $tw.utils.copyToClipboard(itemUrl);
+    if (!state.context.noClose) {
+      this.setCloseState();
+    }
+    this.clearContext();
+  }
+
+  onShiftEnter({ itemUrl, state }: {
+    item: ITiddlerFields;
+    itemUrl: string;
+    state: AutocompleteState<ITiddlerFields>;
+  }) {
+    window.open(`${window.location.origin}/#:${itemUrl}`, '_blank');
     if (!state.context.noClose) {
       this.setCloseState();
     }
