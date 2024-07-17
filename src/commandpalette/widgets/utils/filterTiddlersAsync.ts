@@ -13,35 +13,14 @@ const tidGiWorkspaceID = ((window as any).meta?.())?.workspaceID;
 export async function filterTiddlersAsync(filter: string, options: { exclude?: string[]; system?: boolean; toTiddler?: boolean }): Promise<ITiddlerFields[]> {
   const { system = false, exclude, toTiddler = true } = options;
   if (isInTidGiDesktop && 'service' in window) {
-    // by default tiddlyweb protocol omit all system tiddlers, need to turn off this // TODO: add param to turn off this in TidGi
     const wikiServer = (window.service as any).wiki;
-    let previousServerConfigValue: string | undefined;
-    if (system) {
-      previousServerConfigValue = await wikiServer.wikiOperationInServer('wiki-get-tiddler-text', tidGiWorkspaceID, ['$:/config/SyncSystemTiddlersFromServer']);
-      await wikiServer.wikiOperationInServer('wiki-add-tiddler', tidGiWorkspaceID, [
-        '$:/config/SyncSystemTiddlersFromServer',
-        'yes',
-      ]);
-    }
-    // FIXME: this prevent [all[tiddlers+shadows]]+[fields[]]+[search[]] to work, need to modify tidgi side
     const resultFromIPC = await wikiServer.callWikiIpcServerRoute(
       tidGiWorkspaceID,
       'getTiddlersJSON',
       filter,
       exclude,
+      { ignoreSyncSystemConfig: !system },
     );
-    if (system) {
-      if (previousServerConfigValue === undefined) {
-        await wikiServer.wikiOperationInServer('wiki-delete-tiddler', tidGiWorkspaceID, [
-          '$:/config/SyncSystemTiddlersFromServer',
-        ]);
-      } else {
-        await wikiServer.wikiOperationInServer('wiki-add-tiddler', tidGiWorkspaceID, [
-          '$:/config/SyncSystemTiddlersFromServer',
-          previousServerConfigValue,
-        ]);
-      }
-    }
     return resultFromIPC.data as ITiddlerFields[];
   } else {
     return toTiddler
