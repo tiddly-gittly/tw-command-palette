@@ -7,5 +7,6 @@
     "source": "https://github.com/tiddly-gittly/tiddlywiki-plugins",
     "dependents": "$:/plugins/Gk0Wk/focused-tiddler",
     "plugin-type": "plugin",
+    "stability": "STABILITY_2_STABLE",
     "list": "readme config tree"
 }
