@@ -106,6 +106,7 @@ class AutoCompleteSearchWidget extends Widget {
       target: HTMLElement;
     },
   ) {
+    // FIXME: this is false immediately after the element is created, cause not render
     if (!visibilityEntry.isIntersecting) {
       this.destroy();
       unobserve(visibilityEntry.target, this.onVisibilityChange.bind(this));
