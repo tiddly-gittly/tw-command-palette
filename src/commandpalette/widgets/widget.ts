@@ -73,7 +73,7 @@ class CommandPaletteWidget extends Widget {
         navigateNewTab: this.onCtrlEnter.bind(this) satisfies AutocompleteNavigator<ITiddlerFields>['navigateNewTab'],
         navigateNewWindow: this.onShiftEnter.bind(this) satisfies AutocompleteNavigator<ITiddlerFields>['navigateNewWindow'],
       },
-      plugins: getSubPlugins(),
+      plugins: getSubPlugins(this.id),
       reshape({ sourcesBySourceId }) {
         const {
           'title': titleSource,
@@ -110,6 +110,9 @@ class CommandPaletteWidget extends Widget {
     itemUrl: string;
     state: AutocompleteState<ITiddlerFields>;
   }): void {
+    if (state.query.trim() !== '') {
+      (state.context as IContext).addHistoryItem?.(state.query);
+    }
     if (state.context.newQuery !== undefined) {
       this.autoCompleteInstance?.setQuery?.((state.context as IContext).newQuery!);
       this.autoCompleteInstance?.setContext({ newQuery: undefined } satisfies IContext);

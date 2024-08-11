@@ -34,6 +34,7 @@ SystemTitle: 系统条目标题
 UserTitlePinyin: 用户条目标题拼音
 UserText: 用户条目内容文本
 StoryHistory: 故事流浏览历史
+SearchHistory: 搜索历史
 Filter: 选择预置筛选器
 UnderFilter: 基于筛选器进一步搜索
 Tagging: 带标签的用户条目

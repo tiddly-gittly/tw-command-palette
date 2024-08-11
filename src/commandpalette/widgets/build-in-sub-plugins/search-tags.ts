@@ -14,6 +14,7 @@ export const plugin = {
       return [];
     }
     const onSelect = (item: ITiddlerFields) => {
+      (parameters.state.context as IContext).addHistoryItem?.(parameters.query);
       const filter = `[[${item.title}]] [tag[${item.title}]]`;
       parameters.setContext({ newQuery: '', noClose: true, noNavigate: true, filter, applyExclusion: applyIgnoreFilterToTag() } satisfies IContext);
     };

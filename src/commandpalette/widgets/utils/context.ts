@@ -2,6 +2,10 @@ import type { Widget } from 'tiddlywiki';
 
 export interface IContext {
   /**
+   * Add a history item to the autocomplete-plugin-recent-searches.
+   */
+  addHistoryItem?: (text: string) => void;
+  /**
    * Apply the `TitleTextIgnoreFilter` to the filter.
    */
   applyExclusion?: boolean;
