@@ -1,0 +1,6 @@
+title: $:/plugins/linonetwo/autocomplete/readme
+type: text/vnd.tiddlywiki
+
+\define lingo-base() $:/plugins/linonetwo/autocomplete/language/
+
+<<lingo Readme>>

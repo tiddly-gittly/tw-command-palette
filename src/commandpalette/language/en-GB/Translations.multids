@@ -4,50 +4,11 @@ Name: Command Palette
 Description: Search the text of tiddlers, and execute commands in Tiddlywiki. Beautiful omni-bar and shortcut command center.
 Configs/Description: These settings let you customise the behaviour of "Command Palette" plugin.
 Configs/PluginConfigs/Caption: Plugin Configs
-Configs/TitleAlias/Caption: Fields regarded as title to search
-Configs/TitleAlias/Description: When searching title, you may want to include more fields to search. Separate fields with spaces, note that adding too many fields can cause lag.
-Configs/TextAlias/Caption: Fields regarded as text to search
-Configs/TextAlias/Description: When searching text, you may want to include more fields to search. Separate fields with spaces, note that adding too many fields can cause lag.
 Configs/HideDefaultSearchBar/Caption: Hide default search bar
 Configs/HideDefaultSearchBar/Description: If you only use commandpalette to search and don't need default search bar, check this box.
 Configs/DesktopWidth/Caption: Width on desktop mode
 Configs/DesktopWidth/Description: Width of the input and result boxes on the screen (does not affect mobile, which is full screen by default)
-Configs/TitlePriorityText/Caption: Title higher than text.
-Configs/TitlePriorityText/Description: When checked, title search results will be listed on the top, and text search results will be listed below, when searching user tiddlers. (The result on the bottom can be selected by pressing the ↑ up arrow key to circle go to the bottom of the search results)
-Configs/TitleTextIgnoreFilter/Caption: Tiddlers to be ignored for title and content search.
-Configs/TitleTextIgnoreFilter/Description: Filter to specify tiddlers you don't want to be searched in the command palette, e.g. calendar tiddlers that can be searched by the calendar search feature, or tiddlers that can be managed by other specialized plugins, etc.
-Configs/ApplyIgnoreFilterToTag/Caption: Apply Ignore when searching for tags.
-Configs/ApplyIgnoreFilterToTag/Description: When checked, the above filters are also applied when searching for sub-tiddlers of a tag through `#` mode. When ignore is in effect, the `- ... ` prompt.
-Configs/DebounceDuration/Caption: Search debounce duration
-Configs/DebounceDuration/Description: Pressing a key to search once will lead to lagging, here set the search anti-shake duration, meaning two consecutive key presses within this duration will be judged as inputting, and will wait for you to finish typing before searching, in milliseconds.
-Configs/SearchSystemTitle/Caption: Freely Search System Tiddler Title
-Configs/SearchSystemTitle/Description: There are a large number of system titles in the wiki that make up the Tiddlywiki operating system, and searching for them can be slow. Check this option if you are one of Tiddlywiki's developers and often search for system titles. (only involves free searching of system tiddlers, so you can search layouts, system actions, etc. without checking this option)
-Configs/CacheSystemTiddlers/Caption: Caching system tiddlers
-Configs/CacheSystemTiddlers/Description: Assumed system tiddlers don't change during wiki usage, so they are only loaded to the front-end cache once for the initial search, and then no longer loaded with the latest data for subsequent searches. Note that this option includes all results from searches done with {{$:/plugins/linonetwo/commandpalette/commands/help/System!!command-palette-prefix}}. If you are part of the developers of Tiddlywiki and the system tiddlers change frequently, then you can uncheck this option. (only about search layout, system actions, etc., not about free search system tiddlers)
-Configs/MissingFilterOnTop/Caption: missing filter on top
-Configs/MissingFilterOnTop/Caption: Missing Filter On Top
-Configs/MissingFilterOnTop/Description: When checked, when using `[` filter search mode, if there is no matching filter, it will be displayed on top, so that you can directly use the new filter you just entered to search. When unchecked, it will be at the bottom, so that you can search for the filter tiddlers tagged with `$:/tags/Filter`.
 Configs/Appearance/Caption: Appearance
-Configs/TitleText/Caption: Search Title & Text
-Configs/SystemTiddler/Caption: Search System Tiddlers
-SystemTitle: Title of system tiddler
-UserTitle: Title of user tiddler
-UserTitlePinyin: Title Pinyin of user tiddler
-UserText: Text of user tiddler
-StoryHistory: Story history
-SearchHistory: Search history
-Filter: Pick build-in filters
-UnderFilter: Further search based on filters
-Tagging: User tiddlers with tags
-Message: Trigger system message
-Layout: Switch layout
-Config: Open config
-Tags: Tags
-Help: Command palette usage
-ActionString: Trigger action string
-CurrentTiddler: Current tiddler
-CurrentLayout: Current layout
-NoResult: No result or no uniq result
 Help/Help/Caption: Help
 Help/Help/Description: Usage of the command menu, describes what the command menu will search when different prefixes are added to the search box.
 Help/Filter/Caption: Filters

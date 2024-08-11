@@ -1,0 +1,10 @@
+{
+  "title": "$:/plugins/linonetwo/autocomplete",
+  "name": "autocomplete",
+  "author": "linonetwo",
+  "description": "Auto complete full-text search across wiki. Dependency of TW-CommandPalette. Install that if you want out-of-box features.",
+  "plugin-type": "plugin",
+  "version": "0.0.1",
+  "stability": "STABILITY_2_STABLE",
+  "list": "readme"
+}

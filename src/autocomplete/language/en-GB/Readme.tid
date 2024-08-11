@@ -1,0 +1,15 @@
+title: $:/plugins/linonetwo/autocomplete/language/en-GB/Readme
+
+\define lingo-base() $:/plugins/linonetwo/autocomplete/language/
+
+! <<lingo Name>>
+
+<<lingo Description>>
+
+!! Credits
+
+This plugin references the design of [[Souk21/TW-commandpalette|https://github.com/Souk21/TW-commandpalette]], thanks to him for making the first version! This plugin upgrades and is written with TypeScript and [ext[algolia/autocomplete|https://github.com/algolia/autocomplete]], make it much more powerful and friendly to developers to extend its functionality.
+
+!! Feature
+
+Press ctrl/cmd + P to call up the search box, or add Shift to call up the command box (aka, command palette).

@@ -1,0 +1,5 @@
+title: $:/plugins/linonetwo/autocomplete/widget/build-in-sub-plugins/search-story-history.js
+tags: $:/tags/CommandPalettePlugin
+type: application/javascript
+module-type: library
+priority: 0

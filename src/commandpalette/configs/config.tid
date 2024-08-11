@@ -10,28 +10,7 @@ caption: <<lingo Name $:/plugins/linonetwo/commandpalette/language/>>
 
 !! <<lingo Configs/PluginConfigs/Caption>>
 
-;<<lingo Configs/DebounceDuration/Caption>>
-:<$edit-text tiddler="$:/plugins/linonetwo/commandpalette/configs/DebounceDuration" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="input" type="number" />ms <<lingo Configs/DebounceDuration/Description>>
-
-!!! <<lingo Configs/TitleText/Caption>>
-
-;<<lingo Configs/TitlePriorityText/Caption>>
-:<$checkbox tiddler="$:/plugins/linonetwo/commandpalette/configs/TitlePriorityText" field="text" checked="yes" unchecked=""> <<lingo Configs/TitlePriorityText/Description>></$checkbox>
-;<<lingo Configs/TitleAlias/Caption>>
-:<$edit-text tiddler="$:/plugins/linonetwo/commandpalette/configs/TitleAlias" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="input" /> <<lingo Configs/TitleAlias/Description>>
-;<<lingo Configs/TextAlias/Caption>>
-:<$edit-text tiddler="$:/plugins/linonetwo/commandpalette/configs/TextAlias" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="input" /> <<lingo Configs/TextAlias/Description>>
-;<<lingo Configs/TitleTextIgnoreFilter/Caption>>
-:<$edit-text tiddler="$:/plugins/linonetwo/commandpalette/configs/TitleTextIgnoreFilter" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="input" /> <<lingo Configs/TitleTextIgnoreFilter/Description>>
-;<<lingo Configs/ApplyIgnoreFilterToTag/Caption>>
-:<$checkbox tiddler="$:/plugins/linonetwo/commandpalette/configs/ApplyIgnoreFilterToTag" field="text" checked="yes" unchecked=""> <<lingo Configs/ApplyIgnoreFilterToTag/Description>></$checkbox>
-
-!!! <<lingo Configs/SystemTiddler/Caption>>
-
-;<<lingo Configs/SearchSystemTitle/Caption>>
-:<$checkbox tiddler="$:/plugins/linonetwo/commandpalette/configs/SearchSystemTitle" field="text" checked="yes" unchecked=""> <<lingo Configs/SearchSystemTitle/Description>></$checkbox>
-;<<lingo Configs/CacheSystemTiddlers/Caption>>
-:<$checkbox tiddler="$:/plugins/linonetwo/commandpalette/configs/CacheSystemTiddlers" field="text" checked="yes" unchecked=""> <<lingo Configs/CacheSystemTiddlers/Description>></$checkbox>
+[[autocomplete/config|$:/plugins/linonetwo/autocomplete/config]]
 
 !!! <<lingo Configs/Appearance/Caption>>
 
@@ -51,5 +30,3 @@ caption: <<lingo Name $:/plugins/linonetwo/commandpalette/language/>>
   <option>px</option>
   <option>em</option>
 </$select> <<lingo Configs/DesktopWidth/Description>>
-;<<lingo Configs/MissingFilterOnTop/Caption>>
-:<$checkbox tiddler="$:/plugins/linonetwo/commandpalette/configs/MissingFilterOnTop" field="text" checked="yes" unchecked=""> <<lingo Configs/MissingFilterOnTop/Description>></$checkbox>
