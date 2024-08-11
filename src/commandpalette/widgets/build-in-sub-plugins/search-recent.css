@@ -1,0 +1,26 @@
+.tw-commandpalette-search-recent-item {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+.tw-commandpalette-search-recent-item
+  .tw-commandpalette-search-recent-item-delete {
+  position: absolute;
+  right: 1em;
+  opacity: 0.3;
+  padding: 5px;
+}
+.tw-commandpalette-search-recent-item
+  .tw-commandpalette-search-recent-item-delete:hover {
+  opacity: 0.7;
+}
+.tw-commandpalette-search-recent-item
+  .tw-commandpalette-search-recent-item-delete:active {
+  opacity: 1;
+}
+.tw-commandpalette-search-recent-item
+  .tw-commandpalette-search-recent-item-delete svg {
+  width: 20px;
+}

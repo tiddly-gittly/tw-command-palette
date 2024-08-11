@@ -35,6 +35,7 @@ UserTitle: Title of user tiddler
 UserTitlePinyin: Title Pinyin of user tiddler
 UserText: Text of user tiddler
 StoryHistory: Story history
+SearchHistory: Search history
 Filter: Pick build-in filters
 UnderFilter: Further search based on filters
 Tagging: User tiddlers with tags
