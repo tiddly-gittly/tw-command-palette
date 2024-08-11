@@ -3,8 +3,9 @@
  * container of command input can't be position fix, otherwise need a hack
  * @url https://github.com/algolia/autocomplete/issues/1199
  */
-export function fixPanelPosition() {
-  const defaultInputElement = document.querySelector('.tw-commandpalette-default-container');
+export function fixPanelPosition(parentDomNode: Element) {
+  // const defaultInputElement = document.querySelector('.tw-command-palette-default-container');
+  const defaultInputElement = parentDomNode;
   if (!defaultInputElement) return;
   const rect = defaultInputElement.getBoundingClientRect();
   // Set css variable to be below the search box in case the search box moved when the window was resized

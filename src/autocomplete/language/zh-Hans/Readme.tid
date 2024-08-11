@@ -12,12 +12,18 @@ title: $:/plugins/linonetwo/autocomplete/language/zh-Hans/Readme
 
 !! 自动补全框
 
-本插件提供了一个自动补全框微件 `<$command-palette />`，基本用法如下：
+本插件提供了一个自动补全框微件 `<$auto-complete-search />`，基本用法如下：
 
 ```tid
-<$command-palette
-  id="test"
-  prefix={{$:/temp/commandpalette/test/opened!!prefix}}
-  historyMode={{$:/temp/commandpalette/test/opened!!historyMode}}
+<$auto-complete-search
+  id="demo"
+  prefix={{$:/temp/auto-complete-search/demo/opened!!prefix}}
+  historyMode={{$:/temp/auto-complete-search/demo/opened!!historyMode}}
+  autoFocus="no"
 />
 ```
+
+<$auto-complete-search
+  id="demo"
+  autoFocus="no"
+/>

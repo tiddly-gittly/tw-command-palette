@@ -3,7 +3,7 @@
 import { widget as Widget } from '$:/core/modules/widgets/widget.js';
 import { autocomplete, OnStateChangeProps } from '@algolia/autocomplete-js';
 import type { AutocompleteNavigator } from '@algolia/autocomplete-shared/dist/esm/core/AutocompleteNavigator';
-import { IChangedTiddlers, ITiddlerFields } from 'tiddlywiki';
+import { IChangedTiddlers, IParseTreeNode, ITiddlerFields, IWidgetInitialiseOptions } from 'tiddlywiki';
 import '@algolia/autocomplete-theme-classic';
 import { AutocompleteState } from '@algolia/autocomplete-core';
 import { observe, unobserve } from '@seznam/visibility-observer';
@@ -14,10 +14,15 @@ import { getSubPlugins } from './utils/getSubPlugins';
 import { handleDarkMode } from './utils/handleDarkMode';
 import { uniqSourcesBy } from './utils/uniqSourcesBy';
 
-class CommandPaletteWidget extends Widget {
+class AutoCompleteSearchWidget extends Widget {
   id = 'default';
   refresh(_changedTiddlers: IChangedTiddlers) {
     return false;
+  }
+
+  constructor(parseTreeNode: IParseTreeNode, options?: IWidgetInitialiseOptions) {
+    super(parseTreeNode, options);
+    this.fixPanelPosition = this.fixPanelPosition.bind(this);
   }
 
   /** We restore focus of element when we are close */
@@ -28,19 +33,21 @@ class CommandPaletteWidget extends Widget {
   autoCompleteState?: OnStateChangeProps<ITiddlerFields>;
   historyMode = false;
   autoFocus = true;
+  absoluteCenter = false;
 
   render(parent: Element, nextSibling: Element) {
     this.parentDomNode = parent;
     this.computeAttributes();
     this.execute();
     this.id = this.getAttribute('id', 'default');
-    // params are get from `$:/plugins/linonetwo/autocomplete/DefaultCommandPalette` using transclusion from `$:/temp/commandpalette/default/opened`
+    // params are get from `$:/plugins/linonetwo/autocomplete/DefaultCommandPalette` using transclusion from `$:/temp/auto-complete-search/default/opened`
     const initialPrefix = this.getAttribute('prefix', '');
     this.historyMode = this.getAttribute('historyMode', 'no') === 'yes';
     this.autoFocus = this.getAttribute('autoFocus', 'yes') === 'yes';
+    this.absoluteCenter = this.getAttribute('absoluteCenter', 'no') === 'yes';
     const titlePriorityText = this.wiki.getTiddlerText('$:/plugins/linonetwo/autocomplete/configs/TitlePriorityText', 'no') === 'yes';
     const containerElement = $tw.utils.domMaker('nav', {
-      class: 'tw-commandpalette-container',
+      class: 'tw-auto-complete-container',
     });
     this.parentDomNode.insertBefore(containerElement, nextSibling);
     this.domNodes.push(containerElement);
@@ -208,11 +215,17 @@ class CommandPaletteWidget extends Widget {
         event.preventDefault();
       }
     });
-    fixPanelPosition();
-    inputElement.addEventListener('focus', fixPanelPosition);
-    inputElement.addEventListener('blur', fixPanelPosition);
-    window.addEventListener('resize', fixPanelPosition);
+    if (this.absoluteCenter) {
+      this.fixPanelPosition();
+      inputElement.addEventListener('focus', this.fixPanelPosition);
+      inputElement.addEventListener('blur', this.fixPanelPosition);
+      window.addEventListener('resize', this.fixPanelPosition);
+    }
     /* eslint-enable @typescript-eslint/unbound-method */
+  }
+
+  fixPanelPosition() {
+    fixPanelPosition(this.parentDomNode);
   }
 
   historySwitchActiveItemId?: number;
@@ -255,26 +268,27 @@ class CommandPaletteWidget extends Widget {
   }
 
   setCloseState() {
-    $tw.wiki.deleteTiddler(`$:/temp/commandpalette/${this.id}/opened`);
+    $tw.wiki.deleteTiddler(`$:/temp/auto-complete-search/${this.id}/opened`);
     this.autoCompleteInstance?.setIsOpen(false);
   }
 
   destroy() {
     this.setCloseState();
-    const containerElement = this.parentDomNode?.querySelector('.tw-commandpalette-container');
+    const containerElement = this.parentDomNode?.querySelector('.tw-auto-complete-container');
     this.autoCompleteInstance?.destroy();
     containerElement?.remove?.();
     const panelElement = (this.document as unknown as Document)?.querySelector?.(`.tw-commandpalette-panel-${this.id}`);
     panelElement?.remove?.();
+    this.parentDomNode = undefined;
     this.autoCompleteInstance = undefined;
     /* eslint-disable @typescript-eslint/unbound-method */
-    window.removeEventListener('resize', fixPanelPosition);
+    window.removeEventListener('resize', this.fixPanelPosition);
     /* eslint-enable @typescript-eslint/unbound-method */
     this.previouslyFocusedElement?.focus?.();
   }
 }
 
 declare let exports: {
-  ['command-palette']: typeof CommandPaletteWidget;
+  ['auto-complete-search']: typeof AutoCompleteSearchWidget;
 };
-exports['command-palette'] = CommandPaletteWidget;
+exports['auto-complete-search'] = AutoCompleteSearchWidget;

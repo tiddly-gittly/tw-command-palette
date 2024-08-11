@@ -18,14 +18,14 @@ exports.startup = function() {
     /** For ctrl-tab handling */
     const historyMode = event?.paramObject?.historyMode as string || 'no';
     // Don't forget add transclusion in `src/commandpalette/DefaultCommandPalette.tid` for new param
-    $tw.wiki.addTiddler({ title: `$:/temp/commandpalette/${commandPaletteID}/opened`, text: 'yes', prefix, historyMode });
+    $tw.wiki.addTiddler({ title: `$:/temp/auto-complete-search/${commandPaletteID}/opened`, text: 'yes', prefix, historyMode });
     return false;
   });
   $tw.rootWidget.addEventListener('close-command-palette', (originalEvent: IWidgetEvent) => {
     const event = $tw.hooks.invokeHook('th-close-command-palette', originalEvent);
     // message can provide a command palette ID to close, default to 'default', which is used on the default command palette's widget.
     const commandPaletteID = event?.param || 'default';
-    $tw.wiki.deleteTiddler(`$:/temp/commandpalette/${commandPaletteID}/opened`);
+    $tw.wiki.deleteTiddler(`$:/temp/auto-complete-search/${commandPaletteID}/opened`);
     return false;
   });
 };

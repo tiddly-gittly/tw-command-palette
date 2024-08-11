@@ -16,7 +16,7 @@ tags: $:/tags/Stylesheet
   top: calc(var(--position-autocomplete-panel-top) + 0.25em) !important;
   z-index: 9999;
 }
-.tw-commandpalette-default-container {
+.tw-command-palette-default-container {
   position: fixed;
   background: <<colour page-background>>;
   z-index: 9998;
@@ -58,9 +58,4 @@ div.aa-SourceHeader {
   padding-bottom: 0.3em;
   padding-top: 0.3em;
   opacity: 0.5;
-}
-div.tw-commandpalette-layout-result {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
 }

@@ -3,15 +3,16 @@ tags: $:/tags/CommandPalette
 
 \procedure on-mask-layer-clicked() <$action-sendmessage $message="close-command-palette" $param="default"/>
 
-<% if [{$:/temp/commandpalette/default/opened}match[yes]] %>
+<% if [{$:/temp/auto-complete-search/default/opened}match[yes]] %>
   <$eventcatcher selector=".tw-default-commandpalette-mask-layer" tag="div" $click=<<on-mask-layer-clicked>>>
     <div class="tw-default-commandpalette-mask-layer"></div>
   </$eventcatcher>
-  <div class="tw-commandpalette-default-container">
-    <$command-palette
+  <div class="tw-command-palette-default-container">
+    <$auto-complete-search
       id="default"
-      prefix={{$:/temp/commandpalette/default/opened!!prefix}}
-      historyMode={{$:/temp/commandpalette/default/opened!!historyMode}}
+      prefix={{$:/temp/auto-complete-search/default/opened!!prefix}}
+      historyMode={{$:/temp/auto-complete-search/default/opened!!historyMode}}
+      absoluteCenter="yes"
     />
   </div>
 <% endif %>

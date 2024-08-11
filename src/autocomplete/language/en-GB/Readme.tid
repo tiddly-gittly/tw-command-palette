@@ -6,10 +6,26 @@ title: $:/plugins/linonetwo/autocomplete/language/en-GB/Readme
 
 <<lingo Description>>
 
-!! Credits
+!! CommandPalette
 
-This plugin references the design of [[Souk21/TW-commandpalette|https://github.com/Souk21/TW-commandpalette]], thanks to him for making the first version! This plugin upgrades and is written with TypeScript and [ext[algolia/autocomplete|https://github.com/algolia/autocomplete]], make it much more powerful and friendly to developers to extend its functionality.
+If you want to use the command menu out-of-the-box, you also need to install the [[$:/plugins/linonetwo/commandpalette]] plugin.
 
-!! Feature
+!!! Auto-completion box
 
-Press ctrl/cmd + P to call up the search box, or add Shift to call up the command box (aka, command palette).
+This plugin provides an auto-completion box Widget `<$auto-complete-search />` with the following basic usage:
+
+```tid
+<$auto-complete-search
+  id="demo"
+  prefix={{$:/temp/auto-complete-search/demo/opened!!prefix}}
+  historyMode={{$:/temp/auto-complete-search/demo/opened!!historyMode}}
+  autoFocus="no"
+/>
+```
+
+<$auto-complete-search
+  id="demo"
+  prefix={{$:/temp/auto-complete-search/demo/opened!!prefix}}
+  historyMode={{$:/temp/auto-complete-search/demo/opened!!historyMode}}
+  autoFocus="no"
+/>
