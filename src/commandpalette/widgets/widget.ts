@@ -27,6 +27,7 @@ class CommandPaletteWidget extends Widget {
   /** Can't get state from its instance, so use this as a way to get state */
   autoCompleteState?: OnStateChangeProps<ITiddlerFields>;
   historyMode = false;
+  autoFocus = true;
 
   render(parent: Element, nextSibling: Element) {
     this.parentDomNode = parent;
@@ -36,11 +37,12 @@ class CommandPaletteWidget extends Widget {
     // params are get from `$:/plugins/linonetwo/commandpalette/DefaultCommandPalette` using transclusion from `$:/temp/commandpalette/default/opened`
     const initialPrefix = this.getAttribute('prefix', '');
     this.historyMode = this.getAttribute('historyMode', 'no') === 'yes';
+    this.autoFocus = this.getAttribute('autoFocus', 'yes') === 'yes';
     const titlePriorityText = this.wiki.getTiddlerText('$:/plugins/linonetwo/commandpalette/configs/TitlePriorityText', 'no') === 'yes';
     const containerElement = $tw.utils.domMaker('nav', {
       class: 'tw-commandpalette-container',
     });
-    parent.insertBefore(containerElement, nextSibling);
+    this.parentDomNode.insertBefore(containerElement, nextSibling);
     this.domNodes.push(containerElement);
 
     handleDarkMode();
@@ -52,6 +54,9 @@ class CommandPaletteWidget extends Widget {
     this.autoCompleteInstance = autocomplete<ITiddlerFields>({
       id: this.id,
       container: containerElement,
+      classNames: {
+        panel: `tw-commandpalette-panel-${this.id}`,
+      },
       placeholder: 'Search for tiddlers',
       initialState: {
         query: initialPrefix,
@@ -60,8 +65,8 @@ class CommandPaletteWidget extends Widget {
       onStateChange(nextState) {
         updateState(nextState);
       },
-      autoFocus: true,
-      openOnFocus: true,
+      autoFocus: this.autoFocus,
+      openOnFocus: this.autoFocus,
       ignoreCompositionEvents: true,
       navigator: {
         navigate: this.onEnter.bind(this) satisfies AutocompleteNavigator<ITiddlerFields>['navigate'],
@@ -184,7 +189,9 @@ class CommandPaletteWidget extends Widget {
     observe(containerElement, this.onVisibilityChange.bind(this));
     this.registerHistoryKeyboardHandlers(inputElement);
     // autoFocus param is not working, focus manually.
-    inputElement.focus();
+    if (this.autoFocus) {
+      inputElement.focus();
+    }
     // no API to listen esc, listen manually
     inputElement.addEventListener('keydown', (event) => {
       if (event.key === 'Escape') {
@@ -251,7 +258,11 @@ class CommandPaletteWidget extends Widget {
 
   destroy() {
     this.setCloseState();
+    const containerElement = this.parentDomNode?.querySelector('.tw-commandpalette-container');
     this.autoCompleteInstance?.destroy();
+    containerElement?.remove?.();
+    const panelElement = (this.document as unknown as Document)?.querySelector?.(`.tw-commandpalette-panel-${this.id}`);
+    panelElement?.remove?.();
     this.autoCompleteInstance = undefined;
     /* eslint-disable @typescript-eslint/unbound-method */
     window.removeEventListener('resize', fixPanelPosition);
