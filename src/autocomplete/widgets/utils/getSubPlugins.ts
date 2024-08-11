@@ -25,6 +25,5 @@ export function getSubPlugins(id: string) {
         console.error(`Failed to load command palette plugin ${tiddlerField.title}`, error);
       }
     });
-
   return plugins;
 }

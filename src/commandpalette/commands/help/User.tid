@@ -1,5 +1,0 @@
-command-palette-prefix: 
-caption: <<lingo Help/User/Caption $:/plugins/linonetwo/commandpalette/language/>>
-description: <<lingo Help/User/Description $:/plugins/linonetwo/commandpalette/language/>>
-tags: $:/tags/CommandPaletteHelp
-title: $:/plugins/linonetwo/commandpalette/commands/help/User

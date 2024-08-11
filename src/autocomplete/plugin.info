@@ -6,5 +6,5 @@
   "plugin-type": "plugin",
   "version": "0.0.1",
   "stability": "STABILITY_2_STABLE",
-  "list": "readme"
+  "list": "readme tree"
 }

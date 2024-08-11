@@ -9,13 +9,3 @@ Configs/HideDefaultSearchBar/Description: 如果您只使用命令菜单搜索�
 Configs/DesktopWidth/Caption: 桌面模式宽度
 Configs/DesktopWidth/Description: 输入框和结果框占屏幕的宽度（不影响移动端，移动端默认全屏）
 Configs/Appearance/Caption: 样式
-Help/Help/Caption: 帮助
-Help/Help/Description: 命令菜单用法，介绍在搜索框里加上不同前缀时，命令菜单将会搜索的内容。
-Help/Filter/Caption: 筛选器
-Help/Filter/Description: 分为两步，首先搜索预置筛选器或自定义筛选器，回车确认选中；然后在筛选结果中继续搜索，回车打开条目。第二步里，默认只搜索用户条目，可加上系统条目搜索的前缀来包括系统条目。
-Help/User/Caption: 用户条目
-Help/User/Description: 什么前缀也不加，直接打字，可以搜索你的条目的标题和内容。回车选中（目前无法用鼠标选中），Ctrl+回车会复制选中的内容到剪贴板，方便黏贴。
-Help/System/Caption: 系统条目
-Help/System/Description: 带有这个前缀时，可以搜索各太微系统功能，如可用的系统消息、布局、设置等。
-Help/Tags/Caption: 标签
-Help/Tags/Description: 分为两步，首先搜索知识库中所有的标签，回车确认选中；然后在加了这个标签的条目中继续搜索，回车打开条目。第二步里，默认只搜索用户条目，可加上系统条目搜索的前缀来包括系统条目。

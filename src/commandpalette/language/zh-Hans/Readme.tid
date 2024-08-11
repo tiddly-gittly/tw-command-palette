@@ -6,6 +6,10 @@ title: $:/plugins/linonetwo/commandpalette/language/zh-Hans/Readme
 
 <<lingo Description>>
 
+!! 依赖
+
+本插件基于 [[$:/plugins/linonetwo/autocomplete]] 自动补全框插件开发，你需要一并安装它（用 CPL 安装的话，会自动识别依赖自动安装，就不用担心了）。
+
 !! 致谢
 
 该插件参考了[[Souk21/TW-commandpalette|https://github.com/Souk21/TW-commandpalette]]的设计，感谢他制作的第一版！本插件升级并采用了 TypeScript 和[ext[algolia/autocomplete|https://github.com/algolia/autocomplete]]编写，因此功能更强大，对开发人员扩展其功能也更友好。

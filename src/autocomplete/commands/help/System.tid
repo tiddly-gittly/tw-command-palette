@@ -1,0 +1,5 @@
+command-palette-prefix: $ ￥
+caption: <<lingo Help/System/Caption $:/plugins/linonetwo/autocomplete/language/>>
+description: <<lingo Help/System/Description $:/plugins/linonetwo/autocomplete/language/>>
+tags: $:/tags/CommandPaletteHelp
+title: $:/plugins/linonetwo/autocomplete/commands/help/System

@@ -6,12 +6,18 @@ title: $:/plugins/linonetwo/autocomplete/language/zh-Hans/Readme
 
 <<lingo Description>>
 
-!! 致谢
+!! 命令菜单
 
-该插件参考了[[Souk21/TW-commandpalette|https://github.com/Souk21/TW-commandpalette]]的设计，感谢他制作的第一版！本插件升级并采用了 TypeScript 和[ext[algolia/autocomplete|https://github.com/algolia/autocomplete]]编写，因此功能更强大，对开发人员扩展其功能也更友好。
+如果你想用开箱即用的命令菜单，你还需要安装 [[$:/plugins/linonetwo/commandpalette]] 插件。
 
-!! 功能
+!! 自动补全框
 
-按下 ctrl/cmd + P 唤起搜索框，按的时候如果多加一个 Shift 可以唤起功能框。
+本插件提供了一个自动补全框微件 `<$command-palette />`，基本用法如下：
 
-如果你还安装了[ext[linonetwo/pinyin-fuzzy-search|https://tw-cpl.netlify.app/#linonetwo%2Fpinyin-fuzzy-search:Index%20linonetwo%2Fpinyin-fuzzy-search]]插件，那么搜索的时候可以打拼音。
+```tid
+<$command-palette
+  id="test"
+  prefix={{$:/temp/commandpalette/test/opened!!prefix}}
+  historyMode={{$:/temp/commandpalette/test/opened!!historyMode}}
+/>
+```

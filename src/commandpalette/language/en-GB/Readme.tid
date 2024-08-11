@@ -6,6 +6,10 @@ title: $:/plugins/linonetwo/commandpalette/language/en-GB/Readme
 
 <<lingo Description>>
 
+!! Dependency
+
+This plugin is developed based on [[$:/plugins/linonetwo/autocomplete]] autocomplete plugin, you need to install it together (if you install it with CPL, it will automatically recognize the dependency and install it automatically, so you don't have to worry about it).
+
 !! Credits
 
 This plugin references the design of [[Souk21/TW-commandpalette|https://github.com/Souk21/TW-commandpalette]], thanks to him for making the first version! This plugin upgrades and is written with TypeScript and [ext[algolia/autocomplete|https://github.com/algolia/autocomplete]], make it much more powerful and friendly to developers to extend its functionality.
