@@ -9,7 +9,7 @@ import { lingo } from '../utils/lingo';
 export const plugin = (id: string): AutocompletePlugin<RecentSearchesItem, RecentSearchesPluginData<RecentSearchesItem>> => {
   let setContext: StateUpdater<IContext> | undefined;
   let refresh: () => Promise<void> | undefined;
-  const deleteIcon = getIconSvg('$:/core/images/delete-button');
+  const deleteIcon = getIconSvg('$:/core/images/delete-button', undefined);
   const recentSearchesPlugin = createLocalStorageRecentSearchesPlugin({
     key: `recent-${id}`,
     subscribe(parameters) {
@@ -25,6 +25,11 @@ export const plugin = (id: string): AutocompletePlugin<RecentSearchesItem, Recen
         ...source,
         getItemUrl({ item }) {
           return item.id;
+        },
+        async getItems(parameters) {
+          if (parameters.query.length > 0) return [];
+          const items = source.getItems(parameters);
+          return await items;
         },
         onSelect({ item }) {
           onSelect(item.id);
