@@ -294,6 +294,8 @@ class AutoCompleteSearchWidget extends Widget {
   setCloseState() {
     $tw.wiki.deleteTiddler(`$:/temp/auto-complete-search/${this.id}/opened`);
     this.autoCompleteInstance?.setIsOpen(false);
+    const panelElement = (this.document as unknown as Document)?.querySelector?.(`.tw-commandpalette-panel-${this.id}`);
+    panelElement?.remove?.();
   }
 
   destroy() {
@@ -301,8 +303,6 @@ class AutoCompleteSearchWidget extends Widget {
     const containerElement = this.parentDomNode?.querySelector('.tw-auto-complete-container');
     this.autoCompleteInstance?.destroy();
     containerElement?.remove?.();
-    const panelElement = (this.document as unknown as Document)?.querySelector?.(`.tw-commandpalette-panel-${this.id}`);
-    panelElement?.remove?.();
     this.parentDomNode = undefined;
     this.autoCompleteInstance = undefined;
     /* eslint-disable @typescript-eslint/unbound-method */
