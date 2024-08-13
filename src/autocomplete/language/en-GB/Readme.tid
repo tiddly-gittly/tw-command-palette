@@ -19,5 +19,3 @@ This plugin provides an auto-completion box Widget `<$auto-complete-search />` w
 | `autoFocus`           | yes/no | Automatically sets focus to the input and opens the panel when the widget is rendered.         | `yes`        |
 | `panelBelowInput`   | yes/no | By default panel is below input. Disable this to let it center on top of window. | `yes`     |
 | `destroyWhenNotVis`   | yes/no | Destroys the widget when it is not visible.               | `no`       |
-
-<<wikitext-example-without-html src:'<$auto-complete-search id="demo" autoFocus="no" destroyWhenNotVis="no" />'>>

@@ -19,5 +19,3 @@ title: $:/plugins/linonetwo/autocomplete/language/zh-Hans/Readme
 | `autoFocus`           | yes/no   | 当微件渲染时，自动将焦点设置到输入框并打开面板。  | `yes`        |
 | `panelBelowInput`   | yes/no   | 默认情况下，面板位于输入下方。禁用此选项可让面板位于窗口顶部的中心位置。  | `yes`     |
 | `destroyWhenNotVis`   | yes/no   | 当不可见时，立即销毁微件。               | `no`       |
-
-<<wikitext-example-without-html src:'<$auto-complete-search id="demo" autoFocus="no" destroyWhenNotVis="no" />'>>

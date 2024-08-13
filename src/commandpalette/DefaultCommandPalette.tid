@@ -12,7 +12,7 @@ tags: $:/tags/CommandPalette
       id="default"
       prefix={{$:/temp/auto-complete-search/default/opened!!prefix}}
       historyMode={{$:/temp/auto-complete-search/default/opened!!historyMode}}
-      absoluteCenter="yes"
+      destroyWhenNotVis="yes"
     />
   </div>
 <% endif %>
