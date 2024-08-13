@@ -14,18 +14,10 @@ If you want to use the command menu out-of-the-box, you also need to install the
 
 This plugin provides an auto-completion box Widget `<$auto-complete-search />` with the following basic usage:
 
-```tid
-<$auto-complete-search
-  id="demo"
-  prefix={{$:/temp/auto-complete-search/demo/opened!!prefix}}
-  historyMode={{$:/temp/auto-complete-search/demo/opened!!historyMode}}
-  autoFocus="no"
-/>
-```
+| !Parameter Name         | !Type    | !Description                                                                                   | !Default Value |
+| `cycleHistoryMode`    | yes/no | Determines if the mode is used to cycle through opened story tiddlers, showing only history, no other features.   | `no`       |
+| `autoFocus`           | yes/no | Automatically sets focus to the input and opens the panel when the widget is rendered.         | `yes`        |
+| `panelBelowInput`   | yes/no | By default panel is below input. Disable this to let it center on top of window. | `yes`     |
+| `destroyWhenNotVis`   | yes/no | Destroys the widget when it is not visible.               | `no`       |
 
-<$auto-complete-search
-  id="demo"
-  prefix={{$:/temp/auto-complete-search/demo/opened!!prefix}}
-  historyMode={{$:/temp/auto-complete-search/demo/opened!!historyMode}}
-  autoFocus="no"
-/>
+<<wikitext-example-without-html src:'<$auto-complete-search id="demo" autoFocus="no" destroyWhenNotVis="no" />'>>

@@ -14,16 +14,10 @@ title: $:/plugins/linonetwo/autocomplete/language/zh-Hans/Readme
 
 本插件提供了一个自动补全框微件 `<$auto-complete-search />`，基本用法如下：
 
-```tid
-<$auto-complete-search
-  id="demo"
-  prefix={{$:/temp/auto-complete-search/demo/opened!!prefix}}
-  historyMode={{$:/temp/auto-complete-search/demo/opened!!historyMode}}
-  autoFocus="no"
-/>
-```
+| !参数名称              | !类型    | !描述    | !默认值 |
+| `cycleHistoryMode`    | yes/no   | 确定是否使用该模式循环浏览已打开的故事条目，仅显示历史记录，无其他功能。            | `no`       |
+| `autoFocus`           | yes/no   | 当微件渲染时，自动将焦点设置到输入框并打开面板。  | `yes`        |
+| `panelBelowInput`   | yes/no   | 默认情况下，面板位于输入下方。禁用此选项可让面板位于窗口顶部的中心位置。  | `yes`     |
+| `destroyWhenNotVis`   | yes/no   | 当不可见时，立即销毁微件。               | `no`       |
 
-<$auto-complete-search
-  id="demo"
-  autoFocus="no"
-/>
+<<wikitext-example-without-html src:'<$auto-complete-search id="demo" autoFocus="no" destroyWhenNotVis="no" />'>>

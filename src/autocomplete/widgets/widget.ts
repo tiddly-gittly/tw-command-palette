@@ -31,9 +31,14 @@ class AutoCompleteSearchWidget extends Widget {
   autoCompleteInstance: ReturnType<typeof autocomplete<ITiddlerFields>> | undefined;
   /** Can't get state from its instance, so use this as a way to get state */
   autoCompleteState?: OnStateChangeProps<ITiddlerFields>;
-  historyMode = false;
+  /** Is it in ctrl+tab mode that is used to cycle through opened story tiddlers. In this mode only history is shown, no other features. */
+  cycleHistoryMode = false;
+  /** Auto set focus to input and open the panel on widget render. */
   autoFocus = true;
-  absoluteCenter = false;
+  /** By default panel is below input. Disable this to let it center on top of window. */
+  panelBelowInput = true;
+  /** By default we use @seznam/visibility-observer to destroy on unseen */
+  destroyWhenNotVis = false;
 
   render(parent: Element, nextSibling: Element) {
     this.parentDomNode = parent;
@@ -42,9 +47,10 @@ class AutoCompleteSearchWidget extends Widget {
     this.id = this.getAttribute('id', 'default');
     // params are get from `$:/plugins/linonetwo/autocomplete/DefaultCommandPalette` using transclusion from `$:/temp/auto-complete-search/default/opened`
     const initialPrefix = this.getAttribute('prefix', '');
-    this.historyMode = this.getAttribute('historyMode', 'no') === 'yes';
+    this.cycleHistoryMode = this.getAttribute('cycleHistoryMode', 'no') === 'yes';
     this.autoFocus = this.getAttribute('autoFocus', 'yes') === 'yes';
-    this.absoluteCenter = this.getAttribute('absoluteCenter', 'no') === 'yes';
+    this.panelBelowInput = this.getAttribute('panelBelowInput', 'yes') === 'yes';
+    this.destroyWhenNotVis = this.getAttribute('destroyWhenNotVis', 'no') === 'yes';
     const titlePriorityText = this.wiki.getTiddlerText('$:/plugins/linonetwo/autocomplete/configs/TitlePriorityText', 'no') === 'yes';
     const containerElement = $tw.utils.domMaker('nav', {
       class: 'tw-auto-complete-container',
@@ -106,7 +112,6 @@ class AutoCompleteSearchWidget extends Widget {
       target: HTMLElement;
     },
   ) {
-    // FIXME: this is false immediately after the element is created, cause not render
     if (!visibilityEntry.isIntersecting) {
       this.destroy();
       unobserve(visibilityEntry.target, this.onVisibilityChange.bind(this));
@@ -159,7 +164,8 @@ class AutoCompleteSearchWidget extends Widget {
     itemUrl: string;
     state: AutocompleteState<ITiddlerFields>;
   }) {
-    window.open(`${window.location.origin}/#:${itemUrl}`, '_blank');
+    // It used to open in new window.
+    // window.open(`${window.location.origin}/#:${itemUrl}`, '_blank');
     if (!state.context.noClose) {
       this.setCloseState();
     }
@@ -186,7 +192,9 @@ class AutoCompleteSearchWidget extends Widget {
     if (detachedElement === null) {
       return;
     }
-    observe(detachedElement, this.onVisibilityChange.bind(this));
+    if (this.destroyWhenNotVis) {
+      observe(detachedElement, this.onVisibilityChange.bind(this));
+    }
   }
 
   /**
@@ -197,7 +205,9 @@ class AutoCompleteSearchWidget extends Widget {
     if (inputElement === null) {
       return;
     }
-    observe(containerElement, this.onVisibilityChange.bind(this));
+    if (this.destroyWhenNotVis) {
+      observe(containerElement, this.onVisibilityChange.bind(this));
+    }
     this.registerHistoryKeyboardHandlers(inputElement);
     // autoFocus param is not working, focus manually.
     if (this.autoFocus) {
@@ -216,7 +226,7 @@ class AutoCompleteSearchWidget extends Widget {
         event.preventDefault();
       }
     });
-    if (this.absoluteCenter) {
+    if (this.panelBelowInput) {
       this.fixPanelPosition();
       inputElement.addEventListener('focus', this.fixPanelPosition);
       inputElement.addEventListener('blur', this.fixPanelPosition);
@@ -232,7 +242,7 @@ class AutoCompleteSearchWidget extends Widget {
   historySwitchActiveItemId?: number;
 
   registerHistoryKeyboardHandlers(inputElement: HTMLInputElement) {
-    if (!this.historyMode) return;
+    if (!this.cycleHistoryMode) return;
     inputElement.addEventListener('keydown', (event) => {
       if (this.autoCompleteInstance === undefined) return;
       // when use ctrl+tab to switch between history, when release tab (while still holding ctrl), do nothing after palette open.
