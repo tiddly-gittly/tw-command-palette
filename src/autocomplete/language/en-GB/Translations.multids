@@ -1,15 +1,12 @@
 title: $:/plugins/linonetwo/autocomplete/language/en-GB/
 
-Name: Command Palette
-Description: Search the text of tiddlers, and execute commands in Tiddlywiki. Beautiful omni-bar and shortcut command center.
-Configs/Description: These settings let you customise the behaviour of "Command Palette" plugin.
-Configs/PluginConfigs/Caption: Plugin Configs
+Name: AutoComplete Box
+Description: Search the text of tiddlers and execute commands in Tiddlywiki. Embed anywhere as a Widget.
+Configs/Performance/Caption: Performance
 Configs/TitleAlias/Caption: Fields regarded as title to search
 Configs/TitleAlias/Description: When searching title, you may want to include more fields to search. Separate fields with spaces, note that adding too many fields can cause lag.
 Configs/TextAlias/Caption: Fields regarded as text to search
 Configs/TextAlias/Description: When searching text, you may want to include more fields to search. Separate fields with spaces, note that adding too many fields can cause lag.
-Configs/HideDefaultSearchBar/Caption: Hide default search bar
-Configs/HideDefaultSearchBar/Description: If you only use commandpalette to search and don't need default search bar, check this box.
 Configs/DesktopWidth/Caption: Width on desktop mode
 Configs/DesktopWidth/Description: Width of the input and result boxes on the screen (does not affect mobile, which is full screen by default)
 Configs/TitlePriorityText/Caption: Title higher than text.
@@ -27,7 +24,7 @@ Configs/CacheSystemTiddlers/Description: Assumed system tiddlers don't change du
 Configs/MissingFilterOnTop/Caption: missing filter on top
 Configs/MissingFilterOnTop/Caption: Missing Filter On Top
 Configs/MissingFilterOnTop/Description: When checked, when using `[` filter search mode, if there is no matching filter, it will be displayed on top, so that you can directly use the new filter you just entered to search. When unchecked, it will be at the bottom, so that you can search for the filter tiddlers tagged with `$:/tags/Filter`.
-Configs/Appearance/Caption: Appearance
+Configs/FilterSearch/Caption: Filter Search
 Configs/TitleText/Caption: Search Title & Text
 Configs/SystemTiddler/Caption: Search System Tiddlers
 SystemTitle: Title of system tiddler

@@ -10,8 +10,6 @@ caption: <<lingo Name $:/plugins/linonetwo/commandpalette/language/>>
 
 !! <<lingo Configs/PluginConfigs/Caption>>
 
-[[autocomplete/config|$:/plugins/linonetwo/autocomplete/config]]
-
 !!! <<lingo Configs/Appearance/Caption>>
 
 ;<<lingo Configs/HideDefaultSearchBar/Caption>>
@@ -30,3 +28,7 @@ caption: <<lingo Name $:/plugins/linonetwo/commandpalette/language/>>
   <option>px</option>
   <option>em</option>
 </$select> <<lingo Configs/DesktopWidth/Description>>
+
+!! <$link to="$:/plugins/linonetwo/autocomplete/config"><<lingo Name $:/plugins/linonetwo/autocomplete/language/>></$link>
+
+{{$:/plugins/linonetwo/autocomplete/config}}
