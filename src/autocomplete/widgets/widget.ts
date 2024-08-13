@@ -166,7 +166,20 @@ class AutoCompleteSearchWidget extends Widget {
   }) {
     // It used to open in new window.
     // window.open(`${window.location.origin}/#:${itemUrl}`, '_blank');
-    if (!state.context.noClose) {
+    // Now it create a temporary tiddler with search results.
+    const template = this.wiki.getTiddler('$:/plugins/linonetwo/autocomplete/widget/templates/FilterResultTemplate');
+    const context = state.context as IContext;
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    const filter = context.filter || context.filterToOpen;
+    if (template && filter) {
+      const title = `$:/temp/volatile/${Date.now()}`;
+      this.wiki.addTiddler({ ...template.fields, title, filter });
+      this.dispatchEvent({
+        type: 'tm-navigate',
+        navigateTo: title,
+      });
+    }
+    if (!context.noClose) {
       this.setCloseState();
     }
     this.clearContext();

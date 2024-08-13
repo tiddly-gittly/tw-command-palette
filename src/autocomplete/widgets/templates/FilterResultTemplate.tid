@@ -1,0 +1,16 @@
+title: $:/plugins/linonetwo/autocomplete/widget/templates/FilterResultTemplate
+tags: $:/tags/CommandPaletteResult
+throttle.refresh: yes
+_is_titleless: yes
+
+<ol>
+  <$list filter={{!!filter}}>
+    <li>
+      <$link to=<<currentTiddler>>>
+        <$transclude field="caption">
+          <$view field="title"/>
+        </$transclude>
+      </$link>
+    </li>
+  </$list>
+</ol>

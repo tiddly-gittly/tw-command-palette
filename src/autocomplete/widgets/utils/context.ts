@@ -16,6 +16,10 @@ export interface IContext {
   /** Undefined means true. If is false, then it ask filter not to call `$tw.wiki.getTiddler(title)` */
   filterGetTiddler?: boolean;
   /**
+   * Used by shift+enter to open. But will not trigger "search under this filter".
+   */
+  filterToOpen?: string;
+  /**
    * Ask navigator to set query instead of navigate to a tiddler
    */
   newQuery?: string;

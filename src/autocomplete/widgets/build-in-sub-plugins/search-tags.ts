@@ -23,7 +23,9 @@ export const plugin = {
       sourceId: 'tags',
       async getItems({ query }) {
         // similar to $:/core/Filters/AllTags
-        return await filterTiddlersAsync(`[tags[]search[${query.slice(1)}]]`, { system: true });
+        const filterToOpen = `[tags[]search[${query.slice(1)}]]`;
+        parameters.setContext({ filterToOpen });
+        return await filterTiddlersAsync(filterToOpen, { system: true });
       },
       getItemUrl({ item }) {
         return item.title;

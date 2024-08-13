@@ -1,0 +1,5 @@
+title: $:/plugins/linonetwo/autocomplete/widget/templates/FilterResultBodyCascade
+tags: $:/tags/ViewTemplateBodyFilter
+list-before: $:/config/ViewTemplateBodyFilters/system
+
+[tag[$:/tags/CommandPaletteResult]then[$:/core/ui/ViewTemplate/body/default]]
