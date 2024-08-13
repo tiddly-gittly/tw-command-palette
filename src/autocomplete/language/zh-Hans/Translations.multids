@@ -57,3 +57,9 @@ Help/System/Caption: 系统条目
 Help/System/Description: 带有这个前缀时，可以搜索各太微系统功能，如可用的系统消息、布局、设置等。
 Help/Tags/Caption: 标签
 Help/Tags/Description: 分为两步，首先搜索知识库中所有的标签，回车确认选中；然后在加了这个标签的条目中继续搜索，回车打开条目。第二步里，默认只搜索用户条目，可加上系统条目搜索的前缀来包括系统条目。
+Help/Enter/Caption: ⏎ 回车
+Help/Enter/Description: 当通过上下方向键选中一个选项时，回车可以直接打开它。
+Help/CtrlEnter/Caption: ⌃ ⏎ 控制键加回车
+Help/CtrlEnter/Description: 将当前选中的文本或内容复制到剪贴板中。
+Help/ShiftEnter/Caption: ⇧ 换档键加回车
+Help/ShiftEnter/Description: 在故事河里打开一个临时条目，包含当前搜索的结果。

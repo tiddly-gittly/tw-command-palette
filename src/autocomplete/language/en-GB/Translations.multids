@@ -58,3 +58,11 @@ Help/System/Caption: System tiddlers
 Help/System/Description: Searches for individual micro-system features such as available system messages, layouts, settings, etc.
 Help/Tags/Caption: Tags
 Help/Tags/Description: In two steps, first search for all tags in the Knowledge Base, enter to confirm selection; then continue searching in tiddlers with this tag added, enter to open the tiddler. In the second step, only user tiddlers are searched by default, and system tiddlers can be included by adding a prefix to the system entry search.
+Help/Enter/Caption: ⏎ Enter
+Help/Enter/Description: When an option is selected using the up and down arrow keys, pressing Enter will directly open it.
+
+Help/CtrlEnter/Caption: ⌃ ⏎ Ctrl + Enter
+Help/CtrlEnter/Description: Copies the currently selected text or content to the clipboard.
+
+Help/ShiftEnter/Caption: ⇧ Shift + Enter
+Help/ShiftEnter/Description: Opens a temporary tiddler in the story river, containing the results of the current search.
