@@ -42,11 +42,11 @@
     "dprint": "^0.47.2",
     "eslint-config-tidgi": "^1.2.3",
     "husky": "^9.1.4",
-    "lint-staged": "^15.2.8",
+    "lint-staged": "^15.2.9",
     "postcss": "^8.4.41",
     "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
-    "tw5-typed": "^0.5.11",
+    "tw5-typed": "^0.5.12",
     "typescript": "^5.5.4"
   },
   "dependencies": {
