@@ -20,7 +20,7 @@ export const plugin = {
         sourceId: 'help',
         getItems({ query }) {
           if (cachedTiddlers.length === 0 || !cacheSystemTiddlers()) {
-            cachedTiddlers = $tw.wiki.filterTiddlers('[all[shadows]tag[$:/tags/CommandPaletteHelp]]');
+            cachedTiddlers = $tw.wiki.filterTiddlers('[all[shadows]tag[$:/tags/AutoCompleteHelp]]');
           }
           return (cachedTiddlers
             .map((title) => $tw.wiki.getTiddler(title)?.fields)

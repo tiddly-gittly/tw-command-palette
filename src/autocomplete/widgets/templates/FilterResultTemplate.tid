@@ -1,5 +1,5 @@
 title: $:/plugins/linonetwo/autocomplete/widget/templates/FilterResultTemplate
-tags: $:/tags/CommandPaletteResult
+tags: $:/tags/AutoCompleteResult
 throttle.refresh: yes
 _is_titleless: yes
 

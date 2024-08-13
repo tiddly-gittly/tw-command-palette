@@ -1,5 +1,5 @@
 command-palette-prefix: 
 caption: <<lingo Help/User/Caption $:/plugins/linonetwo/autocomplete/language/>>
 description: <<lingo Help/User/Description $:/plugins/linonetwo/autocomplete/language/>>
-tags: $:/tags/CommandPaletteHelp
+tags: $:/tags/AutoCompleteHelp
 title: $:/plugins/linonetwo/autocomplete/commands/help/User

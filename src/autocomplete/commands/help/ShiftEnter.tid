@@ -1,6 +1,6 @@
 command-palette-prefix: 
 caption: <<lingo Help/ShiftEnter/Caption $:/plugins/linonetwo/autocomplete/language/>>
 description: <<lingo Help/ShiftEnter/Description $:/plugins/linonetwo/autocomplete/language/>>
-tags: $:/tags/CommandPaletteHelp
+tags: $:/tags/AutoCompleteHelp
 title: $:/plugins/linonetwo/autocomplete/commands/help/ShiftEnter
 list-after: $:/plugins/linonetwo/autocomplete/commands/help/CtrlEnter

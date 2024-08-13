@@ -1,5 +1,5 @@
 title: $:/plugins/linonetwo/autocomplete/widget/build-in-sub-plugins/command-action-string.js
-tags: $:/tags/CommandPalettePlugin
+tags: $:/tags/AutoCompletePlugin
 type: application/javascript
 module-type: library
 priority: 20
