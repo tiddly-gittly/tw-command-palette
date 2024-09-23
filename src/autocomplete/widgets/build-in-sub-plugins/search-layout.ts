@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/strict-boolean-expressions */
+import { AutocompleteState } from '@algolia/autocomplete-core';
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
@@ -18,8 +19,9 @@ export const plugin = {
     if (parameters.query.length === 0) return [];
     if (!checkIsSearchSystem(parameters) || checkIsUnderFilter(parameters)) return [];
     const { widget } = parameters.state.context as IContext;
-    const onSelect = (item: ITiddlerFields) => {
+    const onSelect = (item: ITiddlerFields, state: AutocompleteState<ITiddlerFields>) => {
       parameters.setContext({ noNavigate: true } satisfies IContext);
+      parameters.navigator.navigate({ item, itemUrl: item.title, state });
       $tw.wiki.setText('$:/layout', 'text', undefined, item.title, { suppressTimestamp: true });
     };
     return [
@@ -45,8 +47,8 @@ export const plugin = {
         getItemUrl({ item }) {
           return item.title;
         },
-        onSelect({ item }) {
-          onSelect(item);
+        onSelect({ item, state }) {
+          onSelect(item, state);
         },
         templates: {
           header() {
@@ -57,9 +59,9 @@ export const plugin = {
               : $tw.wiki.getTiddlerText('$:/language/PageTemplate/Name');
             return `${lingo('Layout')} - ${lingo('CurrentLayout')}: ${currentLayoutName}`;
           },
-          item({ item, createElement }) {
+          item({ item, createElement, state }) {
             const onclick = () => {
-              onSelect(item);
+              onSelect(item, state);
             };
             if (typeof item.name === 'string' && item.name !== '') {
               const name = renderTextWithCache(item.name, widget);
