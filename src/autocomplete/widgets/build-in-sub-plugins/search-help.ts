@@ -63,7 +63,7 @@ export const plugin = {
             return createElement('div', {
               style: 'display:flex;flex-direction:column;',
               onclick,
-              ontouchend: onclick,
+              onTap: onclick,
             }, [
               createElement('div', { style: 'margin-bottom:0.25em;' }, [
                 createElement('em', { style: 'margin-right:0.25em;' }, [item['command-palette-prefix'] as string]),

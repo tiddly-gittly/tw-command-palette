@@ -73,7 +73,7 @@ export const plugin = {
             };
             return createElement('div', {
               onclick,
-              ontouchend: onclick,
+              onTap: onclick,
             }, `${renderTextWithCache(item.caption, widget, variables)}${description}` || item.title);
           },
         },

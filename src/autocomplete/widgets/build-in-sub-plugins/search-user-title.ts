@@ -38,7 +38,7 @@ export const plugin = {
             }
             return createElement('div', {
               onclick,
-              ontouchend: onclick,
+              onTap: onclick,
             }, item.title);
           },
         },

@@ -68,13 +68,13 @@ export const plugin = {
               return createElement('div', {
                 class: 'tw-commandpalette-layout-result',
                 onclick,
-                ontouchend: onclick,
+                onTap: onclick,
                 innerHTML: `${icon}${name}${description ? ` - ${description}` : ''}`,
               });
             }
             return createElement('div', {
               onclick,
-              ontouchend: onclick,
+              onTap: onclick,
             }, item.title);
           },
         },

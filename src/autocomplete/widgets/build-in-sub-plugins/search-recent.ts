@@ -53,7 +53,7 @@ export const plugin = (id: string): AutocompletePlugin<RecentSearchesItem, Recen
                 onclick: () => {
                   onSelect(item.id);
                 },
-                ontouchend: () => {
+                onTap: () => {
                   onSelect(item.id);
                 },
               },
@@ -61,7 +61,7 @@ export const plugin = (id: string): AutocompletePlugin<RecentSearchesItem, Recen
               createElement('span', {
                 class: 'tw-commandpalette-search-recent-item-delete',
                 onclick: onDelete,
-                ontouchend: onDelete,
+                onTap: onDelete,
                 innerHTML: deleteIcon,
               }),
             );
