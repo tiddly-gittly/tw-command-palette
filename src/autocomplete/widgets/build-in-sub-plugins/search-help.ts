@@ -53,15 +53,17 @@ export const plugin = {
             const description = item.description
               ? ` ${renderTextWithCache(item.description as string, widget)}`
               : '';
+            const onclick = () => {
+              const newQuery = (item['command-palette-prefix'] as string).charAt(0);
+              parameters.setQuery(newQuery);
+              void parameters.refresh().catch(error => {
+                console.error('Error in search-help refresh', error);
+              });
+            };
             return createElement('div', {
               style: 'display:flex;flex-direction:column;',
-              onclick: () => {
-                const newQuery = (item['command-palette-prefix'] as string).charAt(0);
-                parameters.setQuery(newQuery);
-                void parameters.refresh().catch(error => {
-                  console.error('Error in search-help refresh', error);
-                });
-              },
+              onclick,
+              ontouchend: onclick,
             }, [
               createElement('div', { style: 'margin-bottom:0.25em;' }, [
                 createElement('em', { style: 'margin-right:0.25em;' }, [item['command-palette-prefix'] as string]),

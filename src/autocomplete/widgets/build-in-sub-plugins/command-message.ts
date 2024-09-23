@@ -78,10 +78,12 @@ export const plugin = {
             const description = item.description
               ? ` (${renderTextWithCache(item.description as string, widget, variables)})`
               : '';
+            const onclick = () => {
+              onSelect(item);
+            };
             return createElement('div', {
-              onclick: () => {
-                onSelect(item);
-              },
+              onclick,
+              ontouchend: onclick,
             }, `${renderTextWithCache(item.caption, widget, variables)}${description}` || item.title);
           },
         },

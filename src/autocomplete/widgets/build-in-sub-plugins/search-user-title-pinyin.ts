@@ -36,17 +36,17 @@ export const plugin = {
             return lingo('UserTitlePinyin');
           },
           item({ item, createElement, state }) {
+            const onclick = () => {
+              parameters.navigator.navigate({ item, itemUrl: item.title, state });
+            };
             if (typeof item.caption === 'string' && item.caption !== '') {
               return createElement('div', {
-                onclick: () => {
-                  parameters.navigator.navigate({ item, itemUrl: item.title, state });
-                },
+                onclick,
               }, `${item.caption} (${item.title})`);
             }
             return createElement('div', {
-              onclick: () => {
-                parameters.navigator.navigate({ item, itemUrl: item.title, state });
-              },
+              onclick,
+              ontouchend: onclick,
             }, item.title);
           },
         },

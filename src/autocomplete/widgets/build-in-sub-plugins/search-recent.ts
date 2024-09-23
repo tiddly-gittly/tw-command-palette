@@ -40,21 +40,28 @@ export const plugin = (id: string): AutocompletePlugin<RecentSearchesItem, Recen
             return lingo('SearchHistory');
           },
           item({ item, createElement }) {
+            const onDelete = () => {
+              recentSearchesPlugin.data?.removeItem(item.id);
+              void refresh?.()?.catch?.(error => {
+                console.error('Error in search-recent refresh', error);
+              });
+            };
             return createElement(
               'div',
               {
                 class: 'tw-commandpalette-search-recent-item',
-                onclick: onSelect,
+                onclick: () => {
+                  onSelect(item.id);
+                },
+                ontouchend: () => {
+                  onSelect(item.id);
+                },
               },
               createElement('span', {}, item.id),
               createElement('span', {
                 class: 'tw-commandpalette-search-recent-item-delete',
-                onclick: () => {
-                  recentSearchesPlugin.data?.removeItem(item.id);
-                  void refresh?.()?.catch?.(error => {
-                    console.error('Error in search-recent refresh', error);
-                  });
-                },
+                onclick: onDelete,
+                ontouchend: onDelete,
                 innerHTML: deleteIcon,
               }),
             );

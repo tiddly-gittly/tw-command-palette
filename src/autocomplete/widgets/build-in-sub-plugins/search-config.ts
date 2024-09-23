@@ -50,10 +50,12 @@ export const plugin = {
             if (typeof item.caption === 'string' && item.caption !== '') {
               return createElement('div', {
                 onclick,
+                ontouchend: onclick,
               }, renderTextWithCache(item.caption, widget));
             }
             return createElement('div', {
               onclick,
+              ontouchend: onclick,
             }, item.title);
           },
         },

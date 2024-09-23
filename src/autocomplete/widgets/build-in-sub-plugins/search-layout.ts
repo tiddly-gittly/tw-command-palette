@@ -58,22 +58,23 @@ export const plugin = {
             return `${lingo('Layout')} - ${lingo('CurrentLayout')}: ${currentLayoutName}`;
           },
           item({ item, createElement }) {
+            const onclick = () => {
+              onSelect(item);
+            };
             if (typeof item.name === 'string' && item.name !== '') {
               const name = renderTextWithCache(item.name, widget);
               const description = renderTextWithCache(item.description, widget);
               const icon = getIconSvg(item.icon as string, widget);
               return createElement('div', {
                 class: 'tw-commandpalette-layout-result',
-                onclick: () => {
-                  onSelect(item);
-                },
+                onclick,
+                ontouchend: onclick,
                 innerHTML: `${icon}${name}${description ? ` - ${description}` : ''}`,
               });
             }
             return createElement('div', {
-              onclick: () => {
-                onSelect(item);
-              },
+              onclick,
+              ontouchend: onclick,
             }, item.title);
           },
         },

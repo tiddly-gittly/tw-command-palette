@@ -28,16 +28,17 @@ export const plugin = {
             return lingo('UserTitle');
           },
           item({ item, createElement, state }) {
+            const onclick = () => {
+              parameters.navigator.navigate({ item, itemUrl: item.title, state });
+            };
             if (typeof item.caption === 'string' && item.caption !== '') {
-              const onclick = () => {
-                parameters.navigator.navigate({ item, itemUrl: item.title, state });
-              };
               return createElement('div', {
                 onclick,
               }, `${item.caption} (${item.title})`);
             }
             return createElement('div', {
               onclick,
+              ontouchend: onclick,
             }, item.title);
           },
         },

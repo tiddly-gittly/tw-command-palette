@@ -47,11 +47,13 @@ export const plugin = {
               }
             });
 
+            const onclick = () => {
+              parameters.navigator.navigate({ item, itemUrl: item.title, state });
+            };
             return createElement('div', {
               style: 'display:flex;flex-direction:column;',
-              onclick: () => {
-                parameters.navigator.navigate({ item, itemUrl: item.title, state });
-              },
+              onclick,
+              ontouchend: onclick,
             }, [
               createElement('div', { style: 'margin-bottom:0.25em;' }, title),
               createElement('div', {}, [
