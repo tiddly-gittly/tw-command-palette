@@ -1,9 +1,14 @@
+li.aa-Item:has(> div.tw-commandpalette-search-recent-item) {
+  padding: 0;
+}
+
 .tw-commandpalette-search-recent-item {
   position: relative;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
+  height: 100%;
 }
 .tw-commandpalette-search-recent-item
   .tw-commandpalette-search-recent-item-delete {
