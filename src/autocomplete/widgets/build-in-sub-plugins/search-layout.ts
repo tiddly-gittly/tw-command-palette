@@ -19,10 +19,14 @@ export const plugin = {
     if (parameters.query.length === 0) return [];
     if (!checkIsSearchSystem(parameters) || checkIsUnderFilter(parameters)) return [];
     const { widget } = parameters.state.context as IContext;
-    const onSelect = (item: ITiddlerFields, state: AutocompleteState<ITiddlerFields>) => {
-      parameters.setContext({ noNavigate: true } satisfies IContext);
-      parameters.navigator.navigate({ item, itemUrl: item.title, state });
+    const onSelect = (item: ITiddlerFields, state: AutocompleteState<ITiddlerFields>, isClick: boolean) => {
+      const newContext = { noNavigate: true } satisfies IContext;
+      parameters.setContext?.(newContext);
       $tw.wiki.setText('$:/layout', 'text', undefined, item.title, { suppressTimestamp: true });
+      // When Enter, it will call the navigator.navigate, so we don't need to call it here, otherwise it will called twice and second time without context, causing the layout tiddler to be opened.
+      if (isClick) {
+        parameters.navigator.navigate({ item, itemUrl: item.title, state: { ...state, context: { ...state.context, ...newContext } } });
+      }
     };
     return [
       {
@@ -48,7 +52,7 @@ export const plugin = {
           return item.title;
         },
         onSelect({ item, state }) {
-          onSelect(item, state);
+          onSelect(item, state, false);
         },
         templates: {
           header() {
@@ -61,7 +65,7 @@ export const plugin = {
           },
           item({ item, createElement, state }) {
             const onclick = () => {
-              onSelect(item, state);
+              onSelect(item, state, true);
             };
             if (typeof item.name === 'string' && item.name !== '') {
               const name = renderTextWithCache(item.name, widget);

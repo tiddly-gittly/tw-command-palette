@@ -132,6 +132,8 @@ class AutoCompleteSearchWidget extends Widget {
       // use query to re-search, and will set activeItemId to defaultActiveItemId
       void this.autoCompleteInstance?.refresh?.();
     }
+    // DEBUG: console state.context
+    console.log(`state.context`, state.context);
     if (!state.context.noNavigate) {
       // let layout handle the layout change before navigation https://github.com/Jermolene/TiddlyWiki5/discussions/8123
       // $tw.wiki.setText('$:/layout', 'text', undefined, '', { suppressTimestamp: true });
@@ -234,6 +236,8 @@ class AutoCompleteSearchWidget extends Widget {
       }
       // pressing enter is useless (it auto searches), and will cause dropdown to close, so ignore it.
       if (event.key === 'Enter') {
+        // DEBUG: console event
+        console.log(`event`, event);
         this.autoCompleteInstance?.setIsOpen(true);
         event.stopPropagation();
         event.preventDefault();

@@ -23,10 +23,12 @@ export const plugin = (id: string): AutocompletePlugin<RecentSearchesItem, Recen
       refresh = parameters.refresh.bind(parameters);
     },
     transformSource({ source, state }) {
-      const onSelect = (item: RecentSearchesItem) => {
+      const onSelect = (item: RecentSearchesItem, isClick: boolean) => {
         const newContext = { newQuery: item.id, noClose: true, noNavigate: true } satisfies IContext;
         setContext?.(newContext);
-        navigator?.navigate?.({ item, itemUrl: item.id, state: { ...state, context: { ...state.context, ...newContext } } });
+        if (isClick) {
+          navigator?.navigate?.({ item, itemUrl: item.id, state: { ...state, context: { ...state.context, ...newContext } } });
+        }
       };
       return {
         ...source,
@@ -39,7 +41,7 @@ export const plugin = (id: string): AutocompletePlugin<RecentSearchesItem, Recen
           return await items;
         },
         onSelect({ item }) {
-          onSelect(item);
+          onSelect(item, false);
         },
         templates: {
           ...source.templates,
@@ -58,10 +60,10 @@ export const plugin = (id: string): AutocompletePlugin<RecentSearchesItem, Recen
               {
                 class: 'tw-commandpalette-search-recent-item',
                 onclick: () => {
-                  onSelect(item);
+                  onSelect(item, true);
                 },
                 onTap: () => {
-                  onSelect(item);
+                  onSelect(item, true);
                 },
               },
               createElement('span', {}, item.id),
