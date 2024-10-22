@@ -1,6 +1,7 @@
 title: $:/plugins/linonetwo/commandpalette/language/zh-Hans/
 
 ShowControlPanel: 打开命令菜单
+AdvancedSearch: 高级搜索
 Server: 服务器
 Filter/Fields/Caption: 字段名
 Filter/Fields/Description: 搜索Wiki里所有条目涉及到的所有字段名
