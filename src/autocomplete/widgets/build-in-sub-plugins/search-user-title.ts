@@ -11,12 +11,13 @@ export const plugin = {
   async getSources(parameters) {
     if (parameters.query.length === 0) return [];
     if (!checkIsSearchUser(parameters) || checkIsUnderFilter(parameters)) return [];
+    const { fieldsAsTitle, titleFields } = getFieldsAsTitle();
     return await debounced([
       {
         sourceId: 'title',
         async getItems({ query }) {
           if (query === '') return [];
-          const filterToOpen = `[all[tiddlers]!is[system]] ${titleTextExclusionFilter()} +[search:${getFieldsAsTitle()}[${query}]]`;
+          const filterToOpen = `[all[tiddlers]!is[system]] ${titleTextExclusionFilter()} +[search:${fieldsAsTitle}[${query}]]`;
           parameters.setContext({ filterToOpen });
           return await filterTiddlersAsync(filterToOpen, {});
         },
@@ -31,15 +32,13 @@ export const plugin = {
             const onclick = () => {
               parameters.navigator.navigate({ item, itemUrl: item.title, state });
             };
-            if (typeof item.caption === 'string' && item.caption !== '') {
-              return createElement('div', {
-                onclick,
-              }, `${item.caption} (${item.title})`);
-            }
+            const titles = titleFields.map(field => item[field]).filter((item): item is string => typeof item === 'string' && item !== '').map((item, index) =>
+              index === 0 ? item : `(${item})`
+            ).join(' ');
             return createElement('div', {
               onclick,
               onTap: onclick,
-            }, item.title);
+            }, titles);
           },
         },
       },
