@@ -1,0 +1,13 @@
+diff --git a/dist/index.cjs b/dist/index.cjs
+index 174b86cd2d3d4c4c631ef1f432761f66277f52c7..e3a94aba782a33714951733d8d974f269a5c3ef8 100644
+--- a/dist/index.cjs
++++ b/dist/index.cjs
+@@ -209,7 +209,7 @@ class Formatter {
+     this.toml = createFormatter(toml.getBuffer(), globalConfig, pluginConfig.toml);
+     this.json = createFormatter(json.getPath(), globalConfig, pluginConfig.json);
+     this.markdown = createFormatter(markdown.getPath(), globalConfig, pluginConfig.markdown);
+-    this.dockerfile = createFormatter(dockerfile.getBuffer(), globalConfig, pluginConfig.dockerfile);
++    this.dockerfile = createFormatter(dockerfile.getPath(), globalConfig, pluginConfig.dockerfile);
+   }
+   format(filename, source) {
+     const language = detectLanguage(filename);

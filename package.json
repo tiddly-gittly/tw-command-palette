@@ -35,15 +35,15 @@
   },
   "devDependencies": {
     "@modern-js/eslint-config": "^2.59.0",
-    "@modern-js/tsconfig": "^2.63.0",
+    "@modern-js/tsconfig": "^2.63.2",
     "@types/lodash": "^4.17.13",
-    "@types/node": "^22.10.1",
+    "@types/node": "^22.10.2",
     "@types/pinyin": "^2.10.2",
-    "@types/react": "^18.3.12",
+    "@types/react": "^19.0.1",
     "dprint": "^0.47.6",
     "eslint-config-tidgi": "^1.2.3",
     "husky": "^9.1.7",
-    "lint-staged": "^15.2.10",
+    "lint-staged": "^15.2.11",
     "npm-check-updates": "^17.1.11",
     "postcss": "^8.4.49",
     "rimraf": "^6.0.1",
@@ -54,15 +54,20 @@
     "tiddlywiki-plugin-dev": "^0.3.2"
   },
   "dependencies": {
-    "@algolia/autocomplete-core": "^1.17.7",
-    "@algolia/autocomplete-js": "^1.17.7",
-    "@algolia/autocomplete-plugin-recent-searches": "^1.17.7",
-    "@algolia/autocomplete-shared": "^1.17.7",
-    "@algolia/autocomplete-theme-classic": "^1.17.7",
+    "@algolia/autocomplete-core": "^1.17.8",
+    "@algolia/autocomplete-js": "^1.17.8",
+    "@algolia/autocomplete-plugin-recent-searches": "^1.17.8",
+    "@algolia/autocomplete-shared": "^1.17.8",
+    "@algolia/autocomplete-theme-classic": "^1.17.8",
     "@seznam/visibility-observer": "^1.1.0",
     "fuse.js": "^7.0.0",
     "lodash": "^4.17.21",
     "pinyin": "4.0.0-alpha.2",
     "segmentit": "^2.0.3"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "eslint-plugin-dprint-integration": "patches/eslint-plugin-dprint-integration.patch"
+    }
   }
 }
