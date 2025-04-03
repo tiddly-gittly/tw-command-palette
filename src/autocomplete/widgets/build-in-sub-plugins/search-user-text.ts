@@ -6,6 +6,7 @@ import { debounced } from '../utils/debounce';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { getFieldsAsText, getFieldsAsTitle } from '../utils/getFieldsAsTitle';
 import { lingo } from '../utils/lingo';
+import { emptyContext } from '../utils/context';
 
 export const plugin = {
   async getSources(parameters) {
@@ -52,7 +53,7 @@ export const plugin = {
             });
 
             const onclick = () => {
-              parameters.navigator.navigate({ item, itemUrl: item.title, state });
+              parameters.navigator.navigate({ item, itemUrl: item.title, state: { ...state, context: emptyContext } });
             };
             return createElement('div', {
               style: 'display:flex;flex-direction:column;',

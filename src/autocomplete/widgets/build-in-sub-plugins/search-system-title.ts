@@ -5,6 +5,7 @@ import { searchSystemTitle } from '../utils/configs';
 import { debounced } from '../utils/debounce';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
+import { emptyContext } from '../utils/context';
 
 export const plugin = {
   async getSources(parameters) {
@@ -27,7 +28,7 @@ export const plugin = {
           },
           item({ item, createElement, state }) {
             const onclick = () => {
-              parameters.navigator.navigate({ item, itemUrl: item.title, state });
+              parameters.navigator.navigate({ item, itemUrl: item.title, state: { ...state, context: emptyContext } });
             };
             if (typeof item.caption === 'string' && item.caption !== '') {
               return createElement('div', {

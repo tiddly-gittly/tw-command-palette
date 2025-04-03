@@ -6,6 +6,7 @@ import { debounced } from '../utils/debounce';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { getFieldsAsTitle } from '../utils/getFieldsAsTitle';
 import { lingo } from '../utils/lingo';
+import { emptyContext } from '../utils/context';
 
 export const plugin = {
   async getSources(parameters) {
@@ -30,7 +31,8 @@ export const plugin = {
           },
           item({ item, createElement, state }) {
             const onclick = () => {
-              parameters.navigator.navigate({ item, itemUrl: item.title, state });
+              // Assign emptyContext in case of search-recent's content not cleared by clearContext() in widget.ts so there is `noNavigate` that prevents navigate.
+              parameters.navigator.navigate({ item, itemUrl: item.title, state: { ...state, context: emptyContext } });
             };
             const titles = titleFields.map(field => item[field]).filter((item): item is string => typeof item === 'string' && item !== '').map((item, index) =>
               index === 0 ? item : `(${item})`

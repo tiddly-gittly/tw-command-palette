@@ -3,7 +3,7 @@ import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
 import { cacheSystemTiddlers } from '../utils/configs';
-import { IContext } from '../utils/context';
+import { emptyContext, IContext } from '../utils/context';
 import { debounced } from '../utils/debounce';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
@@ -45,7 +45,7 @@ export const plugin = {
           },
           item({ item, createElement, state }) {
             const onclick = () => {
-              parameters.navigator.navigate({ item, itemUrl: item.title, state });
+              parameters.navigator.navigate({ item, itemUrl: item.title, state: { ...state, context: emptyContext } });
             };
             if (typeof item.caption === 'string' && item.caption !== '') {
               return createElement('div', {
