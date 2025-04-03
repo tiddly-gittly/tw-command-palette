@@ -33,12 +33,14 @@ export const plugin = {
         sourceId: 'layout',
         async getItems({ query }) {
           if (cachedTiddlers.length === 0 || !cacheSystemTiddlers()) {
-            cachedTiddlers = await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Layout]] [[$:/core/ui/PageTemplate]] +[!is[draft]sort[name]]`, { system: true });
+            cachedTiddlers = await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Layout]] [[$:/core/ui/PageTemplate]] +[!is[draft]sort[name]]`, { system: true, exclude: [] });
           }
-          return cachedTiddlers.filter((tiddler): tiddler is ITiddlerFields => {
+          // If there are search text, filter each tiddler one by one (so we could filter by rendered caption).
+          const realQuery = query.substring(1);
+          return realQuery ? cachedTiddlers.filter((tiddler): tiddler is ITiddlerFields => {
             // TODO: add pinyinfuse
             return $tw.wiki.filterTiddlers(
-              `[search[${query.slice(1)}]]`,
+              `[search[${realQuery}]]`,
               undefined,
               $tw.wiki.makeTiddlerIterator([
                 renderTextWithCache(tiddler.name, widget),
@@ -46,7 +48,7 @@ export const plugin = {
                 tiddler.title.replace('$:/plugins/', ''),
               ]),
             ).length > 0;
-          });
+          }) : cachedTiddlers;
         },
         getItemUrl({ item }) {
           return item.title;

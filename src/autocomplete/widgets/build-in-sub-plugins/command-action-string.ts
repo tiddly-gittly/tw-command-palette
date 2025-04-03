@@ -30,15 +30,16 @@ export const plugin = {
       {
         sourceId: 'actionString',
         async getItems({ query }) {
-          if (query === '') return [];
           if (cachedTiddlers.length === 0 || !cacheSystemTiddlers()) {
             cachedTiddlers = await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Actions]]`, { system: true, exclude: [] });
           }
-          return cachedTiddlers
+          // If there are search text, filter each tiddler one by one (so we could filter by rendered caption).
+          const realQuery = query.substring(1);
+          return realQuery ? cachedTiddlers
             .filter(tiddler =>
               // TODO: add pinyinfuse
               $tw.wiki.filterTiddlers(
-                `[search[${query.slice(1)}]]`,
+                `[search[${realQuery}]]`,
                 undefined,
                 $tw.wiki.makeTiddlerIterator([
                   tiddler.title.replace('$:/plugins/', '').replace('linonetwo/commandpalette/', ''),
@@ -46,7 +47,7 @@ export const plugin = {
                   renderTextWithCache(tiddler.description, widget),
                 ]),
               ).length > 0
-            );
+            ) : cachedTiddlers;
         },
         getItemUrl({ item }) {
           return item.title;

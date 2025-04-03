@@ -15,8 +15,11 @@ export const plugin = {
       {
         sourceId: 'system-title',
         async getItems({ query }) {
-          if (query === '') return [];
-          const result = await filterTiddlersAsync(`[all[tiddlers+shadows]is[system]search[${query.substring(1)}]]`, { system: true });
+          const realQuery = query.substring(1);
+          if (realQuery === '') return [];
+          const filterToOpen = `[all[tiddlers+shadows]is[system]search[${realQuery}]]`;
+          parameters.setContext({ filterToOpen });
+          const result = await filterTiddlersAsync(filterToOpen, { system: true });
           return result;
         },
         getItemUrl({ item }) {

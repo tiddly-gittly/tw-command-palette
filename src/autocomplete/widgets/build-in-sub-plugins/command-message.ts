@@ -33,11 +33,12 @@ export const plugin = {
       {
         sourceId: 'message',
         async getItems({ query }) {
-          if (query === '') return [];
           if (cachedTiddlers.length === 0 || !cacheSystemTiddlers()) {
             cachedTiddlers = await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Messages]]`, { system: true });
           }
-          return cachedTiddlers
+          // If there are search text, filter each tiddler one by one (so we could filter by rendered caption).
+          const realQuery = query.substring(1);
+          return realQuery ? cachedTiddlers
             .filter((tiddler): tiddler is ITiddlerFields => {
               const filter = tiddler['command-palette-filter'] as string | undefined;
               // if no filter, just pass. If user didn't install `$:/plugins/Gk0Wk/focused-tiddler`, also pass.
@@ -48,7 +49,7 @@ export const plugin = {
             .filter(tiddler =>
               // TODO: add pinyinfuse
               $tw.wiki.filterTiddlers(
-                `[search[${query.slice(1)}]]`,
+                `[search[${realQuery}]]`,
                 undefined,
                 $tw.wiki.makeTiddlerIterator([
                   tiddler.title.replace('$:/plugins/linonetwo/autocomplete/', ''),
@@ -56,7 +57,7 @@ export const plugin = {
                   renderTextWithCache(tiddler.description, widget),
                 ]),
               ).length > 0
-            );
+            ) : cachedTiddlers;
         },
         getItemUrl({ item }) {
           return item.title;
