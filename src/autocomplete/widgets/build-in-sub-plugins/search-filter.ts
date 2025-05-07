@@ -29,25 +29,28 @@ export const plugin = {
           if (cachedTiddlers.length === 0 || !cacheSystemTiddlers()) {
             cachedTiddlers = await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Filter]]`, { system: true });
           }
-          const buildInFilters = cachedTiddlers
-            .filter((tiddler): tiddler is ITiddlerFields => {
-              if (tiddler === undefined) return false;
-              if (!tiddler.filter || typeof tiddler.filter !== 'string') return false;
-              return true;
-            })
-            .filter(tiddler =>
-              // TODO: add pinyinfuse
-              $tw.wiki.filterTiddlers(
-                `[search[${query.slice(1)}]]`,
-                undefined,
-                $tw.wiki.makeTiddlerIterator([
-                  tiddler.title.replace('$:/plugins/', '').replace('linonetwo/commandpalette/', ''),
-                  renderTextWithCache(tiddler.caption, widget),
-                  renderTextWithCache(tiddler.description, widget),
-                  (tiddler.filter as string).trim().replaceAll('[', '').replaceAll(']', ''),
-                ]),
-              ).length > 0
-            );
+          
+          const validFilterTiddlers = cachedTiddlers.filter((tiddler): tiddler is ITiddlerFields => {
+            if (tiddler === undefined) return false;
+            if (!tiddler.filter || typeof tiddler.filter !== 'string') return false;
+            return true;
+          });
+          
+          const realQuery = query.substring(1);
+          const buildInFilters = realQuery ? validFilterTiddlers.filter(tiddler =>
+            // TODO: add pinyinfuse
+            $tw.wiki.filterTiddlers(
+              `[search[${realQuery}]]`,
+              undefined,
+              $tw.wiki.makeTiddlerIterator([
+                tiddler.title.replace('$:/plugins/', '').replace('linonetwo/commandpalette/', ''),
+                renderTextWithCache(tiddler.caption, widget),
+                renderTextWithCache(tiddler.description, widget),
+                (tiddler.filter as string).trim().replaceAll('[', '').replaceAll(']', ''),
+              ]),
+            ).length > 0
+          ) : validFilterTiddlers;
+          
           // allow user input a custom filter to search under it
           const userInputFilter = { filter: query, title: '', type: '', text: '' } satisfies ITiddlerFields;
           if (query.length > 1) {
@@ -95,15 +98,27 @@ export const plugin = {
         sourceId: 'filter',
         async getItems({ query, state }) {
           const system = checkIsSearchSystem(parameters);
-          return await filterTiddlersAsync(
-            `[all[tiddlers+shadows]]+${(state.context as IContext).filter} ${(state.context as IContext).applyExclusion ? titleTextExclusionFilter() : ''} +[search[${
-              system ? query.slice(1) : query
-            }]]`,
-            {
-              system,
-              toTiddler: ((state.context as IContext).filterGetTiddler ?? true),
-            },
-          );
+          const realQuery = system ? query.substring(1) : query;
+          const context = state.context as IContext;
+          
+          // 构建基本过滤器字符串
+          const baseFilter = `[all[tiddlers+shadows]]+${context.filter} ${context.applyExclusion ? titleTextExclusionFilter() : ''}`;
+          
+          return realQuery ? 
+            await filterTiddlersAsync(
+              `${baseFilter} +[search[${realQuery}]]`,
+              {
+                system,
+                toTiddler: (context.filterGetTiddler ?? true),
+              }
+            ) : 
+            await filterTiddlersAsync(
+              baseFilter,
+              {
+                system,
+                toTiddler: (context.filterGetTiddler ?? true),
+              }
+            );
         },
         getItemUrl({ item }) {
           return item.title;

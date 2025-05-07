@@ -22,21 +22,23 @@ export const plugin = {
           if (cachedTiddlers.length === 0 || !cacheSystemTiddlers()) {
             cachedTiddlers = $tw.wiki.filterTiddlers('[all[shadows]tag[$:/tags/AutoCompleteHelp]]');
           }
-          return (cachedTiddlers
+          const allHelpTiddlers = cachedTiddlers
             .map((title) => $tw.wiki.getTiddler(title)?.fields)
-            .filter(Boolean) as ITiddlerFields[])
-            .filter((tiddler) =>
-              // TODO: add pinyinfuse
-              $tw.wiki.filterTiddlers(
-                `[search[${query.slice(1)}]]`,
-                undefined,
-                $tw.wiki.makeTiddlerIterator([
-                  tiddler.title.replace('$:/plugins/linonetwo/autocomplete/commands/help/', ''),
-                  renderTextWithCache(tiddler.caption, widget),
-                  renderTextWithCache(tiddler.description, widget),
-                ]),
-              ).length > 0
-            );
+            .filter(Boolean) as ITiddlerFields[];
+          
+          const realQuery = query.substring(1);
+          return realQuery ? allHelpTiddlers.filter((tiddler) =>
+            // TODO: add pinyinfuse
+            $tw.wiki.filterTiddlers(
+              `[search[${realQuery}]]`,
+              undefined,
+              $tw.wiki.makeTiddlerIterator([
+                tiddler.title.replace('$:/plugins/linonetwo/autocomplete/commands/help/', ''),
+                renderTextWithCache(tiddler.caption, widget),
+                renderTextWithCache(tiddler.description, widget),
+              ]),
+            ).length > 0
+          ) : allHelpTiddlers;
         },
         getItemUrl({ item }) {
           return item.title;
