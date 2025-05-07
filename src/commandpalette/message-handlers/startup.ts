@@ -16,9 +16,9 @@ exports.startup = function() {
     const commandPaletteID = event?.paramObject?.id as string || 'default';
     const prefix = event?.paramObject?.prefix as string || '';
     /** For ctrl-tab handling */
-    const historyMode = event?.paramObject?.historyMode as string || 'no';
+    const cycleHistoryMode = event?.paramObject?.cycleHistoryMode as string || 'no';
     // Don't forget add transclusion in `src/commandpalette/DefaultCommandPalette.tid` for new param
-    $tw.wiki.addTiddler({ title: `$:/temp/auto-complete-search/${commandPaletteID}/opened`, text: 'yes', prefix, historyMode });
+    $tw.wiki.addTiddler({ title: `$:/temp/auto-complete-search/${commandPaletteID}/opened`, text: 'yes', prefix, cycleHistoryMode });
     return false;
   });
   $tw.rootWidget.addEventListener('close-command-palette', (originalEvent: IWidgetEvent) => {

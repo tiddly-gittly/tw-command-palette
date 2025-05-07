@@ -11,7 +11,7 @@ tags: $:/tags/CommandPalette
     <$auto-complete-search
       id="default"
       prefix={{$:/temp/auto-complete-search/default/opened!!prefix}}
-      historyMode={{$:/temp/auto-complete-search/default/opened!!historyMode}}
+      cycleHistoryMode={{$:/temp/auto-complete-search/default/opened!!cycleHistoryMode}}
       destroyWhenNotVis="yes"
     />
   </div>

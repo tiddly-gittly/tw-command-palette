@@ -2,4 +2,4 @@ key: ((command-palette-switch-history))
 tags: $:/tags/KeyboardShortcut
 title: $:/plugins/linonetwo/commandpalette/CommandPaletteSwitchHistory
 
-<$action-sendmessage $message="open-command-palette" historyMode="yes"/>
+<$action-sendmessage $message="open-command-palette" cycleHistoryMode="yes"/>
