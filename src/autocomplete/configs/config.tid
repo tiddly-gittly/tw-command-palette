@@ -4,21 +4,32 @@ caption: <<lingo Name $:/plugins/linonetwo/autocomplete/language/>>
 
 \define lingo-base() $:/plugins/linonetwo/autocomplete/language/
 
+<style>
+.tw-autocomplete-config-full-width {
+  width: 100%;
+  box-sizing: border-box;
+}
+</style>
+
 !!! <<lingo Configs/Performance/Caption>>
 
 ;<<lingo Configs/DebounceDuration/Caption>>
-:<$edit-text tiddler="$:/plugins/linonetwo/autocomplete/configs/DebounceDuration" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="input" type="number" />ms <<lingo Configs/DebounceDuration/Description>>
+:<$edit-text tiddler="$:/plugins/linonetwo/autocomplete/configs/DebounceDuration" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="input" type="number" />ms
+:<<lingo Configs/DebounceDuration/Description>>
 
 !!! <<lingo Configs/TitleText/Caption>>
 
 ;<<lingo Configs/TitlePriorityText/Caption>>
 :<$checkbox tiddler="$:/plugins/linonetwo/autocomplete/configs/TitlePriorityText" field="text" checked="yes" unchecked=""> <<lingo Configs/TitlePriorityText/Description>></$checkbox>
 ;<<lingo Configs/TitleAlias/Caption>>
-:<$edit-text tiddler="$:/plugins/linonetwo/autocomplete/configs/TitleAlias" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="input" /> <<lingo Configs/TitleAlias/Description>>
+:<$edit-text tiddler="$:/plugins/linonetwo/autocomplete/configs/TitleAlias" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="input" class="tw-autocomplete-config-full-width" />
+:<<lingo Configs/TitleAlias/Description>>
 ;<<lingo Configs/TextAlias/Caption>>
-:<$edit-text tiddler="$:/plugins/linonetwo/autocomplete/configs/TextAlias" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="input" /> <<lingo Configs/TextAlias/Description>>
+:<$edit-text tiddler="$:/plugins/linonetwo/autocomplete/configs/TextAlias" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="input" class="tw-autocomplete-config-full-width" />
+:<<lingo Configs/TextAlias/Description>>
 ;<<lingo Configs/TitleTextIgnoreFilter/Caption>>
-:<$edit-text tiddler="$:/plugins/linonetwo/autocomplete/configs/TitleTextIgnoreFilter" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="input" /> <<lingo Configs/TitleTextIgnoreFilter/Description>>
+:<$edit-text tiddler="$:/plugins/linonetwo/autocomplete/configs/TitleTextIgnoreFilter" tabindex=-1 focus=false cancelPopups="yes" fileDrop=no tag="textarea" class="tw-autocomplete-config-full-width" />
+:<<lingo Configs/TitleTextIgnoreFilter/Description>>
 ;<<lingo Configs/ApplyIgnoreFilterToTag/Caption>>
 :<$checkbox tiddler="$:/plugins/linonetwo/autocomplete/configs/ApplyIgnoreFilterToTag" field="text" checked="yes" unchecked=""> <<lingo Configs/ApplyIgnoreFilterToTag/Description>></$checkbox>
 

@@ -13,7 +13,8 @@ caption: <<lingo Name $:/plugins/linonetwo/commandpalette/language/>>
 !!! <<lingo Configs/Appearance/Caption>>
 
 ;<<lingo Configs/HideDefaultSearchBar/Caption>>
-:<$checkbox tiddler="$:/plugins/linonetwo/commandpalette/configs/HideDefaultSearchBar" field="text" checked="yes" unchecked=""> <<lingo Configs/HideDefaultSearchBar/Description>></$checkbox>
+:<$checkbox tiddler="$:/plugins/linonetwo/commandpalette/configs/HideDefaultSearchBar" field="text" checked="yes" unchecked="">
+:<<lingo Configs/HideDefaultSearchBar/Description>></$checkbox>
 ;<<lingo Configs/DesktopWidth/Caption>>
 :<$edit-text
   tiddler="$:/plugins/linonetwo/commandpalette/configs/DesktopWidth"
@@ -27,7 +28,8 @@ caption: <<lingo Name $:/plugins/linonetwo/commandpalette/language/>>
   <option>%</option>
   <option>px</option>
   <option>em</option>
-</$select> <<lingo Configs/DesktopWidth/Description>>
+</$select>
+:<<lingo Configs/DesktopWidth/Description>>
 
 !! <$link to="$:/plugins/linonetwo/autocomplete/config"><<lingo Name $:/plugins/linonetwo/autocomplete/language/>></$link>
 
