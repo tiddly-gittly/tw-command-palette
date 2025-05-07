@@ -18,4 +18,22 @@ title: $:/plugins/linonetwo/commandpalette/language/zh-Hans/Readme
 
 按下 ctrl/cmd + P 唤起搜索框，按的时候如果多加一个 Shift 可以唤起功能框。
 
-如果你还安装了[ext[linonetwo/pinyin-fuzzy-search|https://tw-cpl.netlify.app/#linonetwo%2Fpinyin-fuzzy-search:Index%20linonetwo%2Fpinyin-fuzzy-search]]插件，那么搜索的时候可以打拼音。
+!!! 动作条目
+
+你可以创建带有 `$:/tags/Actions` 标签的动作条目，动作条目会在命令面板中显示，选中后将触发内容中的动作微件。
+
+```tid
+tags: $:/tags/Actions
+caption: XXX
+description: Details of XXX, with variables like <<selectedText>>
+title: Example Action
+condition: [<selectedText>!compare:string:eq[]]
+
+<$action-sendmessage $message="tm-new-tiddler" title=<<selectedText>> />
+```
+
+可用的变量有：
+
+* `<<selectedText>>` - 选中的文本
+* `<<commandpaletteinput>>` - 命令菜单输入框中的文本
+* 其它常见变量如 `<<currentTiddler>>` 等等

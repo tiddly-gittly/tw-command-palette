@@ -15,3 +15,5 @@ Filter/Themes/Caption: 主题列表
 Filter/Themes/Description: 列出已安装的主题的列表
 Filter/Untagged/Caption: 未打标签
 Filter/Untagged/Description: 列出未打标签的条目，无标签会让它们难以找到
+ActionString/NewTiddlerFromSelectedText/Caption: 创建新条目
+ActionString/NewTiddlerFromSelectedText/Description: 用选中的文本作为标题，已选中：

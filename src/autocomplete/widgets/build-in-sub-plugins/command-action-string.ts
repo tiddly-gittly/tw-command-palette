@@ -19,12 +19,14 @@ export const plugin = {
     if (parameters.query.length === 0) return [];
     if (!checkIsSearchSystem(parameters) || checkIsUnderFilter(parameters)) return [];
     const focusedTiddler = $tw.wiki.getTiddlerText('$:/temp/focussedTiddler');
-    const variables = { currentTiddler: focusedTiddler ?? '', commandpaletteinput: parameters.query.slice(1) };
+    const variables = { currentTiddler: focusedTiddler ?? '', commandpaletteinput: parameters.query.slice(1), selectedText: parameters.state.context.selectedText as string ?? '' };
     const { widget } = parameters.state.context as IContext;
     const onSelect = (item: ITiddlerFields) => {
-      parameters.setContext({ noNavigate: true } satisfies IContext);
+      const newContext = { noNavigate: true } satisfies IContext;
+      parameters.setContext?.(newContext);
       // this calls `invokeActions` under the hood
       widget?.invokeActionString(item.text, widget, null, variables);
+      parameters.navigator.navigate({ item, itemUrl: item.title, state: { ...parameters.state, context: { ...parameters.state.context, ...newContext } } });
     };
     return await debounced([
       {
@@ -35,19 +37,36 @@ export const plugin = {
           }
           // If there are search text, filter each tiddler one by one (so we could filter by rendered caption).
           const realQuery = query.substring(1);
-          return realQuery ? cachedTiddlers
-            .filter(tiddler =>
-              // TODO: add pinyinfuse
-              $tw.wiki.filterTiddlers(
-                `[search[${realQuery}]]`,
-                undefined,
-                $tw.wiki.makeTiddlerIterator([
-                  tiddler.title.replace('$:/plugins/', '').replace('linonetwo/commandpalette/', ''),
-                  renderTextWithCache(tiddler.caption, widget),
-                  renderTextWithCache(tiddler.description, widget),
-                ]),
-              ).length > 0
-            ) : cachedTiddlers;
+          
+          const tempWidget = (parameters.state.context as IContext).widget?.makeFakeWidgetWithVariables?.(variables);
+          // Filter tiddlers based on search query and condition field
+          const filteredTiddlers = cachedTiddlers.filter(tiddler => {
+            // Check if the tiddler has a condition field
+            if (tiddler.condition) {
+              // Evaluate the condition using TiddlyWiki's filter mechanism
+              const result = $tw.wiki.filterTiddlers(tiddler.condition as string, tempWidget);
+              // Only show tiddlers where the condition evaluates to a non-empty result
+              if (result.length === 0) {
+                return false;
+              }
+            }
+            
+            // If no search query or condition passed, include the tiddler
+            if (!realQuery) return true;
+            
+            // Otherwise filter by search text
+            return $tw.wiki.filterTiddlers(
+              `[search[${realQuery}]]`,
+              undefined,
+              $tw.wiki.makeTiddlerIterator([
+                tiddler.title.replace('$:/plugins/', '').replace('linonetwo/commandpalette/', ''),
+                renderTextWithCache(tiddler.caption, widget),
+                renderTextWithCache(tiddler.description, widget),
+              ]),
+            ).length > 0;
+          });
+          
+          return filteredTiddlers;
         },
         getItemUrl({ item }) {
           return item.title;

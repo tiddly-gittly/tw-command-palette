@@ -21,13 +21,15 @@ export const plugin = {
     const variables = { currentTiddler: focusedTiddler ?? '' };
     const { widget } = parameters.state.context as IContext;
     const onSelect = (item: ITiddlerFields) => {
-      parameters.setContext({ noNavigate: true } satisfies IContext);
+      const newContext = { noNavigate: true } satisfies IContext;
+      parameters.setContext?.(newContext);
       widget?.dispatchEvent?.({
         type: item.text.trim(),
         tiddlerTitle: focusedTiddler,
         // TODO: if need param, into param input mode like vscode does. Or Listen on right arrow key in onActive, and open a side panel to input params.
         // param
       });
+      parameters.navigator.navigate({ item, itemUrl: item.title, state: { ...parameters.state, context: { ...parameters.state.context, ...newContext } } });
     };
     return await debounced([
       {

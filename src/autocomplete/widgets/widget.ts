@@ -55,6 +55,7 @@ class AutoCompleteSearchWidget extends Widget {
     const containerElement = $tw.utils.domMaker('nav', {
       class: 'tw-auto-complete-container',
     });
+    const selectedText = window.getSelection()?.toString() || '';
     this.parentDomNode.insertBefore(containerElement, nextSibling);
     this.domNodes.push(containerElement);
 
@@ -102,7 +103,7 @@ class AutoCompleteSearchWidget extends Widget {
         ];
       },
     });
-    this.autoCompleteInstance.setContext({ widget: this } satisfies IContext);
+    this.autoCompleteInstance.setContext({ widget: this, selectedText } satisfies IContext);
     this.onCommandPaletteInputDOMInit(containerElement);
     this.onCommandPaletteDetachedDOMInit(containerElement);
   }
@@ -141,6 +142,8 @@ class AutoCompleteSearchWidget extends Widget {
         navigateFromNode: this,
       });
     }
+    // DEBUG: console state.context.noClose
+    console.log(`state.context.noClose`, state.context.noClose);
     if (!state.context.noClose) {
       this.setCloseState();
     }

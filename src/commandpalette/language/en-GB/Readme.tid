@@ -17,3 +17,23 @@ This plugin references the design of [[Souk21/TW-commandpalette|https://github.c
 !! Feature
 
 Press ctrl/cmd + P to call up the search box, or add Shift to call up the command box (aka, command palette).
+
+!!! Action Tiddler
+
+You can create action tiddlers with the `$:/tags/Actions` tag, and the action tiddlers will be displayed in the command palette. After selecting it, the action widget in the content will be triggered.
+
+```tid
+tags: $:/tags/Actions
+caption: XXX
+description: Details of XXX, with variables like <<selectedText>>
+title: Example Action
+condition: [<selectedText>!compare:string:eq[]]
+
+<$action-sendmessage $message="tm-new-tiddler" title=<<selectedText>> />
+```
+
+Available variables are:
+
+* `<<selectedText>>` - The selected text
+* `<<commandpaletteinput>>` - The text in the command menu input box
+* Other common variables such as `<<currentTiddler>>` and so on
