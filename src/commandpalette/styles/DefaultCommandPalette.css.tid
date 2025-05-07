@@ -15,6 +15,17 @@ tags: $:/tags/Stylesheet
   top: calc(var(--position-autocomplete-panel-top) + 0.25em) !important;
   z-index: 9999;
 }
+/** On small screen, don't let panel get out of the window */
+@media (min-height: 520px) {
+  .aa-Panel {
+    max-height: 75vh;
+  }
+}
+@media (max-height: 520px) {
+  .aa-Panel {
+    max-height: 60vh;
+  }
+}
 .tw-command-palette-default-container {
   position: fixed;
   background: <<colour page-background>>;
