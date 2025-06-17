@@ -1,0 +1,6 @@
+tags: $:/tags/Messages
+caption: {{$:/language/Buttons/FullScreen/Caption}}
+description: {{$:/language/Buttons/FullScreen/Hint}}
+title: $:/plugins/linonetwo/commandpalette/Show Switcher
+
+tm-show-switcher
