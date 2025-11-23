@@ -1,0 +1,10 @@
+title: $:/plugins/linonetwo/commandpalette/changelog
+
+! Changelog
+
+!! Version 2.1.2
+
+Depend on [[$:/plugins/linonetwo/autocomplete]] version 0.6.0
+
+* ''Breaking Change'': Requires TidGi-Desktop version 0.13.0 or higher
+** Updated API usage: replaced `window?.meta?.()?.workspaceID` with `window?.meta?.()?.workspace`

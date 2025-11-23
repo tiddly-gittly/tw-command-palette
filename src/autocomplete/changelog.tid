@@ -1,0 +1,8 @@
+title: $:/plugins/linonetwo/autocomplete/changelog
+
+! Changelog
+
+!! Version 0.6.0
+
+* ''Breaking Change'': Requires TidGi-Desktop version 0.13.0 or higher
+** Updated API usage: replaced `window?.meta?.()?.workspaceID` with `window?.meta?.()?.workspace`

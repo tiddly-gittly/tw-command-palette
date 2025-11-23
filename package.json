@@ -18,7 +18,7 @@
     "publish:offline": "npm run clean && tiddlywiki-plugin-dev publish --offline"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=22"
   },
   "husky": {
     "hooks": {
@@ -35,30 +35,30 @@
   },
   "devDependencies": {
     "@modern-js/eslint-config": "^2.59.0",
-    "@modern-js/tsconfig": "^2.67.8",
-    "@types/lodash": "^4.17.17",
-    "@types/node": "^24.0.3",
+    "@modern-js/tsconfig": "^2.69.0",
+    "@types/lodash": "^4.17.21",
+    "@types/node": "^24.10.1",
     "@types/pinyin": "^2.10.2",
-    "@types/react": "^19.1.8",
-    "dprint": "^0.50.0",
+    "@types/react": "^19.2.6",
+    "dprint": "^0.50.2",
     "eslint-config-tidgi": "^2.2.0",
     "husky": "^9.1.7",
-    "lint-staged": "^16.1.2",
-    "npm-check-updates": "^18.0.1",
+    "lint-staged": "^16.2.7",
+    "npm-check-updates": "^19.1.2",
     "postcss": "^8.5.6",
-    "rimraf": "^6.0.1",
-    "tiddlywiki": "^5.3.6",
+    "rimraf": "^6.1.2",
+    "tiddlywiki": "^5.3.8",
     "tiddlywiki-plugin-dev": "^0.3.2",
     "ts-node": "^10.9.2",
-    "tw5-typed": "^0.6.3",
-    "typescript": "^5.8.3"
+    "tw5-typed": "^1.0.5",
+    "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@algolia/autocomplete-core": "^1.19.2",
-    "@algolia/autocomplete-js": "^1.19.2",
-    "@algolia/autocomplete-plugin-recent-searches": "^1.19.2",
-    "@algolia/autocomplete-shared": "^1.19.2",
-    "@algolia/autocomplete-theme-classic": "^1.19.2",
+    "@algolia/autocomplete-core": "^1.19.4",
+    "@algolia/autocomplete-js": "^1.19.4",
+    "@algolia/autocomplete-plugin-recent-searches": "^1.19.4",
+    "@algolia/autocomplete-shared": "^1.19.4",
+    "@algolia/autocomplete-theme-classic": "^1.19.4",
     "@seznam/visibility-observer": "^1.1.0",
     "fuse.js": "^7.1.0",
     "lodash": "^4.17.21",
@@ -67,6 +67,7 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
+      "dprint",
       "svelte-preprocess"
     ]
   }
