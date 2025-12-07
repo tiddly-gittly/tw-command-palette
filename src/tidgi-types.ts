@@ -27,7 +27,7 @@ declare global {
       wiki?: {
         getTiddlerFilePath(title: string, workspaceID?: string): Promise<string | undefined>;
         callWikiIpcServerRoute<T = any>(
-          workspace: IWorkspace,
+          workspaceID: string,
           route: string,
           ...arguments_: any[]
         ): Promise<{ data: T }>;

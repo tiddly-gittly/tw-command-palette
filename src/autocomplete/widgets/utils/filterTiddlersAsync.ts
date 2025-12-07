@@ -15,7 +15,7 @@ export async function filterTiddlersAsync(filter: string, options: { exclude?: s
   if (isInTidGiDesktop && 'service' in window && window.service?.wiki && tidGiWorkspace) {
     const wikiServer = window.service.wiki;
     const resultFromIPC = await wikiServer.callWikiIpcServerRoute(
-      tidGiWorkspace,
+      tidGiWorkspace.id,
       'getTiddlersJSON',
       filter,
       exclude,
