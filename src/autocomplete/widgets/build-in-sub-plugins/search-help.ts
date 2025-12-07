@@ -59,7 +59,7 @@ export const plugin = {
             const onclick = () => {
               const newQuery = (item['command-palette-prefix'] as string).charAt(0);
               parameters.setQuery(newQuery);
-              void parameters.refresh().catch(error => {
+              void parameters.refresh().catch((error: unknown) => {
                 console.error('Error in search-help refresh', error);
               });
             };

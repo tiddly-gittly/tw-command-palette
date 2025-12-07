@@ -17,7 +17,11 @@ export const plugin = {
     if (parameters.query.length === 0) return [];
     if (!checkIsSearchSystem(parameters) || checkIsUnderFilter(parameters)) return [];
     const focusedTiddler = $tw.wiki.getTiddlerText('$:/temp/focussedTiddler');
-    const variables = { currentTiddler: focusedTiddler ?? '', commandpaletteinput: parameters.query.slice(1), selectedText: parameters.state.context.selectedText as string ?? '' };
+    const variables = {
+      currentTiddler: focusedTiddler ?? '',
+      commandpaletteinput: parameters.query.slice(1),
+      selectedText: (parameters.state.context.selectedText ?? '') as string,
+    };
     const { widget } = parameters.state.context as IContext;
     const onSelect = (item: ITiddlerFields) => {
       const newContext = { noNavigate: true } satisfies IContext;

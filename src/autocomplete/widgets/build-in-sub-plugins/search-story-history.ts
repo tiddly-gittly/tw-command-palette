@@ -14,7 +14,8 @@ export const plugin = {
       {
         sourceId: 'story-history',
         getItems({ query }) {
-          const historyData = $tw.wiki.getTiddlerData<Array<{ title: string }>>('$:/HistoryList') ?? [];
+          const historyDataRaw = $tw.wiki.getTiddlerData<Array<{ title: string }> | undefined>('$:/HistoryList');
+          const historyData = historyDataRaw ?? [];
           const historyTitles = uniq([
             ...historyData.reverse().map((x) => x.title),
             ...$tw.wiki.filterTiddlers('[list[$:/StoryList]]'),

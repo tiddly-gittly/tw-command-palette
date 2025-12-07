@@ -51,7 +51,7 @@ export const plugin = (id: string): AutocompletePlugin<RecentSearchesItem, Recen
           item({ item, createElement }) {
             const onDelete = () => {
               recentSearchesPlugin.data?.removeItem(item.id);
-              void refresh()?.catch(error => {
+              void refresh()?.catch((error: unknown) => {
                 console.error('Error in search-recent refresh', error);
               });
             };

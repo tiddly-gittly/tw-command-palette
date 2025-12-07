@@ -160,13 +160,13 @@ class AutoCompleteSearchWidget extends Widget {
     this.clearContext();
   }
 
-  onShiftEnter({ itemUrl, state }: {
+  onShiftEnter({ state }: {
     item: ITiddlerFields;
     itemUrl: string;
     state: AutocompleteState<ITiddlerFields>;
   }) {
     // It used to open in new window.
-    // window.open(`${window.location.origin}/#:${itemUrl}`, '_blank');
+    // window.open(`${window.location.origin}/#:${_itemUrl}`, '_blank');
     // Now it create a temporary tiddler with search results.
     const template = this.wiki.getTiddler('$:/plugins/linonetwo/autocomplete/widget/templates/FilterResultTemplate');
     const context = state.context as IContext;

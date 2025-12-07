@@ -41,7 +41,7 @@ export const plugin = {
           const onclick = () => {
             onSelect(item);
             parameters.setQuery('');
-            void parameters.refresh().catch(error => {
+            void parameters.refresh().catch((error: unknown) => {
               console.error('Error in search-tags refresh', error);
             });
           };

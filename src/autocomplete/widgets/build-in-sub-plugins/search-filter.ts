@@ -30,7 +30,6 @@ export const plugin = {
           }
 
           const validFilterTiddlers = cachedTiddlers.filter((tiddler): tiddler is ITiddlerFields => {
-            if (tiddler === undefined) return false;
             if (!tiddler.filter || typeof tiddler.filter !== 'string') return false;
             return true;
           });
@@ -79,7 +78,7 @@ export const plugin = {
               onclick: () => {
                 onSelect(item);
                 parameters.setQuery('');
-                void parameters.refresh().catch(error => {
+                void parameters.refresh().catch((error: unknown) => {
                   console.error('Error in search-filter step1 refresh', error);
                 });
               },

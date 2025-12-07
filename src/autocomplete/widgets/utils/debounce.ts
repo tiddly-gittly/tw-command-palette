@@ -8,10 +8,10 @@ import { ITiddlerFields } from 'tiddlywiki';
 type AnyFunction = (...arguments_: any[]) => any;
 
 export function debouncePromise<T extends AnyFunction>(function_: T, time: number): (...arguments_: Parameters<T>) => Promise<ReturnType<T>> {
-  let timerId: ReturnType<typeof setTimeout>;
+  let timerId: ReturnType<typeof setTimeout> | undefined;
 
   return async function debounced(...arguments_: Parameters<T>): Promise<ReturnType<T>> {
-    if (timerId) {
+    if (timerId !== undefined) {
       clearTimeout(timerId);
     }
 
