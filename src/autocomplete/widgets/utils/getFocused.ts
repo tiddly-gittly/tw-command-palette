@@ -1,6 +1,5 @@
 export function getCurrentSelection() {
-  // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
-  const selection = window.getSelection().toString();
+  const selection = window.getSelection()?.toString();
   if (selection !== '') return selection;
   const activeElement = getActiveElement() as HTMLInputElement | HTMLTextAreaElement | null;
   if (!activeElement?.selectionStart) return '';
@@ -13,16 +12,17 @@ export function getCurrentSelection() {
 }
 
 export function getActiveElement(element = document.activeElement): HTMLElement | null {
-  // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
+  if (!element) {
+    return null;
+  }
   const shadowRoot = element.shadowRoot;
-  // @ts-expect-error ts-migrate(2531) FIXME: Object is possibly 'null'.
-  const contentDocument = element.contentDocument as Document;
+  const contentDocument = (element as HTMLIFrameElement).contentDocument;
 
   if (shadowRoot?.activeElement) {
     return getActiveElement(shadowRoot.activeElement);
   }
 
-  if (contentDocument.activeElement) {
+  if (contentDocument?.activeElement) {
     return getActiveElement(contentDocument.activeElement);
   }
 
