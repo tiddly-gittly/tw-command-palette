@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { AutocompleteState } from '@algolia/autocomplete-core';
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
@@ -21,7 +20,7 @@ export const plugin = {
     const { widget } = parameters.state.context as IContext;
     const onSelect = (item: ITiddlerFields, state: AutocompleteState<ITiddlerFields>, isClick: boolean) => {
       const newContext = { noNavigate: true } satisfies IContext;
-      parameters.setContext?.(newContext);
+      parameters.setContext(newContext);
       $tw.wiki.setText('$:/layout', 'text', undefined, item.title, { suppressTimestamp: true });
       // When Enter, it will call the navigator.navigate, so we don't need to call it here, otherwise it will called twice and second time without context, causing the layout tiddler to be opened.
       if (isClick) {
@@ -33,22 +32,27 @@ export const plugin = {
         sourceId: 'layout',
         async getItems({ query }) {
           if (cachedTiddlers.length === 0 || !cacheSystemTiddlers()) {
-            cachedTiddlers = await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Layout]] [[$:/core/ui/PageTemplate]] +[!is[draft]sort[name]]`, { system: true, exclude: [] });
+            cachedTiddlers = await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Layout]] [[$:/core/ui/PageTemplate]] +[!is[draft]sort[name]]`, {
+              system: true,
+              exclude: [],
+            });
           }
           // If there are search text, filter each tiddler one by one (so we could filter by rendered caption).
           const realQuery = query.substring(1);
-          return realQuery ? cachedTiddlers.filter((tiddler): tiddler is ITiddlerFields => {
-            // TODO: add pinyinfuse
-            return $tw.wiki.filterTiddlers(
-              `[search[${realQuery}]]`,
-              undefined,
-              $tw.wiki.makeTiddlerIterator([
-                renderTextWithCache(tiddler.name, widget),
-                renderTextWithCache(tiddler.description, widget),
-                tiddler.title.replace('$:/plugins/', ''),
-              ]),
-            ).length > 0;
-          }) : cachedTiddlers;
+          return realQuery
+            ? cachedTiddlers.filter((tiddler): tiddler is ITiddlerFields => {
+              // TODO: add pinyinfuse
+              return $tw.wiki.filterTiddlers(
+                `[search[${realQuery}]]`,
+                undefined,
+                $tw.wiki.makeTiddlerIterator([
+                  renderTextWithCache(tiddler.name, widget),
+                  renderTextWithCache(tiddler.description, widget),
+                  tiddler.title.replace('$:/plugins/', ''),
+                ]),
+              ).length > 0;
+            })
+            : cachedTiddlers;
         },
         getItemUrl({ item }) {
           return item.title;
@@ -59,7 +63,7 @@ export const plugin = {
         templates: {
           header() {
             const currentLayoutTitle = $tw.wiki.getTiddlerText('$:/layout', '');
-            const rawLayoutName = $tw.wiki.getTiddler(currentLayoutTitle)?.fields?.name;
+            const rawLayoutName = $tw.wiki.getTiddler(currentLayoutTitle)?.fields.name;
             const currentLayoutName = rawLayoutName
               ? renderTextWithCache(rawLayoutName, widget)
               : $tw.wiki.getTiddlerText('$:/language/PageTemplate/Name');

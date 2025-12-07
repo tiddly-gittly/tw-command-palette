@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsHelp, checkIsUnderFilter } from '../utils/checkPrefix';
@@ -25,20 +24,22 @@ export const plugin = {
           const allHelpTiddlers = cachedTiddlers
             .map((title) => $tw.wiki.getTiddler(title)?.fields)
             .filter(Boolean) as ITiddlerFields[];
-          
+
           const realQuery = query.substring(1);
-          return realQuery ? allHelpTiddlers.filter((tiddler) =>
-            // TODO: add pinyinfuse
-            $tw.wiki.filterTiddlers(
-              `[search[${realQuery}]]`,
-              undefined,
-              $tw.wiki.makeTiddlerIterator([
-                tiddler.title.replace('$:/plugins/linonetwo/autocomplete/commands/help/', ''),
-                renderTextWithCache(tiddler.caption, widget),
-                renderTextWithCache(tiddler.description, widget),
-              ]),
-            ).length > 0
-          ) : allHelpTiddlers;
+          return realQuery
+            ? allHelpTiddlers.filter((tiddler) =>
+              // TODO: add pinyinfuse
+              $tw.wiki.filterTiddlers(
+                `[search[${realQuery}]]`,
+                undefined,
+                $tw.wiki.makeTiddlerIterator([
+                  tiddler.title.replace('$:/plugins/linonetwo/autocomplete/commands/help/', ''),
+                  renderTextWithCache(tiddler.caption, widget),
+                  renderTextWithCache(tiddler.description, widget),
+                ]),
+              ).length > 0
+            )
+            : allHelpTiddlers;
         },
         getItemUrl({ item }) {
           return item.title;

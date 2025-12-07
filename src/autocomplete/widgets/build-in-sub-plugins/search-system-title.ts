@@ -2,10 +2,10 @@ import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
 import { searchSystemTitle } from '../utils/configs';
+import { emptyContext } from '../utils/context';
 import { debounced } from '../utils/debounce';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
-import { emptyContext } from '../utils/context';
 
 export const plugin = {
   async getSources(parameters) {

@@ -1,5 +1,3 @@
-/* eslint-disable unicorn/no-null */
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
@@ -23,7 +21,7 @@ export const plugin = {
     const { widget } = parameters.state.context as IContext;
     const onSelect = (item: ITiddlerFields) => {
       const newContext = { noNavigate: true } satisfies IContext;
-      parameters.setContext?.(newContext);
+      parameters.setContext(newContext);
       // this calls `invokeActions` under the hood
       widget?.invokeActionString(item.text, widget, null, variables);
       parameters.navigator.navigate({ item, itemUrl: item.title, state: { ...parameters.state, context: { ...parameters.state.context, ...newContext } } });
@@ -37,23 +35,23 @@ export const plugin = {
           }
           // If there are search text, filter each tiddler one by one (so we could filter by rendered caption).
           const realQuery = query.substring(1);
-          
-          const tempWidget = (parameters.state.context as IContext).widget?.makeFakeWidgetWithVariables?.(variables);
+
+          const temporaryWidget = (parameters.state.context as IContext).widget?.makeFakeWidgetWithVariables(variables);
           // Filter tiddlers based on search query and condition field
           const filteredTiddlers = cachedTiddlers.filter(tiddler => {
             // Check if the tiddler has a condition field
             if (tiddler.condition) {
               // Evaluate the condition using TiddlyWiki's filter mechanism
-              const result = $tw.wiki.filterTiddlers(tiddler.condition as string, tempWidget);
+              const result = $tw.wiki.filterTiddlers(tiddler.condition as string, temporaryWidget);
               // Only show tiddlers where the condition evaluates to a non-empty result
               if (result.length === 0) {
                 return false;
               }
             }
-            
+
             // If no search query or condition passed, include the tiddler
             if (!realQuery) return true;
-            
+
             // Otherwise filter by search text
             return $tw.wiki.filterTiddlers(
               `[search[${realQuery}]]`,
@@ -65,7 +63,7 @@ export const plugin = {
               ]),
             ).length > 0;
           });
-          
+
           return filteredTiddlers;
         },
         getItemUrl({ item }) {
@@ -77,7 +75,7 @@ export const plugin = {
         templates: {
           header() {
             // get rendered caption of focused tiddler
-            let caption = focusedTiddler ? $tw.wiki.getTiddler(focusedTiddler)?.fields?.caption as string | undefined : '';
+            let caption = focusedTiddler ? $tw.wiki.getTiddler(focusedTiddler)?.fields.caption as string | undefined : '';
             if (caption) {
               caption = `(${renderTextWithCache(caption, widget, variables)})`;
             }

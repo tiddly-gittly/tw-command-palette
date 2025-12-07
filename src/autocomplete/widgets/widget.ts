@@ -142,8 +142,6 @@ class AutoCompleteSearchWidget extends Widget {
         navigateFromNode: this,
       });
     }
-    // DEBUG: console state.context.noClose
-    console.log(`state.context.noClose`, state.context.noClose);
     if (!state.context.noClose) {
       this.setCloseState();
     }

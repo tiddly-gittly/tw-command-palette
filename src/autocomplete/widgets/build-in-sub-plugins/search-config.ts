@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
@@ -26,16 +25,18 @@ export const plugin = {
             cachedTiddlers = await filterTiddlersAsync(`[all[shadows]tag[$:/tags/ControlPanel/SettingsTab]]`, { system: true });
           }
           const realQuery = query.substring(1);
-          return realQuery ? cachedTiddlers
-            .filter((tiddler): tiddler is ITiddlerFields => {
-              // TODO: add pinyinfuse
-              return $tw.wiki.filterTiddlers(
-                `[search[${realQuery}]]`,
-                undefined,
-                // note that `tiddler.text` is undefined on TidGi desktop, but it is OK to not search its text
-                $tw.wiki.makeTiddlerIterator([renderTextWithCache(tiddler.caption, widget), tiddler.text, tiddler.title.replace('$:/plugins/', '')]),
-              ).length > 0;
-            }) : cachedTiddlers;
+          return realQuery
+            ? cachedTiddlers
+              .filter((tiddler): tiddler is ITiddlerFields => {
+                // TODO: add pinyinfuse
+                return $tw.wiki.filterTiddlers(
+                  `[search[${realQuery}]]`,
+                  undefined,
+                  // note that `tiddler.text` is undefined on TidGi desktop, but it is OK to not search its text
+                  $tw.wiki.makeTiddlerIterator([renderTextWithCache(tiddler.caption, widget), tiddler.text, tiddler.title.replace('$:/plugins/', '')]),
+                ).length > 0;
+              })
+            : cachedTiddlers;
         },
         getItemUrl({ item }) {
           return item.title;

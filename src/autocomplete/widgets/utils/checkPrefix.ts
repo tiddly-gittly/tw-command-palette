@@ -1,13 +1,12 @@
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import { GetSourcesParams } from '@algolia/autocomplete-core';
 import { ITiddlerFields } from 'tiddlywiki';
 import { IContext } from './context';
 
-const systemPrefixes = ($tw.wiki.getTiddler('$:/plugins/linonetwo/autocomplete/commands/help/System')?.fields?.['command-palette-prefix'] as string | undefined)
-  ?.split(' ')?.filter(Boolean);
-const filterPrefix = $tw.wiki.getTiddler('$:/plugins/linonetwo/autocomplete/commands/help/Filter')?.fields?.['command-palette-prefix'] as string | undefined;
-const tagsPrefix = $tw.wiki.getTiddler('$:/plugins/linonetwo/autocomplete/commands/help/Tags')?.fields?.['command-palette-prefix'] as string | undefined;
-const helpPrefix = $tw.wiki.getTiddler('$:/plugins/linonetwo/autocomplete/commands/help/Help')?.fields?.['command-palette-prefix'] as string | undefined;
+const systemPrefixes = ($tw.wiki.getTiddler('$:/plugins/linonetwo/autocomplete/commands/help/System')?.fields['command-palette-prefix'] as string | undefined)
+  ?.split(' ').filter(Boolean);
+const filterPrefix = $tw.wiki.getTiddler('$:/plugins/linonetwo/autocomplete/commands/help/Filter')?.fields['command-palette-prefix'] as string | undefined;
+const tagsPrefix = $tw.wiki.getTiddler('$:/plugins/linonetwo/autocomplete/commands/help/Tags')?.fields['command-palette-prefix'] as string | undefined;
+const helpPrefix = $tw.wiki.getTiddler('$:/plugins/linonetwo/autocomplete/commands/help/Help')?.fields['command-palette-prefix'] as string | undefined;
 export function checkIsSearchSystem(parameters: GetSourcesParams<ITiddlerFields>) {
   return Boolean(systemPrefixes?.includes(parameters.query[0]));
 }

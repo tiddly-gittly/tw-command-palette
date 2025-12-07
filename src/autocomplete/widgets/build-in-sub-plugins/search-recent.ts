@@ -17,7 +17,7 @@ export const plugin = (id: string): AutocompletePlugin<RecentSearchesItem, Recen
   const recentSearchesPlugin = createLocalStorageRecentSearchesPlugin({
     key: `recent-${id}`,
     subscribe(parameters) {
-      parameters.setContext?.({ addHistoryItem: (text: string) => recentSearchesPlugin.data?.addItem({ id: text, label: text }) } satisfies IContext);
+      parameters.setContext({ addHistoryItem: (text: string) => recentSearchesPlugin.data?.addItem({ id: text, label: text }) } satisfies IContext);
       setContext = parameters.setContext as unknown as StateUpdater<IContext>;
       navigator = parameters.navigator;
       refresh = parameters.refresh.bind(parameters);
@@ -27,7 +27,7 @@ export const plugin = (id: string): AutocompletePlugin<RecentSearchesItem, Recen
         const newContext = { newQuery: item.id, noClose: true, noNavigate: true } satisfies IContext;
         setContext?.(newContext);
         if (isClick) {
-          navigator?.navigate?.({ item, itemUrl: item.id, state: { ...state, context: { ...state.context, ...newContext } } });
+          navigator?.navigate({ item, itemUrl: item.id, state: { ...state, context: { ...state.context, ...newContext } } });
         }
       };
       return {
@@ -51,7 +51,7 @@ export const plugin = (id: string): AutocompletePlugin<RecentSearchesItem, Recen
           item({ item, createElement }) {
             const onDelete = () => {
               recentSearchesPlugin.data?.removeItem(item.id);
-              void refresh?.()?.catch?.(error => {
+              void refresh()?.catch(error => {
                 console.error('Error in search-recent refresh', error);
               });
             };

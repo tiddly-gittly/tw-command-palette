@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
-/* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 import { IWidgetEvent } from 'tiddlywiki';
 
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */

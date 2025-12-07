@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 /**
  * container of command input can't be position fix, otherwise need a hack
  * @url https://github.com/algolia/autocomplete/issues/1199

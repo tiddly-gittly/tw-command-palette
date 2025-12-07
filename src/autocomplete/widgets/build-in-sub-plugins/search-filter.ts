@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
 import type { AutocompletePlugin, AutocompleteSource } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsFilter, checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
@@ -29,28 +28,30 @@ export const plugin = {
           if (cachedTiddlers.length === 0 || !cacheSystemTiddlers()) {
             cachedTiddlers = await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Filter]]`, { system: true });
           }
-          
+
           const validFilterTiddlers = cachedTiddlers.filter((tiddler): tiddler is ITiddlerFields => {
             if (tiddler === undefined) return false;
             if (!tiddler.filter || typeof tiddler.filter !== 'string') return false;
             return true;
           });
-          
+
           const realQuery = query.substring(1);
-          const buildInFilters = realQuery ? validFilterTiddlers.filter(tiddler =>
-            // TODO: add pinyinfuse
-            $tw.wiki.filterTiddlers(
-              `[search[${realQuery}]]`,
-              undefined,
-              $tw.wiki.makeTiddlerIterator([
-                tiddler.title.replace('$:/plugins/', '').replace('linonetwo/commandpalette/', ''),
-                renderTextWithCache(tiddler.caption, widget),
-                renderTextWithCache(tiddler.description, widget),
-                (tiddler.filter as string).trim().replaceAll('[', '').replaceAll(']', ''),
-              ]),
-            ).length > 0
-          ) : validFilterTiddlers;
-          
+          const buildInFilters = realQuery
+            ? validFilterTiddlers.filter(tiddler =>
+              // TODO: add pinyinfuse
+              $tw.wiki.filterTiddlers(
+                `[search[${realQuery}]]`,
+                undefined,
+                $tw.wiki.makeTiddlerIterator([
+                  tiddler.title.replace('$:/plugins/', '').replace('linonetwo/commandpalette/', ''),
+                  renderTextWithCache(tiddler.caption, widget),
+                  renderTextWithCache(tiddler.description, widget),
+                  (tiddler.filter as string).trim().replaceAll('[', '').replaceAll(']', ''),
+                ]),
+              ).length > 0
+            )
+            : validFilterTiddlers;
+
           // allow user input a custom filter to search under it
           const userInputFilter = { filter: query, title: '', type: '', text: '' } satisfies ITiddlerFields;
           if (query.length > 1) {
@@ -100,24 +101,24 @@ export const plugin = {
           const system = checkIsSearchSystem(parameters);
           const realQuery = system ? query.substring(1) : query;
           const context = state.context as IContext;
-          
+
           // 构建基本过滤器字符串
           const baseFilter = `[all[tiddlers+shadows]]+${context.filter} ${context.applyExclusion ? titleTextExclusionFilter() : ''}`;
-          
-          return realQuery ? 
-            await filterTiddlersAsync(
+
+          return realQuery
+            ? await filterTiddlersAsync(
               `${baseFilter} +[search[${realQuery}]]`,
               {
                 system,
                 toTiddler: (context.filterGetTiddler ?? true),
-              }
-            ) : 
-            await filterTiddlersAsync(
+              },
+            )
+            : await filterTiddlersAsync(
               baseFilter,
               {
                 system,
                 toTiddler: (context.filterGetTiddler ?? true),
-              }
+              },
             );
         },
         getItemUrl({ item }) {
