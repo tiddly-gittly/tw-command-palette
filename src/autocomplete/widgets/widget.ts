@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-/* eslint-disable @typescript-eslint/strict-boolean-expressions */
+
 import { widget as Widget } from '$:/core/modules/widgets/widget.js';
 import { autocomplete, OnStateChangeProps } from '@algolia/autocomplete-js';
 import type { AutocompleteNavigator } from '@algolia/autocomplete-shared/dist/esm/core/AutocompleteNavigator';
@@ -26,7 +26,7 @@ class AutoCompleteSearchWidget extends Widget {
   }
 
   /** We restore focus of element when we are close */
-  // eslint-disable-next-line unicorn/no-null
+
   previouslyFocusedElement: HTMLElement | null = null;
   autoCompleteInstance: ReturnType<typeof autocomplete<ITiddlerFields>> | undefined;
   /** Can't get state from its instance, so use this as a way to get state */
@@ -128,10 +128,10 @@ class AutoCompleteSearchWidget extends Widget {
       (state.context as IContext).addHistoryItem?.(state.query);
     }
     if (state.context.newQuery !== undefined) {
-      this.autoCompleteInstance?.setQuery?.((state.context as IContext).newQuery!);
+      this.autoCompleteInstance?.setQuery((state.context as IContext).newQuery!);
       this.autoCompleteInstance?.setContext({ newQuery: undefined } satisfies IContext);
       // use query to re-search, and will set activeItemId to defaultActiveItemId
-      void this.autoCompleteInstance?.refresh?.();
+      void this.autoCompleteInstance?.refresh();
     }
     if (!state.context.noNavigate) {
       // let layout handle the layout change before navigation https://github.com/Jermolene/TiddlyWiki5/discussions/8123
@@ -172,7 +172,7 @@ class AutoCompleteSearchWidget extends Widget {
     // Now it create a temporary tiddler with search results.
     const template = this.wiki.getTiddler('$:/plugins/linonetwo/autocomplete/widget/templates/FilterResultTemplate');
     const context = state.context as IContext;
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+
     const filter = context.filter || context.filterToOpen;
     if (template && filter) {
       const title = `$:/temp/volatile/${Date.now()}`;
@@ -263,8 +263,8 @@ class AutoCompleteSearchWidget extends Widget {
       if (this.autoCompleteInstance === undefined) return;
       // when use ctrl+tab to switch between history, when release tab (while still holding ctrl), do nothing after palette open.
       if (event.key === 'Tab' && event.ctrlKey) {
-        this.historySwitchActiveItemId = (this.historySwitchActiveItemId ?? this.autoCompleteState?.state?.activeItemId ?? 0) + (event.shiftKey ? -1 : 1);
-        const collectionLength = this.autoCompleteState?.state?.collections?.[0]?.items?.length ?? 0;
+        this.historySwitchActiveItemId = (this.historySwitchActiveItemId ?? this.autoCompleteState?.state.activeItemId ?? 0) + (event.shiftKey ? -1 : 1);
+        const collectionLength = this.autoCompleteState?.state.collections[0]?.items?.length ?? 0;
         if (this.historySwitchActiveItemId === -1) {
           this.historySwitchActiveItemId = Math.max(collectionLength - 1, 0);
         } else if (this.historySwitchActiveItemId >= collectionLength) {
@@ -284,12 +284,12 @@ class AutoCompleteSearchWidget extends Widget {
         return;
       }
       // when release ctrl, and we are in history mode (no query), open the tiddler.
-      if (event.key === 'Control' && this.autoCompleteState?.state?.query === '') {
+      if (event.key === 'Control' && this.autoCompleteState?.state.query === '') {
         event.stopPropagation();
         event.preventDefault();
-        const item = this.autoCompleteState?.state?.collections.find(({ source }) => source.sourceId === 'story-history')?.items[this.autoCompleteState?.state?.activeItemId ?? 0];
+        const item = this.autoCompleteState.state.collections.find(({ source }) => source.sourceId === 'story-history')?.items[this.autoCompleteState.state.activeItemId ?? 0];
         if (!item) return;
-        this.autoCompleteInstance.navigator.navigate({ item, itemUrl: item.title, state: this.autoCompleteState?.state });
+        this.autoCompleteInstance.navigator.navigate({ item, itemUrl: item.title, state: this.autoCompleteState.state });
       }
     });
   }
@@ -297,21 +297,21 @@ class AutoCompleteSearchWidget extends Widget {
   setCloseState() {
     $tw.wiki.deleteTiddler(`$:/temp/auto-complete-search/${this.id}/opened`);
     this.autoCompleteInstance?.setIsOpen(false);
-    const panelElement = (this.document as unknown as Document)?.querySelector?.(`.tw-commandpalette-panel-${this.id}`);
-    panelElement?.remove?.();
+    const panelElement = (this.document as unknown as Document).querySelector(`.tw-commandpalette-panel-${this.id}`);
+    panelElement?.remove();
   }
 
   destroy() {
     this.setCloseState();
     const containerElement = this.parentDomNode?.querySelector('.tw-auto-complete-container');
     this.autoCompleteInstance?.destroy();
-    containerElement?.remove?.();
+    containerElement?.remove();
     this.parentDomNode = undefined;
     this.autoCompleteInstance = undefined;
     /* eslint-disable @typescript-eslint/unbound-method */
     window.removeEventListener('resize', this.fixPanelPosition);
     /* eslint-enable @typescript-eslint/unbound-method */
-    this.previouslyFocusedElement?.focus?.();
+    this.previouslyFocusedElement?.focus();
   }
 }
 

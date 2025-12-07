@@ -35,11 +35,11 @@
   },
   "devDependencies": {
     "@modern-js/eslint-config": "^2.59.0",
-    "@modern-js/tsconfig": "^2.69.0",
+    "@modern-js/tsconfig": "^2.69.2",
     "@types/lodash": "^4.17.21",
     "@types/node": "^24.10.1",
     "@types/pinyin": "^2.10.2",
-    "@types/react": "^19.2.6",
+    "@types/react": "^19.2.7",
     "dprint": "^0.50.2",
     "eslint-config-tidgi": "^2.2.0",
     "husky": "^9.1.7",
@@ -50,7 +50,7 @@
     "tiddlywiki": "^5.3.8",
     "tiddlywiki-plugin-dev": "^0.3.2",
     "ts-node": "^10.9.2",
-    "tw5-typed": "^1.0.5",
+    "tw5-typed": "^1.1.4",
     "typescript": "^5.9.3"
   },
   "dependencies": {
@@ -67,7 +67,10 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "core-js",
       "dprint",
+      "esbuild",
       "svelte-preprocess"
     ]
   }

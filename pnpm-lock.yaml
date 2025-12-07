@@ -43,8 +43,8 @@ importers:
         specifier: ^2.59.0
         version: 2.59.0(typescript@5.9.3)
       '@modern-js/tsconfig':
-        specifier: ^2.69.0
-        version: 2.69.0
+        specifier: ^2.69.2
+        version: 2.69.2
       '@types/lodash':
         specifier: ^4.17.21
         version: 4.17.21
@@ -55,8 +55,8 @@ importers:
         specifier: ^2.10.2
         version: 2.10.2
       '@types/react':
-        specifier: ^19.2.6
-        version: 19.2.6
+        specifier: ^19.2.7
+        version: 19.2.7
       dprint:
         specifier: ^0.50.2
         version: 0.50.2
@@ -88,8 +88,8 @@ importers:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@24.10.1)(typescript@5.9.3)
       tw5-typed:
-        specifier: ^1.0.5
-        version: 1.0.5
+        specifier: ^1.1.4
+        version: 1.1.4
       typescript:
         specifier: ^5.9.3
         version: 5.9.3
@@ -1316,8 +1316,8 @@ packages:
   '@modern-js/eslint-config@2.59.0':
     resolution: {integrity: sha512-11a3XS0BYBYwQ7ejszQC78MgoitsqraRdFytYpFDe0HlYewoQQyjA6ZoPWjsW8SpKyhoOTQKZYJbyTsQA4sYDg==}
 
-  '@modern-js/tsconfig@2.69.0':
-    resolution: {integrity: sha512-L2heR+raNWi+e/0lmfA9tTRJtlqgsV5MaBDrn9PWoR5Tj4P38Ek3aLhQ71rWaw8AA+z6E5zDWKzD/aApLSx+sQ==}
+  '@modern-js/tsconfig@2.69.2':
+    resolution: {integrity: sha512-pvWZvHfPzTqsjWtQ9WvoPX6TTzeKJJMqLuTLb0zCpU8U2hdYCrm+yhIb30QDVoiLbVHYQaF7fcTPVfIdVwhGCw==}
 
   '@module-federation/runtime-tools@0.5.1':
     resolution: {integrity: sha512-nfBedkoZ3/SWyO0hnmaxuz0R0iGPSikHZOAZ0N/dVSQaIzlffUo35B5nlC2wgWIc0JdMZfkwkjZRrnuuDIJbzg==}
@@ -1583,8 +1583,8 @@ packages:
   '@types/pinyin@2.10.2':
     resolution: {integrity: sha512-jLzlRkaLRLg+lgYPjOuP3HX2cozUkhXls5GTXopsKuKJ9lDGlIAb88OoIztH6TbNUsoJnl/7e/kjaumA5IKKJg==}
 
-  '@types/react@19.2.6':
-    resolution: {integrity: sha512-p/jUvulfgU7oKtj6Xpk8cA2Y1xKTtICGpJYeJXz2YVO2UcvjQgeRMLDGfDeqeRW2Ta+0QNFwcc8X3GH8SxZz6w==}
+  '@types/react@19.2.7':
+    resolution: {integrity: sha512-MWtvHrGZLFttgeEj28VXHxpmwYbor/ATPYbBfSFZEIRK0ecCFLl2Qo55z52Hss+UV9CRN7trSeq1zbgx7YDWWg==}
 
   '@types/sass@1.45.0':
     resolution: {integrity: sha512-jn7qwGFmJHwUSphV8zZneO3GmtlgLsmhs/LQyVvQbIIa+fzGMUiHI4HXJZL3FT8MJmgXWbLGiVVY7ElvHq6vDA==}
@@ -4402,6 +4402,7 @@ packages:
     resolution: {integrity: sha512-T25acZfdhAX/lUVPY/9SXo7bMJKgSaMs5PDOb83S2WKbTCD7DnOUQ4aC3qDy0j5XqlCn4ih3mzMWct3xnQx+Mw==}
     engines: {node: '>=0.8.2'}
     hasBin: true
+    bundledDependencies: []
 
   tinyglobby@0.2.12:
     resolution: {integrity: sha512-qkf4trmKSIiMTs/E63cxH+ojC2unam7rJ0WrauAzpT3ECNTxGRMlaXxVbfxMUC/w0LaYk6jQ4y/nGR9uBO3tww==}
@@ -4466,8 +4467,8 @@ packages:
     peerDependencies:
       typescript: '>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta'
 
-  tw5-typed@1.0.5:
-    resolution: {integrity: sha512-LUNQnzkqt7QhIb10VDLtyWBqmGAxQpU9Xh6sPam9I7Ras388X7WToyiAhgQuC6jNO238GeanPLx8CF+nhTZ2PQ==}
+  tw5-typed@1.1.4:
+    resolution: {integrity: sha512-auGX+9AdjxpLgIvi5teuO+F84lEyNIr/XLhiZGfUIQEvCbwotP+O4YMHK9R+F2/zCeWvrxD2FJEETkX5fFmTag==}
 
   type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
@@ -6116,7 +6117,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@modern-js/tsconfig@2.69.0': {}
+  '@modern-js/tsconfig@2.69.2': {}
 
   '@module-federation/runtime-tools@0.5.1':
     dependencies:
@@ -6374,7 +6375,7 @@ snapshots:
 
   '@types/pinyin@2.10.2': {}
 
-  '@types/react@19.2.6':
+  '@types/react@19.2.7':
     dependencies:
       csstype: 3.2.3
 
@@ -9867,7 +9868,7 @@ snapshots:
       tslib: 1.14.1
       typescript: 5.9.3
 
-  tw5-typed@1.0.5:
+  tw5-typed@1.1.4:
     dependencies:
       '@types/codemirror': 5.60.17
       '@types/echarts': 5.0.0
