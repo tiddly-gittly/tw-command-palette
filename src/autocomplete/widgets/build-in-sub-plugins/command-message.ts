@@ -20,7 +20,7 @@ export const plugin = {
     const variables = { currentTiddler: focusedTiddler ?? '' };
     const { widget } = parameters.state.context as IContext;
     const onSelect = (item: ITiddlerFields) => {
-      const newContext = { noNavigate: true } satisfies IContext;
+      const newContext = { noNavigate: true, noClose: false } satisfies IContext;
       parameters.setContext(newContext);
       widget?.dispatchEvent({
         type: item.text.trim(),
@@ -28,7 +28,6 @@ export const plugin = {
         // TODO: if need param, into param input mode like vscode does. Or Listen on right arrow key in onActive, and open a side panel to input params.
         // param
       });
-      parameters.navigator.navigate({ item, itemUrl: item.title, state: { ...parameters.state, context: { ...parameters.state.context, ...newContext } } });
     };
     return await debounced([
       {
@@ -66,7 +65,7 @@ export const plugin = {
           return item.title;
         },
         onSelect({ item }) {
-          onSelect(item);
+          onSelect(item, false);
         },
         templates: {
           header() {
@@ -83,7 +82,7 @@ export const plugin = {
               ? ` (${renderTextWithCache(item.description as string, widget, variables)})`
               : '';
             const onclick = () => {
-              onSelect(item);
+              onSelect(item, true);
             };
             return createElement('div', {
               onclick,

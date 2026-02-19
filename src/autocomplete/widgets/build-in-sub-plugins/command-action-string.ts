@@ -24,11 +24,9 @@ export const plugin = {
     };
     const { widget } = parameters.state.context as IContext;
     const onSelect = (item: ITiddlerFields) => {
-      const newContext = { noNavigate: true } satisfies IContext;
+      const newContext = { noNavigate: true, noClose: false } satisfies IContext;
       parameters.setContext(newContext);
-      // this calls `invokeActions` under the hood
       widget?.invokeActionString(item.text, widget, null, variables);
-      parameters.navigator.navigate({ item, itemUrl: item.title, state: { ...parameters.state, context: { ...parameters.state.context, ...newContext } } });
     };
     return await debounced([
       {
@@ -74,7 +72,7 @@ export const plugin = {
           return item.title;
         },
         onSelect({ item }) {
-          onSelect(item);
+          onSelect(item, false);
         },
         templates: {
           header() {
@@ -91,7 +89,7 @@ export const plugin = {
               ? ` (${renderTextWithCache(item.description as string, widget, variables)})`
               : '';
             const onclick = () => {
-              onSelect(item);
+              onSelect(item, true);
             };
             return createElement('div', {
               onclick,
