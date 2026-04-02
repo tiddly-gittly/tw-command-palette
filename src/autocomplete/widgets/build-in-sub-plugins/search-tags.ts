@@ -2,7 +2,7 @@ import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsSearchTags } from '../utils/checkPrefix';
 import { applyIgnoreFilterToTag } from '../utils/configs';
-import { IContext } from '../utils/context';
+import { contextActions, contextReducer, IContext } from '../utils/context';
 import { debounced } from '../utils/debounce';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
@@ -16,7 +16,7 @@ export const plugin = {
     const onSelect = (item: ITiddlerFields) => {
       (parameters.state.context as IContext).addHistoryItem?.(parameters.query);
       const filter = `[[${item.title}]] [tag[${item.title}]]`;
-      parameters.setContext({ newQuery: '', noClose: true, noNavigate: true, filter, applyExclusion: applyIgnoreFilterToTag() } satisfies IContext);
+      parameters.setContext(contextReducer(contextActions.selectTag(filter, applyIgnoreFilterToTag())));
     };
     return await debounced([{
       // suggest tags for user to search

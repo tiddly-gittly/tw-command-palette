@@ -2,7 +2,7 @@ import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
 import { cacheSystemTiddlers } from '../utils/configs';
-import { IContext } from '../utils/context';
+import { contextReducer, IContext } from '../utils/context';
 import { debounced } from '../utils/debounce';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
@@ -24,8 +24,13 @@ export const plugin = {
     };
     const { widget } = parameters.state.context as IContext;
     const onSelect = (item: ITiddlerFields) => {
-      const newContext = { noNavigate: true, noClose: false } satisfies IContext;
-      parameters.setContext(newContext);
+      parameters.setContext(contextReducer({ type: 'EXECUTE_COMMAND' }));
+      // Set flag before invokeActionString so onEnter knows the command was
+      // handled here and must not dispatch tm-navigate a second time.
+      if (widget) {
+        widget.commandHandled = true;
+        widget.commandKeepOpen = false;
+      }
       widget?.invokeActionString(item.text, widget, null, variables);
     };
     return await debounced([
@@ -72,7 +77,7 @@ export const plugin = {
           return item.title;
         },
         onSelect({ item }) {
-          onSelect(item, false);
+          onSelect(item);
         },
         templates: {
           header() {
@@ -89,7 +94,7 @@ export const plugin = {
               ? ` (${renderTextWithCache(item.description as string, widget, variables)})`
               : '';
             const onclick = () => {
-              onSelect(item, true);
+              onSelect(item);
             };
             return createElement('div', {
               onclick,

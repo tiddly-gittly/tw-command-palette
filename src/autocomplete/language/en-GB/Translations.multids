@@ -63,3 +63,7 @@ Help/CtrlEnter/Description: Copies the currently selected text or content to the
 
 Help/ShiftEnter/Caption: ⇧ Shift + Enter
 Help/ShiftEnter/Description: Opens a temporary tiddler in the story river, containing the results of the current search.
+CreateTiddler/Header: Create new tiddler
+CreateTiddler/CreateLabel: Create
+CreateTiddler/Prompt: Please enter a title for the new tiddler
+CreateTiddler/TypeToCreate: Type a title to create a new tiddler

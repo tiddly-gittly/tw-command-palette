@@ -5,7 +5,7 @@ import { RecentSearchesItem } from '@algolia/autocomplete-plugin-recent-searches
 import { AutocompleteNavigator } from '@algolia/autocomplete-shared/dist/esm/core/AutocompleteNavigator';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsUnderFilter } from '../utils/checkPrefix';
-import { IContext } from '../utils/context';
+import { contextActions, contextReducer, IContext } from '../utils/context';
 import { getIconSvg } from '../utils/getIconSvg';
 import { lingo } from '../utils/lingo';
 
@@ -24,8 +24,8 @@ export const plugin = (id: string): AutocompletePlugin<RecentSearchesItem, Recen
     },
     transformSource({ source, state }) {
       const onSelect = (item: RecentSearchesItem, isClick: boolean) => {
-        const newContext = { newQuery: item.id, noClose: true, noNavigate: true } satisfies IContext;
-        setContext?.(newContext);
+        const newContext = contextReducer(contextActions.selectRecent(item.id));
+        setContext?.(newContext as IContext);
         if (isClick) {
           navigator?.navigate({ item, itemUrl: item.id, state: { ...state, context: { ...state.context, ...newContext } } });
         }

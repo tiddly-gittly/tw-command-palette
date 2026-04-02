@@ -2,7 +2,7 @@ import { ITiddlerFields } from 'tiddlywiki';
 import type { IWorkspace } from '../../../tidgi-types';
 
 const isInTidGiDesktop = typeof document !== 'undefined' && document.location.protocol.startsWith('tidgi');
-const tidGiWorkspace: IWorkspace | undefined = window.meta?.().workspace;
+const tidGiWorkspace: IWorkspace | undefined = typeof window !== 'undefined' ? window.meta?.().workspace : undefined;
 
 /**
  * @param filter need to add `all[tiddlers+shadows]` by your self.

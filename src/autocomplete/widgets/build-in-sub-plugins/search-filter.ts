@@ -2,7 +2,7 @@ import type { AutocompletePlugin, AutocompleteSource } from '@algolia/autocomple
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsFilter, checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
 import { cacheSystemTiddlers, missingFilterOnTop, titleTextExclusionFilter } from '../utils/configs';
-import { emptyContext, IContext } from '../utils/context';
+import { contextActions, contextReducer, emptyContext, IContext } from '../utils/context';
 import { debounced } from '../utils/debounce';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
@@ -19,7 +19,7 @@ export const plugin = {
       const { widget } = parameters.state.context as IContext;
       const onSelect = (item: ITiddlerFields) => {
         const filterGetTiddler = item['command-palette-get-tiddler'] !== 'no';
-        parameters.setContext({ noNavigate: true, noClose: true, filter: (item.filter as string).trim(), newQuery: '', filterGetTiddler } satisfies IContext);
+        parameters.setContext(contextReducer(contextActions.selectFilter((item.filter as string).trim(), filterGetTiddler)));
       };
       sources.push({
         sourceId: 'build-in-filter',

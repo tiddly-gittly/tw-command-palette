@@ -7,7 +7,7 @@ import { IChangedTiddlers, IParseTreeNode, ITiddlerFields, IWidgetInitialiseOpti
 import '@algolia/autocomplete-theme-classic';
 import { AutocompleteState } from '@algolia/autocomplete-core';
 import { observe, unobserve } from '@seznam/visibility-observer';
-import { emptyContext, IContext } from './utils/context';
+import { contextActions, ContextAction, contextReducer, emptyContext, IContext } from './utils/context';
 import { fixPanelPosition } from './utils/fixPanelPosition';
 import { getActiveElement } from './utils/getFocused';
 import { getSubPlugins } from './utils/getSubPlugins';
@@ -31,6 +31,17 @@ class AutoCompleteSearchWidget extends Widget {
   autoCompleteInstance: ReturnType<typeof autocomplete<ITiddlerFields>> | undefined;
   /** Can't get state from its instance, so use this as a way to get state */
   autoCompleteState?: OnStateChangeProps<ITiddlerFields>;
+  /**
+   * Flag set by command-message/command-action-string onSelect to tell onEnter that the
+   * command has already been executed and navigation should be suppressed.
+   *
+   * WHY: Algolia passes a state *snapshot* to navigator.navigate(onEnter) — changes made
+   * via setContext inside onSelect do NOT reflect in that snapshot. So we cannot rely on
+   * context.noNavigate being visible inside onEnter when the source's onSelect set it.
+   * Using an instance variable bypasses the snapshot problem entirely.
+   */
+  commandHandled = false;
+  commandKeepOpen = false;
   /** Is it in ctrl+tab mode that is used to cycle through opened story tiddlers. In this mode only history is shown, no other features. */
   cycleHistoryMode = false;
   /** Auto set focus to input and open the panel on widget render. */
@@ -127,13 +138,31 @@ class AutoCompleteSearchWidget extends Widget {
     if (state.query.trim() !== '') {
       (state.context as IContext).addHistoryItem?.(state.query);
     }
-    if (state.context.newQuery !== undefined) {
-      this.autoCompleteInstance?.setQuery((state.context as IContext).newQuery!);
+    const context = state.context as IContext;
+    // Check instance flag first: if a command plugin already handled the action
+    // in onSelect (e.g. tm-new-tiddler), do not navigate to the tiddler URL.
+    if (this.commandHandled) {
+      const keepOpen = this.commandKeepOpen;
+      this.commandHandled = false;
+      this.commandKeepOpen = false;
+      if (!keepOpen) { this.setCloseState(); }
+      this.clearContext();
+      return;
+    }
+    if (context.newQuery !== undefined) {
+      this.autoCompleteInstance?.setQuery(context.newQuery);
       this.autoCompleteInstance?.setContext({ newQuery: undefined } satisfies IContext);
       // use query to re-search, and will set activeItemId to defaultActiveItemId
       void this.autoCompleteInstance?.refresh();
+      // When newQuery is set we are in "continue-query" mode:
+      // the panel must stay open for the next step.
+      // Do NOT navigate or close regardless of noNavigate/noClose flags —
+      // callers in continue-query mode always pair newQuery with noNavigate+noClose,
+      // but guard here to prevent accidental close if they forget.
+      this.clearContext();
+      return;
     }
-    if (!state.context.noNavigate) {
+    if (!context.noNavigate) {
       // let layout handle the layout change before navigation https://github.com/Jermolene/TiddlyWiki5/discussions/8123
       // $tw.wiki.setText('$:/layout', 'text', undefined, '', { suppressTimestamp: true });
       this.dispatchEvent({
@@ -142,7 +171,7 @@ class AutoCompleteSearchWidget extends Widget {
         navigateFromNode: this,
       });
     }
-    if (!state.context.noClose) {
+    if (!context.noClose) {
       this.setCloseState();
     }
     this.clearContext();
@@ -188,6 +217,19 @@ class AutoCompleteSearchWidget extends Widget {
 
   clearContext() {
     this.autoCompleteInstance?.setContext(emptyContext);
+  }
+
+  /**
+   * Dispatch a typed action to update the autocomplete context via the reducer.
+   * Use this instead of calling setContext() directly — it documents intent
+   * and ensures consistent state transitions.
+   *
+   * Source plugins that have access to `parameters.setContext` can also call
+   * `parameters.setContext(contextReducer(action))` directly without going
+   * through the widget.
+   */
+  dispatch(action: ContextAction): void {
+    this.autoCompleteInstance?.setContext(contextReducer(action));
   }
 
   /**

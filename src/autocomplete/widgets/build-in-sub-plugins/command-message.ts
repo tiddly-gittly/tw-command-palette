@@ -2,7 +2,7 @@ import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
 import { cacheSystemTiddlers } from '../utils/configs';
-import { IContext } from '../utils/context';
+import { contextActions, contextReducer, IContext } from '../utils/context';
 import { debounced } from '../utils/debounce';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
@@ -20,10 +20,32 @@ export const plugin = {
     const variables = { currentTiddler: focusedTiddler ?? '' };
     const { widget } = parameters.state.context as IContext;
     const onSelect = (item: ITiddlerFields) => {
-      const newContext = { noNavigate: true, noClose: false } satisfies IContext;
-      parameters.setContext(newContext);
+      const messageType = (item.text as string | undefined)?.trim() ?? '';
+      if (!messageType) return;
+      const isNewTiddlerCommand = item.title === '$:/plugins/linonetwo/commandpalette/New Tiddler';
+      if (isNewTiddlerCommand && messageType === 'tm-new-tiddler') {
+        // Enter round-2 title input mode instead of creating immediately.
+        parameters.setContext(contextReducer(contextActions.openCreateTiddlerWizard()));
+        parameters.setQuery('');
+        void parameters.refresh().catch((error: unknown) => {
+          console.error('Error entering create-tiddler wizard', error);
+        });
+        if (widget) {
+          widget.commandHandled = true;
+          widget.commandKeepOpen = true;
+        }
+        return;
+      }
+      parameters.setContext(contextReducer({ type: 'EXECUTE_COMMAND' }));
+      // Set flag before dispatchEvent so onEnter (which fires right after via
+      // Algolia's navigate callback) knows the command was handled here and
+      // must not dispatch tm-navigate to the tiddler URL a second time.
+      if (widget) {
+        widget.commandHandled = true;
+        widget.commandKeepOpen = false;
+      }
       widget?.dispatchEvent({
-        type: item.text.trim(),
+        type: messageType,
         tiddlerTitle: focusedTiddler,
         // TODO: if need param, into param input mode like vscode does. Or Listen on right arrow key in onActive, and open a side panel to input params.
         // param
@@ -65,7 +87,7 @@ export const plugin = {
           return item.title;
         },
         onSelect({ item }) {
-          onSelect(item, false);
+          onSelect(item);
         },
         templates: {
           header() {
@@ -82,7 +104,7 @@ export const plugin = {
               ? ` (${renderTextWithCache(item.description as string, widget, variables)})`
               : '';
             const onclick = () => {
-              onSelect(item, true);
+              onSelect(item);
             };
             return createElement('div', {
               onclick,

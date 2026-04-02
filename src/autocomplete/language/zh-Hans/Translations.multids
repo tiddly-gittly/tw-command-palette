@@ -60,3 +60,7 @@ Help/CtrlEnter/Caption: ⌃ ⏎ 控制键加回车
 Help/CtrlEnter/Description: 将当前选中的文本或内容复制到剪贴板中。
 Help/ShiftEnter/Caption: ⇧ 换档键加回车
 Help/ShiftEnter/Description: 在故事河里打开一个临时条目，包含当前搜索的结果。
+CreateTiddler/Header: 创建新条目
+CreateTiddler/CreateLabel: 创建
+CreateTiddler/Prompt: 请输入新条目的标题
+CreateTiddler/TypeToCreate: 输入条目标题以创建
