@@ -70,3 +70,4 @@ ActionVariablePrompt/ConfirmText: 确认输入
 ActionVariablePrompt/UseDefault: 使用默认值
 ActionVariablePrompt/CheckboxYes: 是
 ActionVariablePrompt/CheckboxNo: 否
+ActionVariablePrompt/ConfirmSelection: 完成选择

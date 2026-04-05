@@ -292,3 +292,24 @@ test('searches within a built-in filter result set', async ({ page }) => {
 
   await expect(page.locator(palettePanelSelector)).toContainText(title);
 });
+
+test('adds a tag through action-string autocomplete variable prompt', async ({ page }) => {
+  const newTag = `PlaywrightTag${Date.now()}`;
+
+  const input = await openCommandPalette(page, '$');
+  await typeIntoPalette(input, '$添加标签到当前条目');
+  await clickPaletteItem(page, '添加标签到当前条目');
+
+  await expect(page.locator(palettePanelSelector)).toContainText('新标签');
+
+  const wizardInput = page.locator(paletteInputSelector);
+  await typeIntoPalette(wizardInput, newTag);
+  await clickPaletteItem(page, newTag);
+
+  await expect.poll(() => page.evaluate(() => {
+    const wikiWindow = window as Window & { $tw: any };
+    const focused = wikiWindow.$tw.wiki.getTiddlerText('$:/temp/focussedTiddler', '');
+    const tags = wikiWindow.$tw.wiki.getTiddler(focused)?.fields.tags || [];
+    return tags;
+  })).toContain(newTag);
+});

@@ -188,6 +188,123 @@ describe('command-action-string source plugin', function () {
       expect(params._spies.latestContext.actionVariablePrompt.definitions[0].name).toBe('is hidden');
     }).then(done).catch(done.fail);
   });
+
+  it('variable wizard (text) supports autocomplete-filter suggestion source', function (done) {
+    var invokeCalls = [];
+    var fakeWidget = {
+      commandHandled: false,
+      commandKeepOpen: false,
+      invokeActionString: function () { invokeCalls.push(Array.prototype.slice.call(arguments)); },
+      makeFakeWidgetWithVariables: function () { return null; },
+    };
+    var prompt = {
+      commandTitle: '$:/plugins/test/action-with-autocomplete',
+      actionText: '<$action-setfield field="tags" value=<<newTag>>/>',
+      definitions: [{
+        name: 'newTag',
+        type: 'text',
+        caption: 'Tag',
+        options: ['beta'],
+        autocompleteFilter: '[list[alpha beta gamma]]',
+      }],
+      currentIndex: 0,
+      values: {},
+      baseVariables: {},
+    };
+    var params = helpers.createMockParameters('be', { widget: fakeWidget, actionVariablePrompt: prompt });
+    Promise.resolve(actionVariablePromptPlugin.plugin.getSources(params)).then(function (sources) {
+      return helpers.findSource(sources, 'action-variable-prompt');
+    }).then(function (source) {
+      if (!source) {
+        pending('action-variable-prompt source not returned; skipping');
+        return;
+      }
+      var items = source.getItems({ query: 'be', state: params.state });
+      expect(items.length).toBe(1);
+      expect(items[0]['command-palette-value']).toBe('beta');
+      source.onSelect({ item: items[0], state: params.state });
+      expect(invokeCalls.length).toBe(1);
+      expect(invokeCalls[0][3].newTag).toBe('beta');
+    }).then(done).catch(done.fail);
+  });
+
+  it('variable wizard (select) uses autocomplete-filter options and saves selected option', function (done) {
+    var invokeCalls = [];
+    var fakeWidget = {
+      commandHandled: false,
+      commandKeepOpen: false,
+      invokeActionString: function () { invokeCalls.push(Array.prototype.slice.call(arguments)); },
+      makeFakeWidgetWithVariables: function () { return null; },
+    };
+    var prompt = {
+      commandTitle: '$:/plugins/test/action-select',
+      actionText: '<$action-setfield field="priority" value=<<priority>>/>',
+      definitions: [{
+        name: 'priority',
+        type: 'select',
+        caption: 'Priority',
+        options: ['high'],
+        autocompleteFilter: '[list[low medium high]]',
+      }],
+      currentIndex: 0,
+      values: {},
+      baseVariables: {},
+    };
+    var params = helpers.createMockParameters('hi', { widget: fakeWidget, actionVariablePrompt: prompt });
+    Promise.resolve(actionVariablePromptPlugin.plugin.getSources(params)).then(function (sources) {
+      return helpers.findSource(sources, 'action-variable-prompt');
+    }).then(function (source) {
+      if (!source) {
+        pending('action-variable-prompt source not returned; skipping');
+        return;
+      }
+      var items = source.getItems({ query: 'hi', state: params.state });
+      expect(items.length).toBe(1);
+      expect(items[0]['command-palette-value']).toBe('high');
+      source.onSelect({ item: items[0], state: params.state });
+      expect(invokeCalls.length).toBe(1);
+      expect(invokeCalls[0][3].priority).toBe('high');
+    }).then(done).catch(done.fail);
+  });
+
+  it('variable wizard (multi-checkbox) confirms list variable value', function (done) {
+    var invokeCalls = [];
+    var fakeWidget = {
+      commandHandled: false,
+      commandKeepOpen: false,
+      invokeActionString: function () { invokeCalls.push(Array.prototype.slice.call(arguments)); },
+      makeFakeWidgetWithVariables: function () { return null; },
+    };
+    var prompt = {
+      commandTitle: '$:/plugins/test/action-multi',
+      actionText: '<$action-setfield field="tags" value=<<tagsToAdd>>/>',
+      definitions: [{
+        name: 'tagsToAdd',
+        type: 'multi-checkbox',
+        caption: 'Tags',
+        options: ['alpha', 'beta'],
+        autocompleteFilter: '[list[alpha beta gamma]]',
+      }],
+      currentIndex: 0,
+      values: { tagsToAdd: 'alpha' },
+      baseVariables: {},
+    };
+    var params = helpers.createMockParameters('', { widget: fakeWidget, actionVariablePrompt: prompt });
+    Promise.resolve(actionVariablePromptPlugin.plugin.getSources(params)).then(function (sources) {
+      return helpers.findSource(sources, 'action-variable-prompt');
+    }).then(function (source) {
+      if (!source) {
+        pending('action-variable-prompt source not returned; skipping');
+        return;
+      }
+      var items = source.getItems({ query: '', state: params.state });
+      var confirm = items.filter(function (item) { return item['command-palette-action'] === 'confirm-multi'; })[0];
+      source.onSelect({ item: confirm, state: params.state });
+
+      expect(invokeCalls.length).toBe(1);
+      expect(invokeCalls[0][3].tagsToAdd).toBe('alpha');
+    }).then(done).catch(done.fail);
+  });
 });
 
 describe('command-message source plugin', function () {

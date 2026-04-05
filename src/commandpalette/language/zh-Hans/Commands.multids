@@ -21,3 +21,7 @@ ActionString/NewTiddlerAskTitle/Caption: 创建新条目（输入标题）
 ActionString/NewTiddlerAskTitle/Description: 进入新建条目向导，然后输入标题
 ActionString/NewTiddlerAskTitle/VariableCaption: 条目标题
 ActionString/NewTiddlerAskTitle/VariableDescription: 输入你要创建的条目标题
+ActionString/AddTags/Caption: 添加标签到当前条目
+ActionString/AddTags/Description: 为当前条目追加一个或多个标签
+ActionString/AddTags/VariableCaption: 新标签
+ActionString/AddTags/VariableDescription: 输入标签名，支持自动补全（来源于知识库所有标签）

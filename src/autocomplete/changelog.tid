@@ -12,6 +12,13 @@ title: $:/plugins/linonetwo/autocomplete/changelog
 * Fixed: improved translation rendering cache key with language and variable context.
 * Fixed: compatibility with TiddlyWiki 5.4.0-prerelease by using quoted lingo override base argument.
 
+!! Version 0.8.0
+
+* Added: `text` action-variable autocomplete via `<variable>/autocomplete-filter`.
+* Added: `select` action-variable type with dynamic options from `<variable>/autocomplete-filter`.
+* Added: `multi-checkbox` action-variable type. Selected options are written as list variables.
+* Added: support for `<variable>/options` static option list, merged with dynamic options.
+
 !! Version 0.6.2
 
 * Fixed: action-string and message command items no longer open their tiddlers when activated; Enter and click now only execute the command and behave identically.

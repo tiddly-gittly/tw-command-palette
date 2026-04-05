@@ -5,7 +5,7 @@ import type { Widget } from 'tiddlywiki';
  */
 export type Phase = 'idle' | 'normal' | 'filter-select' | 'under-filter' | 'tag-search' | 'command';
 
-export type ActionVariableInputType = 'text' | 'checkbox';
+export type ActionVariableInputType = 'text' | 'checkbox' | 'select' | 'multi-checkbox';
 
 export interface IActionVariableDefinition {
   name: string;
@@ -13,6 +13,8 @@ export interface IActionVariableDefinition {
   caption?: string;
   description?: string;
   defaultValue?: string;
+  options?: string[];
+  autocompleteFilter?: string;
 }
 
 export interface IActionVariablePromptState {

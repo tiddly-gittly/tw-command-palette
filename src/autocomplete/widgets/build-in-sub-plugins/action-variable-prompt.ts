@@ -9,11 +9,48 @@ import { renderTextWithCache } from '../utils/renderTextWithCache';
 interface IActionVariablePromptItem extends ITiddlerFields {
   'command-palette-value'?: string;
   'command-palette-hint'?: 'yes';
+  'command-palette-action'?: 'toggle-option' | 'confirm-multi';
 }
 
 function getCheckboxDefault(definition: IActionVariableDefinition) {
   const rawDefault = (definition.defaultValue ?? '').trim().toLowerCase();
   return rawDefault === 'yes' || rawDefault === 'true' || rawDefault === '1';
+}
+
+function stringifyList(values: string[]) {
+  return $tw.utils.stringifyList(values);
+}
+
+function uniqueSorted(values: string[]) {
+  return Array.from(new Set(values.filter(Boolean)));
+}
+
+function getDefinitionOptions(
+  definition: IActionVariableDefinition,
+  prompt: IContext['actionVariablePrompt'],
+  widget: IContext['widget'],
+): string[] {
+  const staticOptions = definition.options ?? [];
+  if (!definition.autocompleteFilter || !prompt || !widget) {
+    return uniqueSorted(staticOptions);
+  }
+  const filterVariables = { ...prompt.baseVariables, ...prompt.values };
+  const temporaryWidget = typeof widget.makeFakeWidgetWithVariables === 'function'
+    ? widget.makeFakeWidgetWithVariables(filterVariables) ?? undefined
+    : undefined;
+  let dynamicOptions: string[] = [];
+  try {
+    dynamicOptions = $tw.wiki.filterTiddlers(definition.autocompleteFilter, temporaryWidget);
+  } catch {
+    dynamicOptions = [];
+  }
+  return uniqueSorted([...staticOptions, ...dynamicOptions]);
+}
+
+function filterByQuery(options: string[], query: string) {
+  if (query === '') return options;
+  const lower = query.toLowerCase();
+  return options.filter(option => option.toLowerCase().includes(lower));
 }
 
 export const plugin = {
@@ -23,13 +60,20 @@ export const plugin = {
     const prompt = context.actionVariablePrompt;
     const { widget } = context;
     if (!prompt || !widget) return [];
-    const renderWidget = typeof widget.makeFakeWidgetWithVariables === 'function' ? widget : undefined;
+    const renderWithFallback = (text: string) => {
+      try {
+        return renderTextWithCache(text, widget);
+      } catch {
+        return text;
+      }
+    };
 
     const definition = prompt.definitions[prompt.currentIndex];
     if (!definition) return [];
     const query = parameters.query.trim();
-    const inputCaption = renderTextWithCache(definition.caption ?? definition.name, renderWidget);
-    const inputDescription = renderTextWithCache(definition.description ?? '', renderWidget);
+    const inputCaption = renderWithFallback(definition.caption ?? definition.name);
+    const inputDescription = renderWithFallback(definition.description ?? '');
+    const definitionOptions = getDefinitionOptions(definition, prompt, widget);
 
     const completeCurrentAndContinue = (value: string) => {
       const nextValues = { ...prompt.values, [definition.name]: value };
@@ -79,6 +123,52 @@ export const plugin = {
           ];
         }
 
+        if (definition.type === 'select') {
+          return filterByQuery(definitionOptions, query).map(option => ({
+            title: option,
+            text: option,
+            type: 'text/vnd.tiddlywiki',
+            tags: [],
+            'command-palette-value': option,
+          } satisfies IActionVariablePromptItem));
+        }
+
+        if (definition.type === 'multi-checkbox') {
+          const selected = $tw.utils.parseStringArray(prompt.values[definition.name] ?? '');
+          const filteredOptions = filterByQuery(definitionOptions, query);
+          const optionItems = filteredOptions.map(option => {
+            const checked = selected.includes(option);
+            return {
+              title: `${checked ? '[x]' : '[ ]'} ${option}`,
+              text: option,
+              type: 'text/vnd.tiddlywiki',
+              tags: [],
+              'command-palette-value': option,
+              'command-palette-action': 'toggle-option',
+            } satisfies IActionVariablePromptItem;
+          });
+          const confirmItem = {
+            title: `${lingo('ActionVariablePrompt/ConfirmSelection')} (${selected.length})`,
+            text: '',
+            type: 'text/vnd.tiddlywiki',
+            tags: [],
+            'command-palette-action': 'confirm-multi',
+          } satisfies IActionVariablePromptItem;
+          return [...optionItems, confirmItem];
+        }
+
+        const autocompleteItems = filterByQuery(definitionOptions, query).map(option => ({
+          title: option,
+          text: option,
+          type: 'text/vnd.tiddlywiki',
+          tags: [],
+          'command-palette-value': option,
+        } satisfies IActionVariablePromptItem));
+
+        if (autocompleteItems.length > 0) {
+          return autocompleteItems;
+        }
+
         if (query !== '') {
           return [{
             title: `${lingo('ActionVariablePrompt/ConfirmText')}: ${query}`,
@@ -115,6 +205,40 @@ export const plugin = {
         if (definition.type === 'checkbox') {
           const selectedValue = (item['command-palette-value'] === 'yes') ? 'yes' : 'no';
           completeCurrentAndContinue(selectedValue);
+          return;
+        }
+        if (definition.type === 'select') {
+          const selectedValue = item['command-palette-value'] ?? '';
+          if (selectedValue === '') return;
+          completeCurrentAndContinue(selectedValue);
+          return;
+        }
+        if (definition.type === 'multi-checkbox') {
+          const selected = $tw.utils.parseStringArray(prompt.values[definition.name] ?? '');
+          const action = item['command-palette-action'];
+          if (action === 'toggle-option') {
+            const option = item['command-palette-value'] ?? '';
+            if (option === '') return;
+            const next = selected.includes(option) ? selected.filter(value => value !== option) : [...selected, option];
+            parameters.setContext(contextReducer(contextActions.updateActionVariablePrompt({
+              ...prompt,
+              values: {
+                ...prompt.values,
+                [definition.name]: stringifyList(next),
+              },
+            })));
+            parameters.setQuery(query);
+            void parameters.refresh().catch((error: unknown) => {
+              console.error('Error refreshing action-variable multi-checkbox prompt', error);
+            });
+            widget.commandHandled = true;
+            widget.commandKeepOpen = true;
+            return;
+          }
+          if (action === 'confirm-multi') {
+            completeCurrentAndContinue(stringifyList(selected));
+            return;
+          }
           return;
         }
         const selectedValue = item['command-palette-value'] ?? query ?? definition.defaultValue ?? '';

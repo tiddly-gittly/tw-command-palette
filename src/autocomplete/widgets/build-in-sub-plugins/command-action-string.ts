@@ -21,13 +21,23 @@ function parseActionVariableDefinitions(item: ITiddlerFields): IActionVariableDe
   const variableNames = $tw.utils.parseStringArray(rawList);
   return variableNames.map((name) => {
     const rawType = (getDynamicField(item, name, 'type') ?? 'text').toLowerCase();
-    const type = rawType === 'checkbox' ? 'checkbox' : 'text';
+    const type = rawType === 'checkbox'
+      ? 'checkbox'
+      : rawType === 'select'
+        ? 'select'
+        : rawType === 'multi-checkbox'
+          ? 'multi-checkbox'
+          : 'text';
+    const rawOptions = getDynamicField(item, name, 'options') ?? '';
+    const options = rawOptions.trim() === '' ? undefined : $tw.utils.parseStringArray(rawOptions);
     return {
       name,
       type,
       caption: getDynamicField(item, name, 'caption'),
       description: getDynamicField(item, name, 'description'),
       defaultValue: getDynamicField(item, name, 'default'),
+      autocompleteFilter: getDynamicField(item, name, 'autocomplete-filter'),
+      options,
     } satisfies IActionVariableDefinition;
   });
 }

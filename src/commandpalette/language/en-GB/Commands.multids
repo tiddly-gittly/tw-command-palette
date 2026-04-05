@@ -21,3 +21,7 @@ ActionString/NewTiddlerAskTitle/Caption: Create new tiddler (type title)
 ActionString/NewTiddlerAskTitle/Description: Enter the create-tiddler wizard and type the title
 ActionString/NewTiddlerAskTitle/VariableCaption: Tiddler title
 ActionString/NewTiddlerAskTitle/VariableDescription: Enter the title to create
+ActionString/AddTags/Caption: Add tags to current tiddler
+ActionString/AddTags/Description: Append one or more tags to the current tiddler
+ActionString/AddTags/VariableCaption: New tag
+ActionString/AddTags/VariableDescription: Type tag name with autocomplete from existing tags

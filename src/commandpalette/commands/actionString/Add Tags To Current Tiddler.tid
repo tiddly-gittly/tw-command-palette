@@ -1,0 +1,11 @@
+tags: $:/tags/Actions
+caption: <<lingo ActionString/AddTags/Caption "$:/plugins/linonetwo/commandpalette/language/">>
+description: <<lingo ActionString/AddTags/Description "$:/plugins/linonetwo/commandpalette/language/">>
+title: $:/plugins/linonetwo/commandpalette/Add Tags To Current Tiddler
+action-variables: newTag
+newTag/type: text
+newTag/caption: <<lingo ActionString/AddTags/VariableCaption "$:/plugins/linonetwo/commandpalette/language/">>
+newTag/description: <<lingo ActionString/AddTags/VariableDescription "$:/plugins/linonetwo/commandpalette/language/">>
+newTag/autocomplete-filter: [all[tags]sort[]]
+
+<$action-listops $tiddler=<<currentTiddler>> $field="tags" $subfilter="+[enlist<newTag>]" />
