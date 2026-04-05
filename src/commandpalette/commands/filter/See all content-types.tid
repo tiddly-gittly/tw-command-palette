@@ -1,5 +1,5 @@
-caption: <<lingo Filter/ContentType/Caption $:/plugins/linonetwo/commandpalette/language/>>
-description: <<lingo Filter/ContentType/Description $:/plugins/linonetwo/commandpalette/language/>>
+caption: <<lingo Filter/ContentType/Caption "$:/plugins/linonetwo/commandpalette/language/">>
+description: <<lingo Filter/ContentType/Description "$:/plugins/linonetwo/commandpalette/language/">>
 tags: $:/tags/Filter
 title: $:/plugins/linonetwo/commandpalette/See all content-types
 filter: [all[tiddlers+shadows]each[type]get[type]]

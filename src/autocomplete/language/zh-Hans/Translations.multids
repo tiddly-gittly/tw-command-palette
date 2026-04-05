@@ -64,3 +64,9 @@ CreateTiddler/Header: 创建新条目
 CreateTiddler/CreateLabel: 创建
 CreateTiddler/Prompt: 请输入新条目的标题
 CreateTiddler/TypeToCreate: 输入条目标题以创建
+ActionVariablePrompt/Header: 命令参数
+ActionVariablePrompt/TypeToConfirm: 在输入框输入内容，然后回车确认
+ActionVariablePrompt/ConfirmText: 确认输入
+ActionVariablePrompt/UseDefault: 使用默认值
+ActionVariablePrompt/CheckboxYes: 是
+ActionVariablePrompt/CheckboxNo: 否

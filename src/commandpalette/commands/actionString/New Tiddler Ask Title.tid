@@ -1,0 +1,10 @@
+tags: $:/tags/Actions
+caption: <<lingo ActionString/NewTiddlerAskTitle/Caption "$:/plugins/linonetwo/commandpalette/language/">>
+description: <<lingo ActionString/NewTiddlerAskTitle/Description "$:/plugins/linonetwo/commandpalette/language/">>
+title: $:/plugins/linonetwo/commandpalette/New Tiddler Ask Title
+action-variables: newTitle
+newTitle/type: text
+newTitle/caption: <<lingo ActionString/NewTiddlerAskTitle/VariableCaption "$:/plugins/linonetwo/commandpalette/language/">>
+newTitle/description: <<lingo ActionString/NewTiddlerAskTitle/VariableDescription "$:/plugins/linonetwo/commandpalette/language/">>
+
+<$action-sendmessage $message="tm-new-tiddler" title=<<newTitle>> />

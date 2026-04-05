@@ -1,4 +1,4 @@
-caption: <<lingo ShowControlPanel $:/plugins/linonetwo/commandpalette/language/>>
+caption: <<lingo ShowControlPanel "$:/plugins/linonetwo/commandpalette/language/">>
 tags: $:/tags/Actions
 title: $:/plugins/linonetwo/commandpalette/Show Control Panel
 

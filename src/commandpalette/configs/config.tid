@@ -1,6 +1,6 @@
 title: $:/plugins/linonetwo/commandpalette/config
 tags: $:/tags/ControlPanel/SettingsTab
-caption: <<lingo Name $:/plugins/linonetwo/commandpalette/language/>>
+caption: <<lingo Name "$:/plugins/linonetwo/commandpalette/language/">>
 
 \define lingo-base() $:/plugins/linonetwo/commandpalette/language/
 
@@ -31,6 +31,6 @@ caption: <<lingo Name $:/plugins/linonetwo/commandpalette/language/>>
 </$select>
 :<<lingo Configs/DesktopWidth/Description>>
 
-!! <$link to="$:/plugins/linonetwo/autocomplete/config"><<lingo Name $:/plugins/linonetwo/autocomplete/language/>></$link>
+!! <$link to="$:/plugins/linonetwo/autocomplete/config"><<lingo Name "$:/plugins/linonetwo/autocomplete/language/">></$link>
 
 {{$:/plugins/linonetwo/autocomplete/config}}

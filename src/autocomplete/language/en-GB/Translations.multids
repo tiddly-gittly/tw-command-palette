@@ -67,3 +67,9 @@ CreateTiddler/Header: Create new tiddler
 CreateTiddler/CreateLabel: Create
 CreateTiddler/Prompt: Please enter a title for the new tiddler
 CreateTiddler/TypeToCreate: Type a title to create a new tiddler
+ActionVariablePrompt/Header: Command parameters
+ActionVariablePrompt/TypeToConfirm: Type in the input box and press Enter to confirm
+ActionVariablePrompt/ConfirmText: Confirm input
+ActionVariablePrompt/UseDefault: Use default value
+ActionVariablePrompt/CheckboxYes: Yes
+ActionVariablePrompt/CheckboxNo: No

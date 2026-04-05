@@ -48,7 +48,7 @@ describe('create-tiddler wizard source plugin', function () {
 
       expect(dispatchCalls.length).toBe(1);
       expect(dispatchCalls[0].type).toBe('tm-new-tiddler');
-      expect(dispatchCalls[0].title).toBe('My New Note');
+      expect(dispatchCalls[0].paramObject).toEqual({ title: 'My New Note' });
       expect(fakeWidget.commandHandled).toBe(true);
       expect(fakeWidget.commandKeepOpen).toBe(false);
       // Wizard should be marked as finished.

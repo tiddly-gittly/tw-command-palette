@@ -1,6 +1,6 @@
 title: $:/plugins/linonetwo/autocomplete/config
 tags: $:/tags/ControlPanel/SettingsTab
-caption: <<lingo Name $:/plugins/linonetwo/autocomplete/language/>>
+caption: <<lingo Name "$:/plugins/linonetwo/autocomplete/language/">>
 
 \define lingo-base() $:/plugins/linonetwo/autocomplete/language/
 

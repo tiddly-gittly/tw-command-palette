@@ -2,6 +2,13 @@ title: $:/plugins/linonetwo/commandpalette/changelog
 
 ! Changelog
 
+!! Version 2.2.0
+
+Depend on [[$:/plugins/linonetwo/autocomplete]] version 0.7.0
+
+* Added: declarative action command "Create new tiddler (type title)" powered by action variable wizard.
+* Fixed: lingo override arguments use quoted base path to stay compatible with TiddlyWiki 5.4.0-prerelease.
+
 !! Version 2.1.2
 
 Depend on [[$:/plugins/linonetwo/autocomplete]] version 0.6.0

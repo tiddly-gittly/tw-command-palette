@@ -10,6 +10,7 @@
 describe('command-action-string source plugin', function () {
   var helpers;
   var actionStringPlugin;
+  var actionVariablePromptPlugin;
   var contextModule;
   var contextActions;
   var contextReducer;
@@ -17,6 +18,7 @@ describe('command-action-string source plugin', function () {
   beforeAll(function () {
     helpers = require('tests/helpers/autocomplete-mock.js');
     actionStringPlugin = require('$:/plugins/linonetwo/autocomplete/widget/build-in-sub-plugins/command-action-string.js');
+    actionVariablePromptPlugin = require('$:/plugins/linonetwo/autocomplete/widget/build-in-sub-plugins/action-variable-prompt.js');
     contextModule = require('$:/plugins/linonetwo/autocomplete/widget/utils/context.js');
     contextActions = contextModule.contextActions;
     contextReducer = contextModule.contextReducer;
@@ -85,6 +87,105 @@ describe('command-action-string source plugin', function () {
       var ctx = params._spies.latestContext;
       expect(ctx.noNavigate).toBe(true);
       expect(ctx.noClose).toBe(false);
+    }).then(done).catch(done.fail);
+  });
+
+  it('onSelect enters variable wizard when action-variables is declared', function (done) {
+    var prefix = getSystemPrefixes()[0] || '>';
+    var invokeCalls = [];
+    var fakeWidget = {
+      commandHandled: false,
+      commandKeepOpen: false,
+      invokeActionString: function () { invokeCalls.push(Array.prototype.slice.call(arguments)); },
+      makeFakeWidgetWithVariables: function () { return null; },
+    };
+    var params = helpers.createMockParameters(prefix + 'new', { widget: fakeWidget, selectedText: 'abc' });
+    Promise.resolve(actionStringPlugin.plugin.getSources(params)).then(function (sources) {
+      return helpers.findSource(sources, 'actionString');
+    }).then(function (source) {
+      if (!source) {
+        pending('actionString source not returned; skipping');
+        return;
+      }
+      var item = helpers.makeTiddler('$:/plugins/test/action-with-vars', {
+        text: '<$action-sendmessage $message="tm-new-tiddler" title=<<newTitle>>/>',
+        tags: ['$:/tags/Actions'],
+        'action-variables': 'newTitle',
+        'newTitle/type': 'text',
+        'newTitle/caption': 'Title',
+      });
+      source.onSelect({ item: item, state: params.state });
+
+      expect(invokeCalls.length).toBe(0);
+      expect(params._spies.latestContext.actionVariablePrompt.commandTitle).toBe('$:/plugins/test/action-with-vars');
+      expect(params._spies.latestContext.actionVariablePrompt.definitions.length).toBe(1);
+      expect(params._spies.latestContext.actionVariablePrompt.definitions[0].name).toBe('newTitle');
+      expect(fakeWidget.commandHandled).toBe(true);
+      expect(fakeWidget.commandKeepOpen).toBe(true);
+    }).then(done).catch(done.fail);
+  });
+
+  it('variable wizard (text) invokes action string with collected value', function (done) {
+    var invokeCalls = [];
+    var fakeWidget = {
+      commandHandled: false,
+      commandKeepOpen: false,
+      invokeActionString: function () { invokeCalls.push(Array.prototype.slice.call(arguments)); },
+    };
+    var prompt = {
+      commandTitle: '$:/plugins/test/action-with-vars',
+      actionText: '<$action-sendmessage $message="tm-new-tiddler" title=<<newTitle>>/>',
+      definitions: [{ name: 'newTitle', type: 'text', caption: 'Title' }],
+      currentIndex: 0,
+      values: {},
+      baseVariables: { currentTiddler: 'HelloThere' },
+    };
+    var params = helpers.createMockParameters('My New Note', { widget: fakeWidget, actionVariablePrompt: prompt });
+    Promise.resolve(actionVariablePromptPlugin.plugin.getSources(params)).then(function (sources) {
+      return helpers.findSource(sources, 'action-variable-prompt');
+    }).then(function (source) {
+      if (!source) {
+        pending('action-variable-prompt source not returned; skipping');
+        return;
+      }
+      var items = source.getItems({ query: 'My New Note', state: params.state });
+      source.onSelect({ item: items[0], state: params.state });
+
+      expect(invokeCalls.length).toBe(1);
+      expect(invokeCalls[0][0]).toContain('tm-new-tiddler');
+      expect(invokeCalls[0][3].newTitle).toBe('My New Note');
+      expect(invokeCalls[0][3].currentTiddler).toBe('HelloThere');
+      expect(fakeWidget.commandHandled).toBe(true);
+      expect(fakeWidget.commandKeepOpen).toBe(false);
+      expect(params._spies.latestContext.actionVariablePrompt).toBeUndefined();
+    }).then(done).catch(done.fail);
+  });
+
+  it('variable wizard (checkbox) writes yes/no and can use compact field keys', function (done) {
+    var prefix = getSystemPrefixes()[0] || '>';
+    var fakeWidget = {
+      commandHandled: false,
+      commandKeepOpen: false,
+      invokeActionString: function () {},
+      makeFakeWidgetWithVariables: function () { return null; },
+    };
+    var params = helpers.createMockParameters(prefix + 'toggle', { widget: fakeWidget });
+    Promise.resolve(actionStringPlugin.plugin.getSources(params)).then(function (sources) {
+      return helpers.findSource(sources, 'actionString');
+    }).then(function (source) {
+      if (!source) {
+        pending('actionString source not returned; skipping');
+        return;
+      }
+      var item = helpers.makeTiddler('$:/plugins/test/action-checkbox', {
+        text: '<$action-setfield field="hidden" value=<<isHidden>>/>',
+        tags: ['$:/tags/Actions'],
+        'action-variables': '[[is hidden]]',
+        'ishidden/type': 'checkbox',
+      });
+      source.onSelect({ item: item, state: params.state });
+      expect(params._spies.latestContext.actionVariablePrompt.definitions[0].type).toBe('checkbox');
+      expect(params._spies.latestContext.actionVariablePrompt.definitions[0].name).toBe('is hidden');
     }).then(done).catch(done.fail);
   });
 });

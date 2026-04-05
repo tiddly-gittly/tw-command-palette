@@ -1,6 +1,6 @@
 tags: $:/tags/Actions
-caption: <<lingo ActionString/NewTiddlerFromSelectedText/Caption $:/plugins/linonetwo/commandpalette/language/>>
-description: <<lingo ActionString/NewTiddlerFromSelectedText/Description $:/plugins/linonetwo/commandpalette/language/>> <<selectedText>>
+caption: <<lingo ActionString/NewTiddlerFromSelectedText/Caption "$:/plugins/linonetwo/commandpalette/language/">>
+description: <<lingo ActionString/NewTiddlerFromSelectedText/Description "$:/plugins/linonetwo/commandpalette/language/">> <<selectedText>>
 title: $:/plugins/linonetwo/commandpalette/New Tiddler Selected Text As Title
 condition: [<selectedText>!compare:string:eq[]]
 

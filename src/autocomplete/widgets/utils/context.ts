@@ -5,6 +5,25 @@ import type { Widget } from 'tiddlywiki';
  */
 export type Phase = 'idle' | 'normal' | 'filter-select' | 'under-filter' | 'tag-search' | 'command';
 
+export type ActionVariableInputType = 'text' | 'checkbox';
+
+export interface IActionVariableDefinition {
+  name: string;
+  type: ActionVariableInputType;
+  caption?: string;
+  description?: string;
+  defaultValue?: string;
+}
+
+export interface IActionVariablePromptState {
+  commandTitle: string;
+  actionText: string;
+  definitions: IActionVariableDefinition[];
+  currentIndex: number;
+  values: Record<string, string>;
+  baseVariables: Record<string, string>;
+}
+
 /**
  * The AutoCompleteSearchWidget instance exposed through context.
  * Extends the base TW Widget with command-palette-specific fields.
@@ -49,6 +68,8 @@ export interface IContext {
   noNavigate?: boolean;
   /** Two-step wizard flag for "create new tiddler" flow. */
   createTiddlerPending?: boolean;
+  /** Generic variable wizard state for action-string commands. */
+  actionVariablePrompt?: IActionVariablePromptState;
 }
 
 // ── Typed actions ────────────────────────────────────────────────────────────
@@ -66,6 +87,12 @@ export type ContextAction =
   | { type: 'OPEN_CREATE_TIDDLER_WIZARD' }
   /** Complete create-tiddler wizard before close. */
   | { type: 'FINISH_CREATE_TIDDLER_WIZARD' }
+  /** Enter action-string variable wizard and keep panel open for variable input. */
+  | { type: 'OPEN_ACTION_VARIABLE_PROMPT'; prompt: IActionVariablePromptState }
+  /** Update current action-string variable wizard state. */
+  | { type: 'UPDATE_ACTION_VARIABLE_PROMPT'; prompt: IActionVariablePromptState }
+  /** Complete action-string variable wizard before close. */
+  | { type: 'FINISH_ACTION_VARIABLE_PROMPT' }
   /**
    * Clear all session state except stable deps.
    * Used when the panel closes or a flow fully completes.
@@ -136,6 +163,29 @@ export function contextReducer(action: ContextAction): Partial<IContext> {
         noClose: false,
       };
     }
+    case 'OPEN_ACTION_VARIABLE_PROMPT': {
+      return {
+        actionVariablePrompt: action.prompt,
+        noNavigate: true,
+        noClose: true,
+        newQuery: '',
+      };
+    }
+    case 'UPDATE_ACTION_VARIABLE_PROMPT': {
+      return {
+        actionVariablePrompt: action.prompt,
+        noNavigate: true,
+        noClose: true,
+        newQuery: '',
+      };
+    }
+    case 'FINISH_ACTION_VARIABLE_PROMPT': {
+      return {
+        actionVariablePrompt: undefined,
+        noNavigate: true,
+        noClose: false,
+      };
+    }
     case 'CLEAR_SESSION': {
       return {
         phase: undefined,
@@ -143,6 +193,7 @@ export function contextReducer(action: ContextAction): Partial<IContext> {
         newQuery: undefined,
         noClose: undefined,
         createTiddlerPending: undefined,
+        actionVariablePrompt: undefined,
         filter: undefined,
         filterGetTiddler: undefined,
         filterToOpen: undefined,
@@ -169,6 +220,9 @@ export const contextActions = {
   executeCommand: (): ContextAction => ({ type: 'EXECUTE_COMMAND' }),
   openCreateTiddlerWizard: (): ContextAction => ({ type: 'OPEN_CREATE_TIDDLER_WIZARD' }),
   finishCreateTiddlerWizard: (): ContextAction => ({ type: 'FINISH_CREATE_TIDDLER_WIZARD' }),
+  openActionVariablePrompt: (prompt: IActionVariablePromptState): ContextAction => ({ type: 'OPEN_ACTION_VARIABLE_PROMPT', prompt }),
+  updateActionVariablePrompt: (prompt: IActionVariablePromptState): ContextAction => ({ type: 'UPDATE_ACTION_VARIABLE_PROMPT', prompt }),
+  finishActionVariablePrompt: (): ContextAction => ({ type: 'FINISH_ACTION_VARIABLE_PROMPT' }),
   clearSession: (): ContextAction => ({ type: 'CLEAR_SESSION' }),
   clearTransient: (): ContextAction => ({ type: 'CLEAR_TRANSIENT' }),
 };

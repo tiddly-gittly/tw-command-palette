@@ -49,7 +49,7 @@ export const plugin = {
         }
         widget?.dispatchEvent({
           type: 'tm-new-tiddler',
-          title: item.title,
+          paramObject: { title: item.title },
         });
       },
       templates: {
@@ -65,7 +65,7 @@ export const plugin = {
               widget.commandHandled = true;
               widget.commandKeepOpen = false;
             }
-            widget?.dispatchEvent({ type: 'tm-new-tiddler', title: item.title });
+            widget?.dispatchEvent({ type: 'tm-new-tiddler', paramObject: { title: item.title } });
           };
           const text = isPrompt
             ? lingo('CreateTiddler/TypeToCreate')

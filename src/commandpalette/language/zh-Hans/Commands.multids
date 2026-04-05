@@ -17,3 +17,7 @@ Filter/Untagged/Caption: 未打标签
 Filter/Untagged/Description: 列出未打标签的条目，无标签会让它们难以找到
 ActionString/NewTiddlerFromSelectedText/Caption: 创建新条目
 ActionString/NewTiddlerFromSelectedText/Description: 用选中的文本作为标题，已选中：
+ActionString/NewTiddlerAskTitle/Caption: 创建新条目（输入标题）
+ActionString/NewTiddlerAskTitle/Description: 进入新建条目向导，然后输入标题
+ActionString/NewTiddlerAskTitle/VariableCaption: 条目标题
+ActionString/NewTiddlerAskTitle/VariableDescription: 输入你要创建的条目标题

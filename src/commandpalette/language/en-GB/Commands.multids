@@ -17,3 +17,7 @@ Filter/Untagged/Caption: Untagged
 Filter/Untagged/Description: lists untagged entries, which can be difficult to find without tags
 ActionString/NewTiddlerFromSelectedText/Caption: Create new tiddler
 ActionString/NewTiddlerFromSelectedText/Description: Use selected text as the title, selected:
+ActionString/NewTiddlerAskTitle/Caption: Create new tiddler (type title)
+ActionString/NewTiddlerAskTitle/Description: Enter the create-tiddler wizard and type the title
+ActionString/NewTiddlerAskTitle/VariableCaption: Tiddler title
+ActionString/NewTiddlerAskTitle/VariableDescription: Enter the title to create

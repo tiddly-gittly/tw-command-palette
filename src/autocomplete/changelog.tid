@@ -2,6 +2,16 @@ title: $:/plugins/linonetwo/autocomplete/changelog
 
 ! Changelog
 
+!! Version 0.7.0
+
+* Added: declarative action variable wizard for action-string commands.
+** Use `action-variables` as a list field to declare variables.
+** Define each variable with `<variable>/type`, `<variable>/caption`, `<variable>/description`, `<variable>/default`.
+** Supported input types: `text`, `checkbox` (writes `yes` or `no` into action variables).
+* Changed: command-action-string no longer contains hardcoded `open-create-tiddler-wizard` branch.
+* Fixed: improved translation rendering cache key with language and variable context.
+* Fixed: compatibility with TiddlyWiki 5.4.0-prerelease by using quoted lingo override base argument.
+
 !! Version 0.6.2
 
 * Fixed: action-string and message command items no longer open their tiddlers when activated; Enter and click now only execute the command and behave identically.
