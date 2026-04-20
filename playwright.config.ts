@@ -13,7 +13,6 @@ export default defineConfig({
   reporter: [['list'], ['html', { open: 'never' }]],
   use: {
     baseURL,
-    locale: 'zh-CN',
     trace: 'on-first-retry',
   },
   webServer: {
