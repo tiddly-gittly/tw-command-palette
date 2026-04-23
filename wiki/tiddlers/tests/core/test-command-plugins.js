@@ -55,12 +55,13 @@ describe('command-action-string source plugin', function () {
 
   // ── Under-filter mode → no sources ────────────────────────────────────────
 
-  it('returns empty array when context.filter is set (under-filter mode)', function (done) {
+  it('returns source even when context.filter is set (routing wrapper filters)', function (done) {
     var prefix = getSystemPrefixes()[0] || '>';
     var params = helpers.createMockParameters(prefix + 'test', { filter: '[tag[X]]' });
     Promise.resolve(actionStringPlugin.plugin.getSources(params)).then(function (sources) {
-      var hasActionSource = (sources || []).some(function (s) { return s.sourceId === 'actionString'; });
-      expect(hasActionSource).toBe(false);
+      // After centralized routing, plugin no longer gates by context.filter itself.
+      var hasActionSource = (sources || []).some(function (s) { return s.sourceId === 'command-action-string'; });
+      expect(hasActionSource).toBe(true);
     }).then(done).catch(done.fail);
   });
 
@@ -75,10 +76,10 @@ describe('command-action-string source plugin', function () {
     };
     var params = helpers.createMockParameters(prefix + 'test', { widget: fakeWidget });
     Promise.resolve(actionStringPlugin.plugin.getSources(params)).then(function (sources) {
-      return helpers.findSource(sources, 'actionString');
+      return helpers.findSource(sources, 'command-action-string');
     }).then(function (source) {
       if (!source) {
-        pending('actionString source not returned (no system tiddlers with $:/tags/Actions); skipping');
+        pending('command-action-string source not returned (no system tiddlers with $:/tags/Actions); skipping');
         return;
       }
       var item = helpers.makeTiddler('$:/plugins/test/action', { text: '<$action-setfield/>', tags: ['$:/tags/Actions'] });
@@ -101,10 +102,10 @@ describe('command-action-string source plugin', function () {
     };
     var params = helpers.createMockParameters(prefix + 'new', { widget: fakeWidget, selectedText: 'abc' });
     Promise.resolve(actionStringPlugin.plugin.getSources(params)).then(function (sources) {
-      return helpers.findSource(sources, 'actionString');
+      return helpers.findSource(sources, 'command-action-string');
     }).then(function (source) {
       if (!source) {
-        pending('actionString source not returned; skipping');
+        pending('command-action-string source not returned; skipping');
         return;
       }
       var item = helpers.makeTiddler('$:/plugins/test/action-with-vars', {
@@ -171,10 +172,10 @@ describe('command-action-string source plugin', function () {
     };
     var params = helpers.createMockParameters(prefix + 'toggle', { widget: fakeWidget });
     Promise.resolve(actionStringPlugin.plugin.getSources(params)).then(function (sources) {
-      return helpers.findSource(sources, 'actionString');
+      return helpers.findSource(sources, 'command-action-string');
     }).then(function (source) {
       if (!source) {
-        pending('actionString source not returned; skipping');
+        pending('command-action-string source not returned; skipping');
         return;
       }
       var item = helpers.makeTiddler('$:/plugins/test/action-checkbox', {
@@ -335,12 +336,13 @@ describe('command-message source plugin', function () {
     }).then(done).catch(done.fail);
   });
 
-  it('returns empty array when context.filter is set', function (done) {
+  it('returns source even when context.filter is set (routing wrapper filters)', function (done) {
     var prefix = getSystemPrefixes()[0] || '>';
     var params = helpers.createMockParameters(prefix + 'test', { filter: '[tag[X]]' });
     Promise.resolve(messagePlugin.plugin.getSources(params)).then(function (sources) {
-      var hasMessageSource = (sources || []).some(function (s) { return s.sourceId === 'message'; });
-      expect(hasMessageSource).toBe(false);
+      // After centralized routing, plugin no longer gates by context.filter itself.
+      var hasMessageSource = (sources || []).some(function (s) { return s.sourceId === 'command-message'; });
+      expect(hasMessageSource).toBe(true);
     }).then(done).catch(done.fail);
   });
 
@@ -351,10 +353,10 @@ describe('command-message source plugin', function () {
     };
     var params = helpers.createMockParameters(prefix + 'test', { widget: fakeWidget });
     Promise.resolve(messagePlugin.plugin.getSources(params)).then(function (sources) {
-      return helpers.findSource(sources, 'message');
+      return helpers.findSource(sources, 'command-message');
     }).then(function (source) {
       if (!source) {
-        pending('message source not returned (no $:/tags/Messages tiddlers); skipping');
+        pending('command-message source not returned (no $:/tags/Messages tiddlers); skipping');
         return;
       }
       var item = helpers.makeTiddler('$:/plugins/test/message', { text: 'tm-close-tiddler', tags: ['$:/tags/Messages'] });
@@ -376,10 +378,10 @@ describe('command-message source plugin', function () {
     };
     var params = helpers.createMockParameters(prefix + 'create', { widget: fakeWidget });
     Promise.resolve(messagePlugin.plugin.getSources(params)).then(function (sources) {
-      return helpers.findSource(sources, 'message');
+      return helpers.findSource(sources, 'command-message');
     }).then(function (source) {
       if (!source) {
-        pending('message source not returned; skipping');
+        pending('command-message source not returned; skipping');
         return;
       }
       // Simulate a tiddler where text field is missing (undefined)
@@ -404,10 +406,10 @@ describe('command-message source plugin', function () {
     };
     var params = helpers.createMockParameters(prefix + 'create', { widget: fakeWidget });
     Promise.resolve(messagePlugin.plugin.getSources(params)).then(function (sources) {
-      return helpers.findSource(sources, 'message');
+      return helpers.findSource(sources, 'command-message');
     }).then(function (source) {
       if (!source) {
-        pending('message source not returned; skipping');
+        pending('command-message source not returned; skipping');
         return;
       }
       var itemEmptyText = helpers.makeTiddler('$:/plugins/test/message-empty', { text: '   ', tags: ['$:/tags/Messages'] });
@@ -428,10 +430,10 @@ describe('command-message source plugin', function () {
     };
     var params = helpers.createMockParameters(prefix + 'new', { widget: fakeWidget });
     Promise.resolve(messagePlugin.plugin.getSources(params)).then(function (sources) {
-      return helpers.findSource(sources, 'message');
+      return helpers.findSource(sources, 'command-message');
     }).then(function (source) {
       if (!source) {
-        pending('message source not returned; skipping');
+        pending('command-message source not returned; skipping');
         return;
       }
       var item = helpers.makeTiddler('$:/plugins/linonetwo/commandpalette/New Tiddler', { text: 'tm-new-tiddler', tags: ['$:/tags/Messages'] });

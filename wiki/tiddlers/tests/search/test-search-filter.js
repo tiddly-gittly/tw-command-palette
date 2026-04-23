@@ -36,14 +36,15 @@ describe('search-filter source plugin', function () {
 
   // ── Prefix gating ──────────────────────────────────────────────────────────
 
-  it('returns no sources when query is empty', function (done) {
+  it('returns both sources when query is empty (routing wrapper filters them)', function (done) {
     var params = helpers.createMockParameters('', {});
     Promise.resolve(filterPlugin.plugin.getSources(params)).then(function (sources) {
-      // debounced result — sources array should be empty or contain no filter/under-filter sources
-      var hasBuildInFilter = (sources || []).some(function (s) { return s.sourceId === 'build-in-filter'; });
+      // After centralized routing, plugin always returns both sources;
+      // the wrapper in getSubPlugins.ts filters by sourceId.
+      var hasFilterSelect = (sources || []).some(function (s) { return s.sourceId === 'filter-select'; });
       var hasFilter = (sources || []).some(function (s) { return s.sourceId === 'filter'; });
-      expect(hasBuildInFilter).toBe(false);
-      expect(hasFilter).toBe(false);
+      expect(hasFilterSelect).toBe(true);
+      expect(hasFilter).toBe(true);
     }).then(done).catch(done.fail);
   });
 
@@ -58,10 +59,10 @@ describe('search-filter source plugin', function () {
 
     var params = helpers.createMockParameters(filterPrefix + 'tag[Test]', {});
     Promise.resolve(filterPlugin.plugin.getSources(params)).then(function (sources) {
-      return Promise.all([sources, helpers.findSource(sources, 'build-in-filter')]);
+      return Promise.all([sources, helpers.findSource(sources, 'filter-select')]);
     }).then(function (results) {
-      var buildInFilterSource = results[1];
-      expect(buildInFilterSource).toBeDefined();
+      var filterSelectSource = results[1];
+      expect(filterSelectSource).toBeDefined();
     }).then(done).catch(done.fail);
   });
 
@@ -75,10 +76,10 @@ describe('search-filter source plugin', function () {
 
     var params = helpers.createMockParameters(filterPrefix + 'tag', {});
     Promise.resolve(filterPlugin.plugin.getSources(params)).then(function (sources) {
-      return helpers.findSource(sources, 'build-in-filter');
+      return helpers.findSource(sources, 'filter-select');
     }).then(function (source) {
       if (!source) {
-        pending('build-in-filter source not returned (prefix mismatch); skipping');
+        pending('filter-select source not returned (prefix mismatch); skipping');
         return;
       }
       // Simulate keyboard selection
@@ -112,12 +113,13 @@ describe('search-filter source plugin', function () {
     }).then(done).catch(done.fail);
   });
 
-  it('does NOT return filter source when context.filter is empty string', function (done) {
+  it('returns filter source even when context.filter is empty string (wrapper handles routing)', function (done) {
     var params = helpers.createMockParameters('hello', { filter: '' });
     Promise.resolve(filterPlugin.plugin.getSources(params)).then(function (sources) {
       return helpers.findSource(sources, 'filter');
     }).then(function (filterSource) {
-      expect(filterSource).toBeUndefined();
+      // After centralized routing, plugin no longer gates by context.filter itself.
+      expect(filterSource).toBeDefined();
     }).then(done).catch(done.fail);
   });
 
@@ -131,10 +133,10 @@ describe('search-filter source plugin', function () {
 
     var params = helpers.createMockParameters(filterPrefix + 'tag', {});
     Promise.resolve(filterPlugin.plugin.getSources(params)).then(function (sources) {
-      return helpers.findSource(sources, 'build-in-filter');
+      return helpers.findSource(sources, 'filter-select');
     }).then(function (source) {
       if (!source) {
-        pending('build-in-filter source not returned; skipping');
+        pending('filter-select source not returned; skipping');
         return;
       }
       var item1 = { title: '$:/t1', filter: '[tag[A]]', 'command-palette-get-tiddler': 'yes', text: '', type: '', tags: [] };

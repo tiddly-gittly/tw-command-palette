@@ -29,10 +29,12 @@ describe('search-tags source plugin', function () {
 
   // ── Prefix gating ──────────────────────────────────────────────────────────
 
-  it('returns empty array for query without tags prefix', function (done) {
+  it('returns source even without tags prefix (routing is centralized)', function (done) {
     var params = helpers.createMockParameters('hello', {});
     Promise.resolve(tagsPlugin.plugin.getSources(params)).then(function (sources) {
-      expect(sources).toEqual([]);
+      // After centralized routing, plugin no longer gates by prefix itself.
+      // The wrapper in getSubPlugins.ts filters sources by sourceId.
+      expect(sources.length).toBeGreaterThan(0);
     }).then(done).catch(done.fail);
   });
 
