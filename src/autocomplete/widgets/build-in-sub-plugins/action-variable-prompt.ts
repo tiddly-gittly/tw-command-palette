@@ -1,3 +1,4 @@
+import { AutocompleteState } from '@algolia/autocomplete-core';
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { checkIsUnderFilter } from '../utils/checkPrefix';
@@ -96,6 +97,67 @@ export const plugin = {
       widget.commandHandled = true;
       widget.commandKeepOpen = false;
       widget.invokeActionString(prompt.actionText, widget, null, mergedVariables);
+    };
+
+    const onSelect = (item: IActionVariablePromptItem, state?: AutocompleteState<ITiddlerFields>, isClick = false) => {
+      if (item['command-palette-hint'] === 'yes') return;
+      if (definition.type === 'checkbox') {
+        const selectedValue = (item['command-palette-value'] === 'yes') ? 'yes' : 'no';
+        completeCurrentAndContinue(selectedValue);
+        if (isClick && state) {
+          parameters.navigator.navigate({ item, itemUrl: item.title, state });
+        }
+        return;
+      }
+      if (definition.type === 'select') {
+        const selectedValue = item['command-palette-value'] ?? '';
+        if (selectedValue === '') return;
+        completeCurrentAndContinue(selectedValue);
+        if (isClick && state) {
+          parameters.navigator.navigate({ item, itemUrl: item.title, state });
+        }
+        return;
+      }
+      if (definition.type === 'multi-checkbox') {
+        const selected = $tw.utils.parseStringArray(prompt.values[definition.name] ?? '');
+        const action = item['command-palette-action'];
+        if (action === 'toggle-option') {
+          const option = item['command-palette-value'] ?? '';
+          if (option === '') return;
+          const next = selected.includes(option) ? selected.filter(value => value !== option) : [...selected, option];
+          parameters.setContext(contextReducer(contextActions.updateActionVariablePrompt({
+            ...prompt,
+            values: {
+              ...prompt.values,
+              [definition.name]: stringifyList(next),
+            },
+          })));
+          parameters.setQuery(query);
+          void parameters.refresh().catch((error: unknown) => {
+            console.error('Error refreshing action-variable multi-checkbox prompt', error);
+          });
+          widget.commandHandled = true;
+          widget.commandKeepOpen = true;
+          if (isClick && state) {
+            parameters.navigator.navigate({ item, itemUrl: item.title, state });
+          }
+          return;
+        }
+        if (action === 'confirm-multi') {
+          completeCurrentAndContinue(stringifyList(selected));
+          if (isClick && state) {
+            parameters.navigator.navigate({ item, itemUrl: item.title, state });
+          }
+          return;
+        }
+        return;
+      }
+      const selectedValue = item['command-palette-value'] ?? query ?? definition.defaultValue ?? '';
+      if (selectedValue === '') return;
+      completeCurrentAndContinue(selectedValue);
+      if (isClick && state) {
+        parameters.navigator.navigate({ item, itemUrl: item.title, state });
+      }
     };
 
     return await debounced([{
@@ -200,60 +262,24 @@ export const plugin = {
       getItemUrl({ item }) {
         return item.title;
       },
-      onSelect({ item }) {
-        if (item['command-palette-hint'] === 'yes') return;
-        if (definition.type === 'checkbox') {
-          const selectedValue = (item['command-palette-value'] === 'yes') ? 'yes' : 'no';
-          completeCurrentAndContinue(selectedValue);
-          return;
-        }
-        if (definition.type === 'select') {
-          const selectedValue = item['command-palette-value'] ?? '';
-          if (selectedValue === '') return;
-          completeCurrentAndContinue(selectedValue);
-          return;
-        }
-        if (definition.type === 'multi-checkbox') {
-          const selected = $tw.utils.parseStringArray(prompt.values[definition.name] ?? '');
-          const action = item['command-palette-action'];
-          if (action === 'toggle-option') {
-            const option = item['command-palette-value'] ?? '';
-            if (option === '') return;
-            const next = selected.includes(option) ? selected.filter(value => value !== option) : [...selected, option];
-            parameters.setContext(contextReducer(contextActions.updateActionVariablePrompt({
-              ...prompt,
-              values: {
-                ...prompt.values,
-                [definition.name]: stringifyList(next),
-              },
-            })));
-            parameters.setQuery(query);
-            void parameters.refresh().catch((error: unknown) => {
-              console.error('Error refreshing action-variable multi-checkbox prompt', error);
-            });
-            widget.commandHandled = true;
-            widget.commandKeepOpen = true;
-            return;
-          }
-          if (action === 'confirm-multi') {
-            completeCurrentAndContinue(stringifyList(selected));
-            return;
-          }
-          return;
-        }
-        const selectedValue = item['command-palette-value'] ?? query ?? definition.defaultValue ?? '';
-        if (selectedValue === '') return;
-        completeCurrentAndContinue(selectedValue);
+      onSelect({ item, state }) {
+        onSelect(item, state, false);
       },
       templates: {
         header() {
           return `${lingo('ActionVariablePrompt/Header')} (${prompt.currentIndex + 1}/${prompt.definitions.length}) - ${inputCaption}`;
         },
-        item({ item, createElement }) {
+        item({ item, createElement, state }) {
           const hint = item['command-palette-hint'] === 'yes';
           const text = item.title;
           return createElement('div', {
             style: hint ? 'opacity:0.7;' : '',
+            onclick: () => {
+              onSelect(item, state, true);
+            },
+            onTap: () => {
+              onSelect(item, state, true);
+            },
           }, text);
         },
         footer() {

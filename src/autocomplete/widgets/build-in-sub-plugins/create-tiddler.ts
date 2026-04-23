@@ -66,6 +66,7 @@ export const plugin = {
               widget.commandKeepOpen = false;
             }
             widget?.dispatchEvent({ type: 'tm-new-tiddler', paramObject: { title: item.title } });
+            parameters.navigator.navigate({ item, itemUrl: item.title, state });
           };
           const text = isPrompt
             ? lingo('CreateTiddler/TypeToCreate')

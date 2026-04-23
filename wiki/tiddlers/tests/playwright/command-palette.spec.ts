@@ -4,24 +4,26 @@ const paletteInputSelector = '.tw-auto-complete-container input';
 const palettePanelSelector = '.tw-commandpalette-panel-default';
 const paletteItemSelector = `${palettePanelSelector} .aa-Item`;
 const layoutResultSelector = '.tw-commandpalette-layout-result';
+type WikiWindow = Window & { $tw: any };
+type MaybeWikiWindow = Window & {
+  $tw?: {
+    wiki?: unknown;
+    rootWidget?: unknown;
+  };
+};
 
 async function waitForWiki(page: Page) {
   await page.goto('/');
   await page.waitForLoadState('networkidle');
   await page.waitForFunction(() => {
-    const wikiWindow = window as Window & {
-      $tw?: {
-        wiki?: unknown;
-        rootWidget?: unknown;
-      };
-    };
+    const wikiWindow = window as unknown as MaybeWikiWindow;
     return Boolean(wikiWindow.$tw?.wiki && wikiWindow.$tw?.rootWidget);
   });
 }
 
 async function seedBaseState(page: Page) {
   await page.evaluate(() => {
-    const wikiWindow = window as Window & { $tw: any };
+    const wikiWindow = window as unknown as WikiWindow;
     wikiWindow.$tw.wiki.setText('$:/language', 'text', undefined, '$:/languages/zh-Hans', { suppressTimestamp: true });
     wikiWindow.$tw.wiki.addTiddler({
       title: 'Playwright Focus Note',
@@ -42,7 +44,7 @@ async function seedBaseState(page: Page) {
 
 async function openCommandPalette(page: Page, prefix = '') {
   await page.evaluate((nextPrefix) => {
-    const wikiWindow = window as Window & { $tw: any };
+    const wikiWindow = window as unknown as WikiWindow;
     wikiWindow.$tw.rootWidget.dispatchEvent({
       type: 'open-command-palette',
       paramObject: {
@@ -68,35 +70,36 @@ async function closeCommandPalette(page: Page) {
 }
 
 async function clickPaletteItem(page: Page, text: string | RegExp) {
-  const item = page.locator(`${paletteItemSelector} div`).filter({ hasText: text }).first();
+  await expect(page.locator(palettePanelSelector)).toContainText(text);
+  const item = page.locator(paletteItemSelector).filter({ hasText: text }).first();
   await expect(item).toBeVisible();
   await item.click();
 }
 
 async function getOpenState(page: Page) {
   return page.evaluate(() => {
-    const wikiWindow = window as Window & { $tw: any };
+    const wikiWindow = window as unknown as WikiWindow;
     return wikiWindow.$tw.wiki.getTiddlerText('$:/temp/auto-complete-search/default/opened', '');
   });
 }
 
 async function getStoryList(page: Page) {
   return page.evaluate(() => {
-    const wikiWindow = window as Window & { $tw: any };
+    const wikiWindow = window as unknown as WikiWindow;
     return wikiWindow.$tw.wiki.getTiddlerList('$:/StoryList');
   });
 }
 
 async function getDraftCount(page: Page) {
   return page.evaluate(() => {
-    const wikiWindow = window as Window & { $tw: any };
+    const wikiWindow = window as unknown as WikiWindow;
     return wikiWindow.$tw.wiki.filterTiddlers('[all[tiddlers]has[draft.of]]').length;
   });
 }
 
 async function getDraftTitlesFor(page: Page, title: string) {
   return page.evaluate((draftOfTitle) => {
-    const wikiWindow = window as Window & { $tw: any };
+    const wikiWindow = window as unknown as WikiWindow;
     return wikiWindow.$tw.wiki.filterTiddlers('[all[tiddlers]]').filter((candidateTitle: string) => {
       const fields = wikiWindow.$tw.wiki.getTiddler(candidateTitle)?.fields;
       return fields?.['draft.of'] === draftOfTitle;
@@ -106,7 +109,7 @@ async function getDraftTitlesFor(page: Page, title: string) {
 
 async function getCreatedTiddlerState(page: Page, title: string) {
   return page.evaluate((expectedTitle) => {
-    const wikiWindow = window as Window & { $tw: any };
+    const wikiWindow = window as unknown as WikiWindow;
     const storyList = wikiWindow.$tw.wiki.getTiddlerList('$:/StoryList');
     const drafts = wikiWindow.$tw.wiki.filterTiddlers('[all[tiddlers]]').filter((candidateTitle: string) => {
       const fields = wikiWindow.$tw.wiki.getTiddler(candidateTitle)?.fields;
@@ -123,7 +126,7 @@ async function getCreatedTiddlerState(page: Page, title: string) {
 
 async function addTestLayout(page: Page, title: string, name: string) {
   await page.evaluate(({ layoutTitle, layoutName }) => {
-    const wikiWindow = window as Window & { $tw: any };
+    const wikiWindow = window as unknown as WikiWindow;
     wikiWindow.$tw.wiki.addTiddler({
       title: layoutTitle,
       tags: ['$:/tags/Layout'],
@@ -136,7 +139,7 @@ async function addTestLayout(page: Page, title: string, name: string) {
 
 async function getExpectedLayoutNames(page: Page) {
   return page.evaluate(() => {
-    const wikiWindow = window as Window & { $tw: any };
+    const wikiWindow = window as unknown as WikiWindow;
     const titles = wikiWindow.$tw.wiki.filterTiddlers('[all[tiddlers+shadows]tag[$:/tags/Layout]] [[$:/core/ui/PageTemplate]] +[!is[draft]sort[name]]');
     return titles.map((title: string) => {
       const fields = wikiWindow.$tw.wiki.getTiddler(title)?.fields;
@@ -157,7 +160,7 @@ async function getExpectedLayoutNames(page: Page) {
 
 async function getCurrentLayoutDisplayName(page: Page) {
   return page.evaluate(() => {
-    const wikiWindow = window as Window & { $tw: any };
+    const wikiWindow = window as unknown as WikiWindow;
     const currentLayoutTitle = wikiWindow.$tw.wiki.getTiddlerText('$:/layout', '');
     const rawName = wikiWindow.$tw.wiki.getTiddler(currentLayoutTitle)?.fields.name;
     if (typeof rawName === 'string' && rawName.length > 0) {
@@ -170,7 +173,7 @@ async function getCurrentLayoutDisplayName(page: Page) {
 async function typeIntoPalette(input: Locator, suffix: string) {
   await input.press('Control+A');
   await input.fill('');
-  await input.type(suffix);
+  await input.fill(suffix);
 }
 
 test.beforeEach(async ({ page }) => {
@@ -224,7 +227,7 @@ test('selects a layout and updates the current layout label', async ({ page }) =
   await layoutItem.click();
 
   await expect.poll(() => page.evaluate(() => {
-    const wikiWindow = window as Window & { $tw: any };
+    const wikiWindow = window as unknown as WikiWindow;
     return wikiWindow.$tw.wiki.getTiddlerText('$:/layout', '');
   })).toBe(layoutTitle);
 
@@ -269,16 +272,18 @@ test('creates a new tiddler through the command menu wizard', async ({ page }) =
     const state = await getCreatedTiddlerState(page, newTitle);
     return state.hasRealTiddler
       || state.drafts.length > 0
-      || state.storyList.some(item => item.includes(newTitle))
+      || state.storyList.some((item: string) => item.includes(newTitle))
       || state.focused.includes(newTitle);
   }).toBe(true);
+
+  await expect(page.locator(palettePanelSelector)).toHaveCount(0);
 });
 
 test('searches within a built-in filter result set', async ({ page }) => {
   const title = `Playwright 未打标签 ${Date.now()}`;
 
   await page.evaluate((untaggedTitle) => {
-    const wikiWindow = window as Window & { $tw: any };
+    const wikiWindow = window as unknown as WikiWindow;
     wikiWindow.$tw.wiki.addTiddler({
       title: untaggedTitle,
       text: 'This is an untagged tiddler used by Playwright.',
@@ -294,7 +299,31 @@ test('searches within a built-in filter result set', async ({ page }) => {
 });
 
 test('adds a tag through action-string autocomplete variable prompt', async ({ page }) => {
+  const focusedTitle = `Playwright Fresh Note ${Date.now()}`;
   const newTag = `PlaywrightTag${Date.now()}`;
+  const leakingTiddlerTitle = `Playwright Prompt Leak Candidate ${Date.now()}`;
+
+  await page.evaluate(({ nextFocusedTitle, tagToAdd, leakingTitle }) => {
+    const wikiWindow = window as unknown as WikiWindow;
+    wikiWindow.$tw.wiki.addTiddler({
+      title: nextFocusedTitle,
+      text: 'This focused tiddler is used to verify action-variable prompt behavior.',
+      tags: [],
+    });
+    wikiWindow.$tw.wiki.addTiddler({
+      title: leakingTitle,
+      text: `This text would leak into generic search results for ${tagToAdd} if prompt isolation breaks.`,
+      tags: [tagToAdd],
+    });
+    wikiWindow.$tw.wiki.addTiddler({
+      title: '$:/StoryList',
+      list: [nextFocusedTitle],
+    });
+    wikiWindow.$tw.wiki.addTiddler({
+      title: '$:/temp/focussedTiddler',
+      text: nextFocusedTitle,
+    });
+  }, { nextFocusedTitle: focusedTitle, tagToAdd: newTag, leakingTitle: leakingTiddlerTitle });
 
   const input = await openCommandPalette(page, '$');
   await typeIntoPalette(input, '$添加标签到当前条目');
@@ -304,12 +333,15 @@ test('adds a tag through action-string autocomplete variable prompt', async ({ p
 
   const wizardInput = page.locator(paletteInputSelector);
   await typeIntoPalette(wizardInput, newTag);
+  await expect(page.locator(palettePanelSelector)).not.toContainText(leakingTiddlerTitle);
   await clickPaletteItem(page, newTag);
 
   await expect.poll(() => page.evaluate(() => {
-    const wikiWindow = window as Window & { $tw: any };
+    const wikiWindow = window as unknown as WikiWindow;
     const focused = wikiWindow.$tw.wiki.getTiddlerText('$:/temp/focussedTiddler', '');
     const tags = wikiWindow.$tw.wiki.getTiddler(focused)?.fields.tags || [];
     return tags;
   })).toContain(newTag);
+
+  await expect(page.locator(palettePanelSelector)).toHaveCount(0);
 });
