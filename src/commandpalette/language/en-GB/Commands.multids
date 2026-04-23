@@ -25,3 +25,8 @@ ActionString/AddTags/Caption: Add tags to current tiddler
 ActionString/AddTags/Description: Append one or more tags to the current tiddler
 ActionString/AddTags/VariableCaption: New tag
 ActionString/AddTags/VariableDescription: Type tag name with autocomplete from existing tags
+ActionString/CloseTiddler/VariableCaption: Tiddler to Close
+ActionString/CloseTiddler/VariableDescription: Leave empty to close current tiddler
+ActionString/EditTiddler/VariableDescription: Leave empty to edit current tiddler
+ActionString/DeleteTiddler/VariableDescription: Leave empty to delete current tiddler
+ActionString/CloneTiddler/VariableDescription: Leave empty to clone current tiddler

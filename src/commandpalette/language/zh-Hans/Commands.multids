@@ -25,3 +25,8 @@ ActionString/AddTags/Caption: 添加标签到当前条目
 ActionString/AddTags/Description: 为当前条目追加一个或多个标签
 ActionString/AddTags/VariableCaption: 新标签
 ActionString/AddTags/VariableDescription: 输入标签名，支持自动补全（来源于知识库所有标签）
+ActionString/CloseTiddler/VariableCaption: 要关闭的条目
+ActionString/CloseTiddler/VariableDescription: 留空则关闭当前条目
+ActionString/EditTiddler/VariableDescription: 留空则编辑当前条目
+ActionString/DeleteTiddler/VariableDescription: 留空则删除当前条目
+ActionString/CloneTiddler/VariableDescription: 留空则克隆当前条目
