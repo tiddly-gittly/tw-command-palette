@@ -1,0 +1,11 @@
+tags: $:/tags/Actions
+caption: {{$:/language/Buttons/Edit/Caption}}
+description: {{$:/language/Buttons/Edit/Hint}}
+title: $:/plugins/linonetwo/commandpalette/Edit Tiddler
+action-variables: tiddlerToEdit
+tiddlerToEdit/type: text
+tiddlerToEdit/caption: 要编辑的条目
+tiddlerToEdit/description: <<lingo ActionString/EditTiddler/VariableDescription "$:/plugins/linonetwo/commandpalette/language/">>
+tiddlerToEdit/default: <<currentTiddler>>
+
+<$action-sendmessage $message="tm-edit-tiddler" $param=<<tiddlerToEdit>>/>

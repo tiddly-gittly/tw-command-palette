@@ -1,0 +1,11 @@
+tags: $:/tags/Actions
+caption: {{$:/language/Buttons/Close/Caption}}
+description: {{$:/language/Buttons/Close/Hint}} <<currentTiddler>>
+title: $:/plugins/linonetwo/commandpalette/Close Tiddler
+action-variables: tiddlerToClose
+tiddlerToClose/type: text
+tiddlerToClose/caption: <<lingo ActionString/CloseTiddler/VariableCaption "$:/plugins/linonetwo/commandpalette/language/">>
+tiddlerToClose/description: <<lingo ActionString/CloseTiddler/VariableDescription "$:/plugins/linonetwo/commandpalette/language/">>
+tiddlerToClose/default: <<currentTiddler>>
+
+<$action-sendmessage $message="tm-close-tiddler" $param=<<tiddlerToClose>>/>

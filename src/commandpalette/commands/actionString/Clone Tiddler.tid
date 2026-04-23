@@ -1,0 +1,11 @@
+tags: $:/tags/Actions
+caption: {{$:/language/Buttons/Clone/Caption}}
+description: {{$:/language/Buttons/Clone/Hint}} <<currentTiddler>>
+title: $:/plugins/linonetwo/commandpalette/Clone Tiddler
+action-variables: templateTiddler
+templateTiddler/type: text
+templateTiddler/caption: 模板条目
+templateTiddler/description: <<lingo ActionString/CloneTiddler/VariableDescription "$:/plugins/linonetwo/commandpalette/language/">>
+templateTiddler/default: <<currentTiddler>>
+
+<$action-sendmessage $message="tm-new-tiddler" $param=<<templateTiddler>>/>

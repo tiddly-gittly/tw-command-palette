@@ -1,0 +1,11 @@
+tags: $:/tags/Actions
+caption: {{$:/language/Buttons/Delete/Caption}}
+description: {{$:/language/Buttons/Delete/Hint}}
+title: $:/plugins/linonetwo/commandpalette/Delete Tiddler
+action-variables: tiddlerToDelete
+tiddlerToDelete/type: text
+tiddlerToDelete/caption: 要删除的条目
+tiddlerToDelete/description: <<lingo ActionString/DeleteTiddler/VariableDescription "$:/plugins/linonetwo/commandpalette/language/">>
+tiddlerToDelete/default: <<currentTiddler>>
+
+<$action-sendmessage $message="tm-delete-tiddler" $param=<<tiddlerToDelete>>/>
