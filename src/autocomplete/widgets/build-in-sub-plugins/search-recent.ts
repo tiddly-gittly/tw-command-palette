@@ -4,7 +4,6 @@ import { createLocalStorageRecentSearchesPlugin, RecentSearchesPluginData } from
 import { RecentSearchesItem } from '@algolia/autocomplete-plugin-recent-searches/dist/esm/types';
 import { AutocompleteNavigator } from '@algolia/autocomplete-shared/dist/esm/core/AutocompleteNavigator';
 import { ITiddlerFields } from 'tiddlywiki';
-import { checkIsModalPromptActive, checkIsUnderFilter } from '../utils/checkPrefix';
 import { contextActions, contextReducer, IContext } from '../utils/context';
 import { getIconSvg } from '../utils/getIconSvg';
 import { lingo } from '../utils/lingo';
@@ -32,15 +31,14 @@ export const plugin = (id: string): AutocompletePlugin<RecentSearchesItem, Recen
       };
       return {
         ...source,
+        sourceId: 'story-history',
         getItemUrl({ item }) {
           return item.id;
         },
         async getItems(parameters) {
-          if (
-            parameters.query.length > 0
-            || checkIsUnderFilter(parameters as unknown as GetSourcesParams<ITiddlerFields>)
-            || checkIsModalPromptActive(parameters as unknown as GetSourcesParams<ITiddlerFields>)
-          ) return [];
+          // Routing logic is now centralized in phaseRouter.ts
+          // This source will only be called when appropriate
+          if (parameters.query.length > 0) return [];
           const items = source.getItems(parameters);
           return await items;
         },

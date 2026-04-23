@@ -1,6 +1,5 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
-import { checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
 import { cacheSystemTiddlers } from '../utils/configs';
 import { emptyContext, IContext } from '../utils/context';
 import { debounced } from '../utils/debounce';
@@ -14,12 +13,12 @@ import { renderTextWithCache } from '../utils/renderTextWithCache';
 let cachedTiddlers: ITiddlerFields[] = [];
 export const plugin = {
   async getSources(parameters) {
+    // Routing logic is now centralized in phaseRouter.ts
     if (parameters.query.length === 0) return [];
-    if (!checkIsSearchSystem(parameters) || checkIsUnderFilter(parameters)) return [];
     const { widget } = parameters.state.context as IContext;
     return await debounced([
       {
-        sourceId: 'config',
+        sourceId: 'search-config',
         async getItems({ query }) {
           if (cachedTiddlers.length === 0 || !cacheSystemTiddlers()) {
             cachedTiddlers = await filterTiddlersAsync(`[all[shadows]tag[$:/tags/ControlPanel/SettingsTab]]`, { system: true });

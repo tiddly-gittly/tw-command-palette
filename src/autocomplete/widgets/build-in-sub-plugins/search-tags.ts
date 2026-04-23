@@ -1,6 +1,5 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
-import { checkIsSearchTags } from '../utils/checkPrefix';
 import { applyIgnoreFilterToTag } from '../utils/configs';
 import { contextActions, contextReducer, IContext } from '../utils/context';
 import { debounced } from '../utils/debounce';
@@ -9,10 +8,8 @@ import { lingo } from '../utils/lingo';
 
 export const plugin = {
   async getSources(parameters) {
+    // Routing logic is now centralized in phaseRouter.ts
     if (parameters.query.length === 0) return [];
-    if (!checkIsSearchTags(parameters)) {
-      return [];
-    }
     const onSelect = (item: ITiddlerFields) => {
       (parameters.state.context as IContext).addHistoryItem?.(parameters.query);
       const filter = `[[${item.title}]] [tag[${item.title}]]`;

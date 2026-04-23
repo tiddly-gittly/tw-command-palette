@@ -13,6 +13,7 @@ import { getActiveElement } from './utils/getFocused';
 import { getSubPlugins } from './utils/getSubPlugins';
 import { handleDarkMode } from './utils/handleDarkMode';
 import { uniqSourcesBy } from './utils/uniqSourcesBy';
+import { computePhase } from './utils/phaseRouter';
 
 class AutoCompleteSearchWidget extends Widget {
   id = 'default';
@@ -89,6 +90,19 @@ class AutoCompleteSearchWidget extends Widget {
       defaultActiveItemId: 0,
       onStateChange(nextState) {
         updateState(nextState);
+        
+        // Automatically compute and update phase based on query and context
+        const context = nextState.state.context as IContext;
+        const newPhase = computePhase(nextState.state.query, context);
+        
+        // Only update context and refresh if phase actually changed
+        if (context.phase !== newPhase) {
+          nextState.setContext({ phase: newPhase } satisfies Partial<IContext>);
+          // refresh() triggers all sources' getSources to re-execute
+          void nextState.refresh().catch((error: unknown) => {
+            console.error('Error refreshing after phase change', error);
+          });
+        }
       },
       autoFocus: this.autoFocus,
       openOnFocus: this.autoFocus,
@@ -104,12 +118,13 @@ class AutoCompleteSearchWidget extends Widget {
           'title': titleSource,
           'title-pinyin': titlePinyinSource,
           'story-history': storyHistorySource,
+          'story-list': storyListSource,
           'text': textSource,
           ...rest
         } = sourcesBySourceId;
         // this will also affect `priority` field. The order here is more important than `priority` field.
         return [
-          ...removeDuplicates(...[...(titlePriorityText ? [titleSource, textSource] : [textSource, titleSource]), titlePinyinSource, storyHistorySource].filter(Boolean)),
+          ...removeDuplicates(...[...(titlePriorityText ? [titleSource, textSource] : [textSource, titleSource]), titlePinyinSource, storyListSource, storyHistorySource].filter(Boolean)),
           ...Object.values(rest),
         ];
       },
@@ -327,7 +342,7 @@ class AutoCompleteSearchWidget extends Widget {
       if (event.key === 'Control' && this.autoCompleteState?.state.query === '') {
         event.stopPropagation();
         event.preventDefault();
-        const item = this.autoCompleteState.state.collections.find(({ source }) => source.sourceId === 'story-history')?.items[this.autoCompleteState.state.activeItemId ?? 0];
+        const item = this.autoCompleteState.state.collections.find(({ source }) => source.sourceId === 'story-list')?.items[this.autoCompleteState.state.activeItemId ?? 0];
         if (!item) return;
         this.autoCompleteInstance.navigator.navigate({ item, itemUrl: item.title, state: this.autoCompleteState.state });
       }

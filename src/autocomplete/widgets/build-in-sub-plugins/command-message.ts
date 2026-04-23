@@ -1,6 +1,5 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
-import { checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
 import { cacheSystemTiddlers } from '../utils/configs';
 import { contextActions, contextReducer, IContext } from '../utils/context';
 import { debounced } from '../utils/debounce';
@@ -14,8 +13,8 @@ import { renderTextWithCache } from '../utils/renderTextWithCache';
 let cachedTiddlers: ITiddlerFields[] = [];
 export const plugin = {
   async getSources(parameters) {
+    // Routing logic is now centralized in phaseRouter.ts
     if (parameters.query.length === 0) return [];
-    if (!checkIsSearchSystem(parameters) || checkIsUnderFilter(parameters)) return [];
     const focusedTiddler = $tw.wiki.getTiddlerText('$:/temp/focussedTiddler');
     const variables = { currentTiddler: focusedTiddler ?? '' };
     const { widget } = parameters.state.context as IContext;
@@ -53,7 +52,7 @@ export const plugin = {
     };
     return await debounced([
       {
-        sourceId: 'message',
+        sourceId: 'command-message',
         async getItems({ query }) {
           if (cachedTiddlers.length === 0 || !cacheSystemTiddlers()) {
             cachedTiddlers = await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Messages]]`, { system: true });

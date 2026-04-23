@@ -3,7 +3,7 @@ import type { Widget } from 'tiddlywiki';
 /**
  * Explicit phase to track which stage of the command palette flow we are in.
  */
-export type Phase = 'idle' | 'normal' | 'filter-select' | 'under-filter' | 'tag-search' | 'command';
+export type Phase = 'idle' | 'normal' | 'filter-select' | 'under-filter' | 'tag-search' | 'command' | 'help';
 
 export type ActionVariableInputType = 'text' | 'checkbox' | 'select' | 'multi-checkbox';
 

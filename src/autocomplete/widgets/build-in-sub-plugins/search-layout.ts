@@ -1,7 +1,6 @@
 import { AutocompleteState } from '@algolia/autocomplete-core';
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
-import { checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
 import { cacheSystemTiddlers } from '../utils/configs';
 import { IContext } from '../utils/context';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
@@ -15,8 +14,8 @@ import { renderTextWithCache } from '../utils/renderTextWithCache';
 let cachedTiddlers: ITiddlerFields[] = [];
 export const plugin = {
   getSources(parameters) {
+    // Routing logic is now centralized in phaseRouter.ts
     if (parameters.query.length === 0) return [];
-    if (!checkIsSearchSystem(parameters) || checkIsUnderFilter(parameters)) return [];
     const { widget } = parameters.state.context as IContext;
     const onSelect = (item: ITiddlerFields, state: AutocompleteState<ITiddlerFields>, isClick: boolean) => {
       const newContext = { noNavigate: true } satisfies IContext;
@@ -29,7 +28,7 @@ export const plugin = {
     };
     return [
       {
-        sourceId: 'layout',
+        sourceId: 'search-layout',
         async getItems({ query }) {
           if (cachedTiddlers.length === 0 || !cacheSystemTiddlers()) {
             cachedTiddlers = await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Layout]] [[$:/core/ui/PageTemplate]] +[!is[draft]sort[name]]`, {

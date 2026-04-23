@@ -1,18 +1,17 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import uniq from 'lodash/uniq';
 import { ITiddlerFields } from 'tiddlywiki';
-import { checkIsSearchUser, checkIsUnderFilter } from '../utils/checkPrefix';
 import { emptyContext, IContext } from '../utils/context';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
 
 export const plugin = {
   getSources(parameters) {
+    // Routing logic is now centralized in phaseRouter.ts
     const { widget } = parameters.state.context as IContext;
-    if (!checkIsSearchUser(parameters) || checkIsUnderFilter(parameters)) return [];
     return [
       {
-        sourceId: 'story-history',
+        sourceId: 'story-list',
         getItems({ query }) {
           const historyDataRaw = $tw.wiki.getTiddlerData<Array<{ title: string }> | undefined>('$:/HistoryList');
           const historyData = historyDataRaw ?? [];

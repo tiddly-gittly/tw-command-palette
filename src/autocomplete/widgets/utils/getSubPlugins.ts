@@ -1,5 +1,8 @@
 import { AutocompletePlugin } from '@algolia/autocomplete-js';
+import { GetSourcesParams } from '@algolia/autocomplete-core';
 import { ITiddlerFields } from 'tiddlywiki';
+import { computeActiveSourceIds, computePhase } from './phaseRouter';
+import { IContext } from './context';
 
 export function getSubPlugins(id: string) {
   const plugins: Array<AutocompletePlugin<ITiddlerFields, unknown>> = [];
@@ -19,6 +22,23 @@ export function getSubPlugins(id: string) {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
           plugin = plugin(id);
         }
+        
+        // Wrap the plugin's getSources with centralized routing logic
+        const originalGetSources = plugin.getSources;
+        if (originalGetSources) {
+          plugin.getSources = async function(parameters: GetSourcesParams<ITiddlerFields>) {
+            const context = parameters.state.context as IContext;
+            const phase = context.phase ?? computePhase(parameters.query, context);
+            const activeSourceIds = computeActiveSourceIds(phase, parameters.query, context);
+            
+            // Call original getSources
+            const sources = await originalGetSources.call(this, parameters);
+            
+            // Filter to only active sources
+            return sources.filter((source: { sourceId: string }) => activeSourceIds.has(source.sourceId));
+          };
+        }
+        
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         plugins.push(plugin);
       } catch (error) {

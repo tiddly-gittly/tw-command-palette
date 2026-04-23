@@ -1,6 +1,5 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
-import { checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
 import { searchSystemTitle } from '../utils/configs';
 import { emptyContext } from '../utils/context';
 import { debounced } from '../utils/debounce';
@@ -9,11 +8,12 @@ import { lingo } from '../utils/lingo';
 
 export const plugin = {
   async getSources(parameters) {
+    // Routing logic is now centralized in phaseRouter.ts
     if (parameters.query.length === 0) return [];
-    if (!searchSystemTitle() || !checkIsSearchSystem(parameters) || checkIsUnderFilter(parameters)) return [];
+    if (!searchSystemTitle()) return [];
     return await debounced([
       {
-        sourceId: 'system-title',
+        sourceId: 'search-system-title',
         async getItems({ query }) {
           const realQuery = query.substring(1);
           if (realQuery === '') return [];

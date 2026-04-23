@@ -1,6 +1,5 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
-import { checkIsSearchUser, checkIsUnderFilter } from '../utils/checkPrefix';
 import { titleTextExclusionFilter } from '../utils/configs';
 import { emptyContext } from '../utils/context';
 import { debounced } from '../utils/debounce';
@@ -10,8 +9,9 @@ import { lingo } from '../utils/lingo';
 
 export const plugin = {
   async getSources(parameters) {
+    // Routing logic is now centralized in phaseRouter.ts
+    // This source will only be called when appropriate
     if (parameters.query.length === 0) return [];
-    if (!checkIsSearchUser(parameters) || checkIsUnderFilter(parameters)) return [];
     const { fieldsAsTitle, titleFields } = getFieldsAsTitle();
     return await debounced([
       {

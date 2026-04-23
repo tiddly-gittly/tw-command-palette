@@ -1,6 +1,5 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
-import { checkIsHelp, checkIsUnderFilter } from '../utils/checkPrefix';
 import { cacheSystemTiddlers } from '../utils/configs';
 import { IContext } from '../utils/context';
 import { lingo } from '../utils/lingo';
@@ -12,8 +11,9 @@ import { renderTextWithCache } from '../utils/renderTextWithCache';
 let cachedTiddlers: string[] = [];
 export const plugin = {
   getSources(parameters) {
+    // Routing logic is now centralized in phaseRouter.ts
+    // This source will only be called when appropriate
     const { widget } = parameters.state.context as IContext;
-    if (!checkIsHelp(parameters) || checkIsUnderFilter(parameters)) return [];
     return [
       {
         sourceId: 'help',

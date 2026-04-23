@@ -1,6 +1,5 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
-import { checkIsUnderFilter } from '../utils/checkPrefix';
 import { contextActions, contextReducer, IContext } from '../utils/context';
 import { debounced } from '../utils/debounce';
 import { lingo } from '../utils/lingo';
@@ -15,7 +14,7 @@ import { lingo } from '../utils/lingo';
  */
 export const plugin = {
   async getSources(parameters) {
-    if (checkIsUnderFilter(parameters)) return [];
+    // Routing logic is now centralized in phaseRouter.ts
     const context = parameters.state.context as IContext;
     if (!context.createTiddlerPending) return [];
 
@@ -56,7 +55,7 @@ export const plugin = {
         header() {
           return lingo('CreateTiddler/Header');
         },
-        item({ item, createElement }) {
+        item({ item, createElement, state }) {
           const isPrompt = !rawTitle;
           const onclick = () => {
             if (isPrompt) return;

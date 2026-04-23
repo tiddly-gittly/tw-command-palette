@@ -1,7 +1,6 @@
 import { AutocompleteState } from '@algolia/autocomplete-core';
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
-import { checkIsUnderFilter } from '../utils/checkPrefix';
 import { contextActions, contextReducer, IActionVariableDefinition, IContext } from '../utils/context';
 import { debounced } from '../utils/debounce';
 import { lingo } from '../utils/lingo';
@@ -56,7 +55,7 @@ function filterByQuery(options: string[], query: string) {
 
 export const plugin = {
   async getSources(parameters) {
-    if (checkIsUnderFilter(parameters)) return [];
+    // Routing logic is now centralized in phaseRouter.ts
     const context = parameters.state.context as IContext;
     const prompt = context.actionVariablePrompt;
     const { widget } = context;

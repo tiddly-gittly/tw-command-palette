@@ -1,6 +1,5 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
-import { checkIsSearchSystem, checkIsUnderFilter } from '../utils/checkPrefix';
 import { cacheSystemTiddlers } from '../utils/configs';
 import { contextActions, contextReducer, IActionVariableDefinition, IContext } from '../utils/context';
 import { debounced } from '../utils/debounce';
@@ -48,8 +47,8 @@ function parseActionVariableDefinitions(item: ITiddlerFields): IActionVariableDe
 let cachedTiddlers: ITiddlerFields[] = [];
 export const plugin = {
   async getSources(parameters) {
+    // Routing logic is now centralized in phaseRouter.ts
     if (parameters.query.length === 0) return [];
-    if (!checkIsSearchSystem(parameters) || checkIsUnderFilter(parameters)) return [];
     const focusedTiddler = $tw.wiki.getTiddlerText('$:/temp/focussedTiddler');
     const variables = {
       currentTiddler: focusedTiddler ?? '',
@@ -91,7 +90,7 @@ export const plugin = {
     };
     return await debounced([
       {
-        sourceId: 'actionString',
+        sourceId: 'command-action-string',
         async getItems({ query }) {
           if (cachedTiddlers.length === 0 || !cacheSystemTiddlers()) {
             cachedTiddlers = await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Actions]]`, { system: true, exclude: [] });

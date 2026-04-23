@@ -1,6 +1,5 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
-import { checkIsSearchUser, checkIsUnderFilter } from '../utils/checkPrefix';
 import { titleTextExclusionFilter } from '../utils/configs';
 import { emptyContext } from '../utils/context';
 import { debounced } from '../utils/debounce';
@@ -10,7 +9,7 @@ import { lingo } from '../utils/lingo';
 
 export const plugin = {
   async getSources(parameters) {
-    if (!checkIsSearchUser(parameters) || checkIsUnderFilter(parameters)) return [];
+    // Routing logic is now centralized in phaseRouter.ts
     if (
       // check `pinyinfuse` operator is installed
       $tw.wiki.getTiddler('$:/plugins/linonetwo/pinyin-fuzzy-search/pinyin-fuzzy-search.js') === undefined ||
