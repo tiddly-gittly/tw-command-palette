@@ -1,7 +1,7 @@
 import type { AutocompletePlugin, AutocompleteSource } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { cacheSystemTiddlers, missingFilterOnTop, titleTextExclusionFilter } from '../utils/configs';
-import { contextActions, contextReducer, emptyContext, IContext } from '../utils/context';
+import { contextActions, contextReducer, IContext } from '../utils/context';
 import { debounced } from '../utils/debounce';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
@@ -19,7 +19,7 @@ export const plugin = {
     const sources: Array<AutocompleteSource<ITiddlerFields>> = [];
     const context = parameters.state.context as IContext;
     const { widget } = context;
-    
+
     // Source 1: Filter selection (shown when user types filter prefix)
     const onSelect = (item: ITiddlerFields) => {
       const filterGetTiddler = item['command-palette-get-tiddler'] !== 'no';
@@ -41,7 +41,6 @@ export const plugin = {
         const realQuery = query.substring(1);
         const buildInFilters = realQuery
           ? validFilterTiddlers.filter(tiddler =>
-            // TODO: add pinyinfuse
             $tw.wiki.filterTiddlers(
               `[search[${realQuery}]]`,
               undefined,
@@ -95,7 +94,7 @@ export const plugin = {
         },
       },
     });
-    
+
     // Source 2: Under-filter search (shown when context.filter is set)
     sources.push({
       sourceId: 'filter',
@@ -135,8 +134,8 @@ export const plugin = {
         },
         item({ item, createElement, state }) {
           const onclick = () => {
-            // parameters.setContext(emptyContext); is not working here. But need to clear the context
-            parameters.navigator.navigate({ item, itemUrl: item.title, state: { ...state, context: { ...state.context, ...emptyContext } } });
+            const transientContext = contextReducer(contextActions.clearTransient());
+            parameters.navigator.navigate({ item, itemUrl: item.title, state: { ...state, context: { ...state.context, ...transientContext } } });
           };
           if (typeof item.caption === 'string' && item.caption !== '') {
             return createElement('div', {

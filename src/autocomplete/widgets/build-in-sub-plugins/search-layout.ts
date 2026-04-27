@@ -40,7 +40,6 @@ export const plugin = {
           const realQuery = query.substring(1);
           return realQuery
             ? cachedTiddlers.filter((tiddler): tiddler is ITiddlerFields => {
-              // TODO: add pinyinfuse
               return $tw.wiki.filterTiddlers(
                 `[search[${realQuery}]]`,
                 undefined,

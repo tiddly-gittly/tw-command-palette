@@ -19,12 +19,7 @@ export const plugin = {
             ...historyData.reverse().map((x) => x.title),
             ...$tw.wiki.filterTiddlers('[list[$:/StoryList]]'),
           ]);
-          let filteredHistoryTitles: string[] = [];
-          if ($tw.wiki.getTiddler('$:/plugins/linonetwo/pinyin-fuzzy-search/pinyin-fuzzy-search.js') === undefined) {
-            filteredHistoryTitles = $tw.wiki.filterTiddlers(`[search:title[${query}]]`, undefined, $tw.wiki.makeTiddlerIterator(historyTitles));
-          } else {
-            filteredHistoryTitles = $tw.wiki.filterTiddlers(`[pinyinfuse[${query}]]`, undefined, $tw.wiki.makeTiddlerIterator(historyTitles));
-          }
+          const filteredHistoryTitles = $tw.wiki.filterTiddlers(`[search:title[${query}]]`, undefined, $tw.wiki.makeTiddlerIterator(historyTitles));
           const [first, second, ...rest] = filteredHistoryTitles
             .map((title) => $tw.wiki.getTiddler(title)?.fields)
             .filter(Boolean) as ITiddlerFields[];

@@ -7,13 +7,13 @@ import { IChangedTiddlers, IParseTreeNode, ITiddlerFields, IWidgetInitialiseOpti
 import '@algolia/autocomplete-theme-classic';
 import { AutocompleteState } from '@algolia/autocomplete-core';
 import { observe, unobserve } from '@seznam/visibility-observer';
-import { contextActions, ContextAction, contextReducer, emptyContext, IContext } from './utils/context';
+import { ContextAction, contextActions, contextReducer, IContext } from './utils/context';
 import { fixPanelPosition } from './utils/fixPanelPosition';
 import { getActiveElement } from './utils/getFocused';
 import { getSubPlugins } from './utils/getSubPlugins';
 import { handleDarkMode } from './utils/handleDarkMode';
-import { uniqSourcesBy } from './utils/uniqSourcesBy';
 import { computePhase } from './utils/phaseRouter';
+import { uniqSourcesBy } from './utils/uniqSourcesBy';
 
 class AutoCompleteSearchWidget extends Widget {
   id = 'default';
@@ -90,11 +90,11 @@ class AutoCompleteSearchWidget extends Widget {
       defaultActiveItemId: 0,
       onStateChange(nextState) {
         updateState(nextState);
-        
+
         // Automatically compute and update phase based on query and context
         const context = nextState.state.context as IContext;
         const newPhase = computePhase(nextState.state.query, context);
-        
+
         // Only update context and refresh if phase actually changed
         if (context.phase !== newPhase) {
           nextState.setContext({ phase: newPhase } satisfies Partial<IContext>);
@@ -116,7 +116,6 @@ class AutoCompleteSearchWidget extends Widget {
       reshape({ sourcesBySourceId }) {
         const {
           'title': titleSource,
-          'title-pinyin': titlePinyinSource,
           'story-history': storyHistorySource,
           'story-list': storyListSource,
           'text': textSource,
@@ -124,7 +123,7 @@ class AutoCompleteSearchWidget extends Widget {
         } = sourcesBySourceId;
         // this will also affect `priority` field. The order here is more important than `priority` field.
         return [
-          ...removeDuplicates(...[...(titlePriorityText ? [titleSource, textSource] : [textSource, titleSource]), titlePinyinSource, storyListSource, storyHistorySource].filter(Boolean)),
+          ...removeDuplicates(...[...(titlePriorityText ? [titleSource, textSource] : [textSource, titleSource]), storyListSource, storyHistorySource].filter(Boolean)),
           ...Object.values(rest),
         ];
       },
@@ -160,7 +159,7 @@ class AutoCompleteSearchWidget extends Widget {
       const keepOpen = this.commandKeepOpen;
       this.commandHandled = false;
       this.commandKeepOpen = false;
-      if (!keepOpen) { this.setCloseState(); }
+      if (!keepOpen) this.setCloseState();
       this.clearContext();
       return;
     }
@@ -231,7 +230,7 @@ class AutoCompleteSearchWidget extends Widget {
   }
 
   clearContext() {
-    this.autoCompleteInstance?.setContext(emptyContext);
+    this.autoCompleteInstance?.setContext(contextReducer(contextActions.clearTransient()));
   }
 
   /**

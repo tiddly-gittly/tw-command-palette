@@ -69,7 +69,6 @@ export const plugin = {
                 return passTheFilterOnTiddler;
               })
               .filter(tiddler =>
-                // TODO: add pinyinfuse
                 $tw.wiki.filterTiddlers(
                   `[search[${realQuery}]]`,
                   undefined,

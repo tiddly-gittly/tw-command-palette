@@ -29,7 +29,6 @@ Configs/TitleText/Caption: Search Title & Text
 Configs/SystemTiddler/Caption: Search System Tiddlers
 SystemTitle: Title of system tiddler
 UserTitle: Title of user tiddler
-UserTitlePinyin: Title Pinyin of user tiddler
 UserText: Text of user tiddler
 StoryHistory: Story history
 SearchHistory: Search history

@@ -28,7 +28,6 @@ export const plugin = {
           const realQuery = query.substring(1);
           return realQuery
             ? allHelpTiddlers.filter((tiddler) =>
-              // TODO: add pinyinfuse
               $tw.wiki.filterTiddlers(
                 `[search[${realQuery}]]`,
                 undefined,
