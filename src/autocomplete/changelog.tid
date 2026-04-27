@@ -2,6 +2,17 @@ title: $:/plugins/linonetwo/autocomplete/changelog
 
 ! Changelog
 
+!! Version 0.9.1
+
+* Fixed: title search ignore filters now only suppress title-like fields by default; caption matches remain searchable.
+* Changed: removed pinyin search support and related pinyin dependency from autocomplete.
+
+!! Version 0.9.0
+
+* Added: centralized source routing via `phaseRouter.ts` to make autocomplete mode switching consistent.
+* Fixed: action-variable prompt now stays isolated from other sources and closes the panel correctly after wizard selection.
+* Added: Playwright regressions for command palette wizard flows.
+
 !! Version 0.7.0
 
 * Added: declarative action variable wizard for action-string commands.
