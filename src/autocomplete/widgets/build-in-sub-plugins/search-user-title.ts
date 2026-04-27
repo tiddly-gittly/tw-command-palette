@@ -4,7 +4,7 @@ import { titleTextExclusionFilter } from '../utils/configs';
 import { emptyContext } from '../utils/context';
 import { debounced } from '../utils/debounce';
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
-import { getFieldsAsTitle } from '../utils/getFieldsAsTitle';
+import { buildTitleFieldFilter, getFieldsAsTitle } from '../utils/getFieldsAsTitle';
 import { lingo } from '../utils/lingo';
 
 export const plugin = {
@@ -12,15 +12,22 @@ export const plugin = {
     // Routing logic is now centralized in phaseRouter.ts
     // This source will only be called when appropriate
     if (parameters.query.length === 0) return [];
-    const { fieldsAsTitle, titleFields } = getFieldsAsTitle();
+    const { fieldsAsTitleOnly, fieldsAsCaption, titleFields } = getFieldsAsTitle();
     return await debounced([
       {
         sourceId: 'title',
         async getItems({ query }) {
           if (query === '') return [];
-          const filterToOpen = `[all[tiddlers]!is[system]] ${titleTextExclusionFilter()} +[search:${fieldsAsTitle}[${query}]]`;
+          const filterToOpen = buildTitleFieldFilter({
+            baseFilter: '[all[tiddlers]!is[system]]',
+            query,
+            operator: 'search',
+            fieldsAsTitleOnly,
+            fieldsAsCaption,
+            exclusionFilter: titleTextExclusionFilter(),
+          });
           parameters.setContext({ filterToOpen });
-          return await filterTiddlersAsync(filterToOpen, {});
+          return filterToOpen === '' ? [] : await filterTiddlersAsync(filterToOpen, {});
         },
         getItemUrl({ item }) {
           return item.title;

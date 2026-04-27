@@ -1,11 +1,42 @@
+const captionField = 'caption';
+
 /**
- * @returns `title,caption` that can be use with `search:title,caption[]` operator.
+ * @returns configured title-like fields and a caption split for search behavior.
  */
 export function getFieldsAsTitle() {
   const TitleAliasConfig = $tw.wiki.getTiddlerText('$:/plugins/linonetwo/autocomplete/configs/TitleAlias', 'title caption');
   const titleFields = TitleAliasConfig.split(' ').filter(Boolean);
+  const titleOnlyFields = titleFields.filter(field => field !== captionField);
+  const captionFields = titleFields.filter(field => field === captionField);
   const fieldsAsTitle = titleFields.join(',');
-  return { fieldsAsTitle, titleFields };
+  const fieldsAsTitleOnly = titleOnlyFields.join(',');
+  const fieldsAsCaption = captionFields.join(',');
+  return { fieldsAsTitle, fieldsAsTitleOnly, fieldsAsCaption, titleFields };
+}
+
+export function buildTitleFieldFilter({
+  baseFilter,
+  query,
+  operator,
+  fieldsAsTitleOnly,
+  fieldsAsCaption,
+  exclusionFilter = '',
+}: {
+  baseFilter: string;
+  query: string;
+  operator: string;
+  fieldsAsTitleOnly: string;
+  fieldsAsCaption: string;
+  exclusionFilter?: string;
+}) {
+  const filterRuns = [];
+  if (fieldsAsTitleOnly !== '') {
+    filterRuns.push(`${baseFilter} ${exclusionFilter} +[${operator}:${fieldsAsTitleOnly}[${query}]]`);
+  }
+  if (fieldsAsCaption !== '') {
+    filterRuns.push(`${baseFilter} +[${operator}:${fieldsAsCaption}[${query}]]`);
+  }
+  return filterRuns.join(' ');
 }
 
 export function getFieldsAsText() {
