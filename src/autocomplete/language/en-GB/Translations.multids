@@ -37,12 +37,14 @@ UnderFilter: Further search based on filters
 Tagging: User tiddlers with tags
 Message: Trigger system message
 Layout: Switch layout
+SidebarTab: Switch sidebar tab
 Config: Open config
 Tags: Tags
 Help: Command palette usage
 ActionString: Trigger action string
 CurrentTiddler: Current tiddler
 CurrentLayout: Current layout
+CurrentSidebarTab: Current sidebar tab
 NoResult: No result or no uniq result
 Help/Help/Caption: Help
 Help/Help/Description: Usage of the command menu, describes what the command menu will search when different prefixes are added to the search box.

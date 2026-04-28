@@ -51,3 +51,13 @@ test('selects a layout and updates the current layout label', async ({ page }) =
 
   await expect.poll(() => getCurrentLayoutDisplayName(page)).toBe(layoutName);
 });
+
+test('does not match default layout for unrelated system queries', async ({ page }) => {
+  const input = await openCommandPalette(page, '$');
+
+  await typeIntoPalette(input, '$open');
+  await expect(page.locator(layoutResultSelector)).toHaveCount(0);
+
+  await typeIntoPalette(input, '$tool');
+  await expect(page.locator(layoutResultSelector)).toHaveCount(0);
+});

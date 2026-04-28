@@ -2,6 +2,12 @@ title: $:/plugins/linonetwo/autocomplete/changelog
 
 ! Changelog
 
+!! Version 0.9.2
+
+* Added: sidebar tab search in system mode, with switching support and matching on both tab title and rendered caption.
+* Added: Playwright regressions for sidebar-tab search and switching.
+* Fixed: system queries like `open` and `tool` no longer falsely match the default layout through the layout source.
+
 !! Version 0.9.1
 
 * Fixed: title search ignore filters now only suppress title-like fields by default; caption matches remain searchable.

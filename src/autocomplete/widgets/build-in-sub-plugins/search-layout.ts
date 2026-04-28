@@ -12,6 +12,22 @@ import { renderTextWithCache } from '../utils/renderTextWithCache';
  * This list won't change during wiki use, so we can only fetch it once.
  */
 let cachedTiddlers: ITiddlerFields[] = [];
+
+function includesQuery(candidate: string, query: string) {
+  return candidate.toLowerCase().includes(query.toLowerCase());
+}
+
+function getSearchableLayoutTexts(tiddler: ITiddlerFields, widget: IContext['widget']) {
+  const rawTitle = tiddler.title.replace('$:/plugins/', '');
+  const normalizedTitle = rawTitle.replace('$:/', '').replaceAll('/', ' ');
+  return [
+    renderTextWithCache(tiddler.name, widget),
+    renderTextWithCache(tiddler.description, widget),
+    rawTitle,
+    normalizedTitle,
+  ].filter((value): value is string => typeof value === 'string' && value.length > 0);
+}
+
 export const plugin = {
   getSources(parameters) {
     // Routing logic is now centralized in phaseRouter.ts
@@ -37,18 +53,10 @@ export const plugin = {
             });
           }
           // If there are search text, filter each tiddler one by one (so we could filter by rendered caption).
-          const realQuery = query.substring(1);
+          const realQuery = query.substring(1).trim();
           return realQuery
             ? cachedTiddlers.filter((tiddler): tiddler is ITiddlerFields => {
-              return $tw.wiki.filterTiddlers(
-                `[search[${realQuery}]]`,
-                undefined,
-                $tw.wiki.makeTiddlerIterator([
-                  renderTextWithCache(tiddler.name, widget),
-                  renderTextWithCache(tiddler.description, widget),
-                  tiddler.title.replace('$:/plugins/', ''),
-                ]),
-              ).length > 0;
+              return getSearchableLayoutTexts(tiddler, widget).some((candidate) => includesQuery(candidate, realQuery));
             })
             : cachedTiddlers;
         },

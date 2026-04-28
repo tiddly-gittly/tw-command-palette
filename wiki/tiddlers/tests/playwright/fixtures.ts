@@ -176,3 +176,20 @@ export async function getCurrentLayoutDisplayName(page: Page) {
     return wikiWindow.$tw.wiki.getTiddlerText('$:/language/PageTemplate/Name', currentLayoutTitle || '$:/core/ui/PageTemplate');
   });
 }
+
+export async function getSelectedSidebarTabTitle(page: Page) {
+  return page.evaluate(() => {
+    const selectedButton = document.querySelector<HTMLButtonElement>('.tc-sidebar-lists .tc-tab-buttons button.tc-tab-selected');
+    if (selectedButton?.dataset.tabTitle) {
+      return selectedButton.dataset.tabTitle;
+    }
+
+    const wikiWindow = window as unknown as WikiWindow;
+    const stateTitle = wikiWindow.$tw.wiki.filterTiddlers('[all[tiddlers+shadows]prefix[$:/state/tab/sidebar--]]')[0];
+    if (stateTitle) {
+      return wikiWindow.$tw.wiki.getTiddlerText(stateTitle, '');
+    }
+
+    return wikiWindow.$tw.wiki.getTiddlerText('$:/config/DefaultSidebarTab', '');
+  });
+}

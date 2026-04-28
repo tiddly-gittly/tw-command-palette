@@ -64,6 +64,7 @@ export function computeActiveSourceIds(
       'command-action-string',
       'search-config',
       'search-layout',
+      'search-sidebar-tab',
       'search-system-title',
     ]);
   }

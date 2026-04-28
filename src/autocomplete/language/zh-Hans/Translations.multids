@@ -36,12 +36,14 @@ UnderFilter: 基于筛选器进一步搜索
 Tagging: 带标签的用户条目
 Message: 触发系统消息
 Layout: 切换布局
+SidebarTab: 切换侧边栏标签页
 Config: 打开设置
 Tags: 标签
 Help: 命令菜单用法
 ActionString: 触发动作字符串
 CurrentTiddler: 当前条目
 CurrentLayout: 当前布局
+CurrentSidebarTab: 当前侧边栏标签页
 NoResult: 无结果或结果重复
 Help/Help/Caption: 帮助
 Help/Help/Description: 命令菜单用法，介绍在搜索框里加上不同前缀时，命令菜单将会搜索的内容。
