@@ -2,7 +2,9 @@ import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { cacheSystemTiddlers } from '../utils/configs';
 import { contextActions, contextReducer, IActionVariableDefinition, IContext } from '../utils/context';
-import { debounced } from '../utils/debounce';
+import { createDebounced } from '../utils/debounce';
+
+const debounced = createDebounced();
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
@@ -48,7 +50,7 @@ let cachedTiddlers: ITiddlerFields[] = [];
 export const plugin = {
   async getSources(parameters) {
     // Routing logic is now centralized in phaseRouter.ts
-    if (parameters.query.length === 0) return [];
+    if (!parameters.query.trim()) return [];
     const focusedTiddler = $tw.wiki.getTiddlerText('$:/temp/focussedTiddler');
     const variables = {
       currentTiddler: focusedTiddler ?? '',
@@ -112,7 +114,7 @@ export const plugin = {
             }
 
             // If no search query or condition passed, include the tiddler
-            if (!realQuery) return true;
+            if (!realQuery.trim()) return true;
 
             // Otherwise filter by search text
             return $tw.wiki.filterTiddlers(

@@ -2,7 +2,9 @@ import { AutocompleteState } from '@algolia/autocomplete-core';
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { contextActions, contextReducer, IActionVariableDefinition, IContext } from '../utils/context';
-import { debounced } from '../utils/debounce';
+import { createDebounced } from '../utils/debounce';
+
+const debounced = createDebounced();
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
 
@@ -48,7 +50,7 @@ function getDefinitionOptions(
 }
 
 function filterByQuery(options: string[], query: string) {
-  if (query === '') return options;
+  if (!query.trim()) return options;
   const lower = query.toLowerCase();
   return options.filter(option => option.toLowerCase().includes(lower));
 }

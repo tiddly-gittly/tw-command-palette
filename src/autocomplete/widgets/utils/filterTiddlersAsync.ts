@@ -12,6 +12,7 @@ const tidGiWorkspace: IWorkspace | undefined = typeof window !== 'undefined' ? w
  */
 export async function filterTiddlersAsync(filter: string, options: { exclude?: string[]; system?: boolean; toTiddler?: boolean }): Promise<ITiddlerFields[]> {
   const { system = false, exclude, toTiddler = true } = options;
+  let result: ITiddlerFields[];
   if (isInTidGiDesktop && 'service' in window && window.service?.wiki && tidGiWorkspace) {
     const wikiServer = window.service.wiki;
     const resultFromIPC = await wikiServer.callWikiIpcServerRoute(
@@ -21,12 +22,13 @@ export async function filterTiddlersAsync(filter: string, options: { exclude?: s
       exclude,
       { ignoreSyncSystemConfig: system, toTiddler },
     );
-    return resultFromIPC.data as ITiddlerFields[];
+    result = resultFromIPC.data as ITiddlerFields[];
   } else {
-    return toTiddler
+    result = toTiddler
       ? $tw.wiki.filterTiddlers(filter)
         .map((title) => $tw.wiki.getTiddler(title)?.fields)
         .filter(Boolean) as ITiddlerFields[]
       : $tw.wiki.filterTiddlers(filter).filter(Boolean).map((title) => ({ title })) as ITiddlerFields[];
   }
+  return result;
 }

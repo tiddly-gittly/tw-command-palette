@@ -1,7 +1,9 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { contextActions, contextReducer, IContext } from '../utils/context';
-import { debounced } from '../utils/debounce';
+import { createDebounced } from '../utils/debounce';
+
+const debounced = createDebounced();
 import { lingo } from '../utils/lingo';
 
 /**

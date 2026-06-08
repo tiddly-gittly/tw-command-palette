@@ -2,7 +2,9 @@ import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { cacheSystemTiddlers } from '../utils/configs';
 import { contextActions, contextReducer, IContext } from '../utils/context';
-import { debounced } from '../utils/debounce';
+import { createDebounced } from '../utils/debounce';
+
+const debounced = createDebounced();
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
@@ -59,7 +61,7 @@ export const plugin = {
           }
           // If there are search text, filter each tiddler one by one (so we could filter by rendered caption).
           const realQuery = query.substring(1);
-          return realQuery
+          return realQuery.trim()
             ? cachedTiddlers
               .filter((tiddler): tiddler is ITiddlerFields => {
                 const filter = tiddler['command-palette-filter'] as string | undefined;

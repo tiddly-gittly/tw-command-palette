@@ -2,7 +2,9 @@ import type { AutocompletePlugin, AutocompleteSource } from '@algolia/autocomple
 import { ITiddlerFields } from 'tiddlywiki';
 import { cacheSystemTiddlers, missingFilterOnTop, titleTextExclusionFilter } from '../utils/configs';
 import { contextActions, contextReducer, IContext } from '../utils/context';
-import { debounced } from '../utils/debounce';
+import { createDebounced } from '../utils/debounce';
+
+const debounced = createDebounced();
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
@@ -28,7 +30,7 @@ export const plugin = {
     sources.push({
       sourceId: 'filter-select',
       async getItems({ query }) {
-        if (query === '') return [];
+        if (!query.trim()) return [];
         if (cachedTiddlers.length === 0 || !cacheSystemTiddlers()) {
           cachedTiddlers = await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/Filter]]`, { system: true });
         }
@@ -38,7 +40,7 @@ export const plugin = {
           return true;
         });
 
-        const realQuery = query.substring(1);
+        const realQuery = query.substring(1).trim();
         const buildInFilters = realQuery
           ? validFilterTiddlers.filter(tiddler =>
             $tw.wiki.filterTiddlers(
@@ -104,26 +106,16 @@ export const plugin = {
         const systemPrefixes = ($tw.wiki.getTiddler('$:/plugins/linonetwo/autocomplete/commands/help/System')?.fields['command-palette-prefix'] as string | undefined)
           ?.split(' ').filter(Boolean);
         const system = Boolean(systemPrefixes?.includes(query[0]));
-        const realQuery = system ? query.substring(1) : query;
+        const realQuery = (system ? query.substring(1) : query).trim();
 
         // 构建基本过滤器字符串
         const baseFilter = `[all[tiddlers+shadows]]+${context.filter} ${context.applyExclusion ? titleTextExclusionFilter() : ''}`;
-
-        return realQuery
-          ? await filterTiddlersAsync(
-            `${baseFilter} +[search[${realQuery}]]`,
-            {
-              system,
-              toTiddler: (context.filterGetTiddler ?? true),
-            },
-          )
-          : await filterTiddlersAsync(
-            baseFilter,
-            {
-              system,
-              toTiddler: (context.filterGetTiddler ?? true),
-            },
-          );
+        const filter = realQuery ? `${baseFilter} +[search[${realQuery}]]` : baseFilter;
+        const result = await filterTiddlersAsync(filter, {
+          system,
+          toTiddler: (context.filterGetTiddler ?? true),
+        });
+        return result;
       },
       getItemUrl({ item }) {
         return item.title;

@@ -74,7 +74,7 @@ function getSidebarTabDisplayText(tab: ITiddlerFields, widget: IContext['widget'
 
 export const plugin = {
   getSources(parameters) {
-    if (parameters.query.length === 0) return [];
+    if (!parameters.query.trim()) return [];
     const { widget } = parameters.state.context as IContext;
     const onSelect = (item: ITiddlerFields, state: AutocompleteState<ITiddlerFields>, isClick: boolean) => {
       if (widget) {

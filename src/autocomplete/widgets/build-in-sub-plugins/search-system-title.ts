@@ -2,7 +2,9 @@ import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { searchSystemTitle } from '../utils/configs';
 import { emptyContext } from '../utils/context';
-import { debounced } from '../utils/debounce';
+import { createDebounced } from '../utils/debounce';
+
+const debounced = createDebounced();
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
 
@@ -16,7 +18,7 @@ export const plugin = {
         sourceId: 'search-system-title',
         async getItems({ query }) {
           const realQuery = query.substring(1);
-          if (realQuery === '') return [];
+          if (!realQuery.trim()) return [];
           const filterToOpen = `[all[tiddlers+shadows]is[system]search[${realQuery}]]`;
           parameters.setContext({ filterToOpen });
           const result = await filterTiddlersAsync(filterToOpen, { system: true });

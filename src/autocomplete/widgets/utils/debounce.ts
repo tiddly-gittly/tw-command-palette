@@ -23,5 +23,14 @@ export function debouncePromise<T extends AnyFunction>(function_: T, time: numbe
   };
 }
 
-const debounceDuration = Number($tw.wiki.getTiddlerText('$:/plugins/linonetwo/autocomplete/configs/DebounceDuration', '300'));
+export const debounceDuration = Number($tw.wiki.getTiddlerText('$:/plugins/linonetwo/autocomplete/configs/DebounceDuration', '300'));
 export const debounced = debouncePromise(async (items: Array<AutocompleteSource<ITiddlerFields>>) => await Promise.resolve(items), debounceDuration);
+
+/**
+ * Create a debounced wrapper with its own independent timer.
+ * Each source/plugin should use its own instance to avoid timer contention
+ * when Autocomplete calls multiple getSources in parallel.
+ */
+export function createDebounced() {
+  return debouncePromise(async (items: Array<AutocompleteSource<ITiddlerFields>>) => await Promise.resolve(items), debounceDuration);
+}

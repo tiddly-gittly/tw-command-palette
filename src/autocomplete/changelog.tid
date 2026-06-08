@@ -2,6 +2,12 @@ title: $:/plugins/linonetwo/autocomplete/changelog
 
 ! Changelog
 
+!! Version 0.9.3
+
+* Fixed: each autocomplete sub-plugin now uses an independent debounce instance, preventing multiple sources from cancelling each other's search results.
+* Fixed: IME composition placeholder spaces no longer trigger full-text searches, reducing panel open lag.
+* Fixed: `story-list` source returns an empty array on empty queries and limits results to 20 items, preventing large history lists from causing UI freezes.
+
 !! Version 0.9.2
 
 * Added: sidebar tab search in system mode, with switching support and matching on both tab title and rendered caption.

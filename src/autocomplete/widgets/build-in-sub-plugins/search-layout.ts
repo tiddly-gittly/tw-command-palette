@@ -31,7 +31,7 @@ function getSearchableLayoutTexts(tiddler: ITiddlerFields, widget: IContext['wid
 export const plugin = {
   getSources(parameters) {
     // Routing logic is now centralized in phaseRouter.ts
-    if (parameters.query.length === 0) return [];
+    if (!parameters.query.trim()) return [];
     const { widget } = parameters.state.context as IContext;
     const onSelect = (item: ITiddlerFields, state: AutocompleteState<ITiddlerFields>, isClick: boolean) => {
       const newContext = { noNavigate: true } satisfies IContext;

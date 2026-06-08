@@ -2,7 +2,9 @@ import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { applyIgnoreFilterToTag } from '../utils/configs';
 import { contextActions, contextReducer, IContext } from '../utils/context';
-import { debounced } from '../utils/debounce';
+import { createDebounced } from '../utils/debounce';
+
+const debounced = createDebounced();
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
 
@@ -20,7 +22,9 @@ export const plugin = {
       sourceId: 'tags',
       async getItems({ query }) {
         // similar to $:/core/Filters/AllTags
-        const filterToOpen = `[tags[]search[${query.slice(1)}]]`;
+        const realQuery = query.slice(1).trim();
+        if (!realQuery) return [];
+        const filterToOpen = `[tags[]search[${realQuery}]]`;
         parameters.setContext({ filterToOpen });
         return await filterTiddlersAsync(filterToOpen, { system: true });
       },

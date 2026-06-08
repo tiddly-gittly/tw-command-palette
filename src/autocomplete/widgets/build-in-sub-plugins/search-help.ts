@@ -25,7 +25,7 @@ export const plugin = {
             .map((title) => $tw.wiki.getTiddler(title)?.fields)
             .filter(Boolean) as ITiddlerFields[];
 
-          const realQuery = query.substring(1);
+          const realQuery = query.substring(1).trim();
           return realQuery
             ? allHelpTiddlers.filter((tiddler) =>
               $tw.wiki.filterTiddlers(

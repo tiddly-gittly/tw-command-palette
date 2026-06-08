@@ -2,7 +2,9 @@ import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { titleTextExclusionFilter } from '../utils/configs';
 import { emptyContext } from '../utils/context';
-import { debounced } from '../utils/debounce';
+import { createDebounced } from '../utils/debounce';
+
+const debounced = createDebounced();
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { buildTitleFieldFilter, getFieldsAsTitle } from '../utils/getFieldsAsTitle';
 import { lingo } from '../utils/lingo';
@@ -17,7 +19,7 @@ export const plugin = {
       {
         sourceId: 'title',
         async getItems({ query }) {
-          if (query === '') return [];
+          if (!query.trim()) return [];
           const filterToOpen = buildTitleFieldFilter({
             baseFilter: '[all[tiddlers]!is[system]]',
             query,
@@ -27,7 +29,8 @@ export const plugin = {
             exclusionFilter: titleTextExclusionFilter(),
           });
           parameters.setContext({ filterToOpen });
-          return filterToOpen === '' ? [] : await filterTiddlersAsync(filterToOpen, {});
+          const result = filterToOpen === '' ? [] : await filterTiddlersAsync(filterToOpen, {});
+          return result;
         },
         getItemUrl({ item }) {
           return item.title;

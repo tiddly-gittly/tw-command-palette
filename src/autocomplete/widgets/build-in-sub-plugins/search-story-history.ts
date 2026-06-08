@@ -2,17 +2,23 @@ import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import uniq from 'lodash/uniq';
 import { ITiddlerFields } from 'tiddlywiki';
 import { emptyContext, IContext } from '../utils/context';
+import { createDebounced } from '../utils/debounce';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
 
+const debounced = createDebounced();
+
 export const plugin = {
-  getSources(parameters) {
+  async getSources(parameters) {
     // Routing logic is now centralized in phaseRouter.ts
     const { widget } = parameters.state.context as IContext;
-    return [
+    return await debounced([
       {
         sourceId: 'story-list',
         getItems({ query }) {
+          if (!query.trim()) {
+            return [];
+          }
           const historyDataRaw = $tw.wiki.getTiddlerData<Array<{ title: string }> | undefined>('$:/HistoryList');
           const historyData = historyDataRaw ?? [];
           const historyTitles = uniq([
@@ -24,7 +30,7 @@ export const plugin = {
             .map((title) => $tw.wiki.getTiddler(title)?.fields)
             .filter(Boolean) as ITiddlerFields[];
           // swap first and second, so its easier to switch to second, like using ctrl + tab in vscode
-          return [second, first, ...rest].filter(Boolean);
+          return [second, first, ...rest].filter(Boolean).slice(0, 20);
         },
         getItemUrl({ item }) {
           return item.title;
@@ -50,6 +56,6 @@ export const plugin = {
           },
         },
       },
-    ];
+    ]);
   },
 } satisfies AutocompletePlugin<ITiddlerFields, unknown>;

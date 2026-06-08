@@ -2,7 +2,9 @@ import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { cacheSystemTiddlers } from '../utils/configs';
 import { emptyContext, IContext } from '../utils/context';
-import { debounced } from '../utils/debounce';
+import { createDebounced } from '../utils/debounce';
+
+const debounced = createDebounced();
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
@@ -24,7 +26,7 @@ export const plugin = {
             cachedTiddlers = await filterTiddlersAsync(`[all[shadows]tag[$:/tags/ControlPanel/SettingsTab]]`, { system: true });
           }
           const realQuery = query.substring(1);
-          return realQuery
+          return realQuery.trim()
             ? cachedTiddlers
               .filter((tiddler): tiddler is ITiddlerFields => {
                 return $tw.wiki.filterTiddlers(
