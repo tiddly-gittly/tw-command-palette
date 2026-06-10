@@ -73,8 +73,18 @@ export async function closeCommandPalette(page: Page) {
 export async function clickPaletteItem(page: Page, text: string | RegExp) {
   await expect(page.locator(palettePanelSelector)).toContainText(text);
   const item = page.locator(paletteItemSelector).filter({ hasText: text }).first();
-  await expect(item).toBeVisible();
-  await item.click();
+
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    await expect(item).toBeVisible();
+    try {
+      await item.click();
+      return;
+    } catch (error) {
+      if (!(error instanceof Error) || !error.message.includes('detached from the DOM') || attempt === 2) {
+        throw error;
+      }
+    }
+  }
 }
 
 export async function typeIntoPalette(input: Locator, suffix: string) {
