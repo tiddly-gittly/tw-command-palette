@@ -29,6 +29,8 @@ concurrency:
 
 jobs:
   Plugins:
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     permissions:
         contents: write
         pages: write
@@ -49,17 +51,19 @@ jobs:
           version: 'latest'
           run_install: false
 
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
+
       - name: Cache dependencies
         uses: actions/cache@v5
         with:
-          path: |
-            **/node_modules
-            ~/.pnpm-store
-            ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-node-${{ hashFiles('**/pnpm-lock.yaml') }}
-            ${{ runner.os }}-node-
+            ${{ runner.os }}-pnpm-
 
       - name: Install Dependencies
         run: pnpm install
