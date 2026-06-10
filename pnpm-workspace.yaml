@@ -1,9 +1,10 @@
 packages:
   - '.'
 
-onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - dprint
-  - esbuild
-  - svelte-preprocess
+allowBuilds:
+  '@parcel/watcher': true
+  core-js: true
+  dprint: true
+  esbuild: true
+  svelte-preprocess: true
 

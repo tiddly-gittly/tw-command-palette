@@ -2,6 +2,7 @@
   "url": "https://tiddly-gittly.github.io/Modern.TiddlyDev/",
   "license": "MIT",
   "version": "0.0.2",
+  "packageManager": "pnpm@11.5.3",
   "scripts": {
     "dev": "tiddlywiki-plugin-dev dev",
     "dev:wiki": "tiddlywiki-plugin-dev dev --write-wiki",
@@ -73,14 +74,5 @@
     "segmentit": "^2.0.3",
     "tiddlywiki": "^5.3.8",
     "tiddlywiki-plugin-dev": "^0.5.7"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@parcel/watcher",
-      "core-js",
-      "dprint",
-      "esbuild",
-      "svelte-preprocess"
-    ]
   }
 }
