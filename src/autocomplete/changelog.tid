@@ -2,6 +2,13 @@ title: $:/plugins/linonetwo/autocomplete/changelog
 
 ! Changelog
 
+!! Version 0.9.4
+
+* Fixed: entering `$` (dollar sign), `¥` (half-width yen), or `￥` (full-width yen) in system mode now correctly shows the layout list by default. The system prefix config now includes all three symbols.
+* Changed: removed deprecated `emptyContext` export, `checkIsModalPromptActive`, and `checkIsUnderFilter` helpers from internal utils. Callers now use `contextReducer(contextActions.clearTransient())` directly.
+* Changed: removed deprecated `IBrowserViewMetaData.workspaceID` field; use `workspace` instead.
+* Added: Playwright regressions for `$`, `¥`, and `￥` layout list display, including a case that verifies the default layout appears with no extra layouts installed.
+
 !! Version 0.9.3
 
 * Fixed: each autocomplete sub-plugin now uses an independent debounce instance, preventing multiple sources from cancelling each other's search results.

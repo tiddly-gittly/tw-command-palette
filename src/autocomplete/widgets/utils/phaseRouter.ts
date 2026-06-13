@@ -1,4 +1,3 @@
-import { GetSourcesParams } from '@algolia/autocomplete-core';
 import { ITiddlerFields } from 'tiddlywiki';
 import { IContext, Phase } from './context';
 
@@ -116,25 +115,4 @@ export function computePhase(
   }
 
   return 'normal';
-}
-
-/**
- * Legacy compatibility: check if a modal prompt is active.
- * Kept for backward compatibility during migration.
- *
- * @deprecated Use computePhase() and check for 'command' phase instead
- */
-export function checkIsModalPromptActive(parameters: GetSourcesParams<ITiddlerFields>) {
-  const context = parameters.state.context as IContext;
-  return Boolean(context.createTiddlerPending || context.actionVariablePrompt);
-}
-
-/**
- * Legacy compatibility: check if under filter.
- * Kept for backward compatibility during migration.
- *
- * @deprecated Use computePhase() and check for 'under-filter' phase instead
- */
-export function checkIsUnderFilter(parameters: GetSourcesParams<ITiddlerFields>) {
-  return Boolean((parameters.state.context as IContext).filter);
 }

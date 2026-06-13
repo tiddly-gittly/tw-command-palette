@@ -1,7 +1,7 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { titleTextExclusionFilter } from '../utils/configs';
-import { emptyContext } from '../utils/context';
+import { contextActions, contextReducer } from '../utils/context';
 import { createDebounced } from '../utils/debounce';
 
 const debounced = createDebounced();
@@ -55,7 +55,7 @@ export const plugin = {
             });
 
             const onclick = () => {
-              parameters.navigator.navigate({ item, itemUrl: item.title, state: { ...state, context: emptyContext } });
+              parameters.navigator.navigate({ item, itemUrl: item.title, state: { ...state, context: contextReducer(contextActions.clearTransient()) } });
             };
             return createElement('div', {
               style: 'display:flex;flex-direction:column;',

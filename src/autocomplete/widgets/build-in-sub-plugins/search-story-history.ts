@@ -1,7 +1,7 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import uniq from 'lodash/uniq';
 import { ITiddlerFields } from 'tiddlywiki';
-import { emptyContext, IContext } from '../utils/context';
+import { contextActions, contextReducer, IContext } from '../utils/context';
 import { createDebounced } from '../utils/debounce';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
@@ -41,7 +41,7 @@ export const plugin = {
           },
           item({ item, createElement, state }) {
             const onclick = () => {
-              parameters.navigator.navigate({ item, itemUrl: item.title, state: { ...state, context: emptyContext } });
+              parameters.navigator.navigate({ item, itemUrl: item.title, state: { ...state, context: contextReducer(contextActions.clearTransient()) } });
             };
             if (typeof item.caption === 'string' && item.caption !== '') {
               return createElement('div', {

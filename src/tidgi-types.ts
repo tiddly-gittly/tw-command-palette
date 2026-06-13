@@ -52,8 +52,6 @@ declare global {
 
 export interface IBrowserViewMetaData {
   isPopup?: boolean;
-  /** @deprecated Use workspace instead */
-  workspaceID?: string;
   workspace?: IWorkspace;
 }
 

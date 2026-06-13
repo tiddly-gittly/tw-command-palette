@@ -228,11 +228,3 @@ export const contextActions = {
   clearSession: (): ContextAction => ({ type: 'CLEAR_SESSION' }),
   clearTransient: (): ContextAction => ({ type: 'CLEAR_TRANSIENT' }),
 };
-
-// ── Legacy helpers (kept for backward compat during migration) ────────────────
-
-/**
- * @deprecated Use `contextReducer(contextActions.clearTransient())` via dispatch instead.
- * Kept for widget.clearContext() until full migration.
- */
-export const emptyContext = contextReducer({ type: 'CLEAR_TRANSIENT' }) satisfies Partial<IContext>;

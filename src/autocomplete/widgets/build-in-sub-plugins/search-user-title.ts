@@ -1,7 +1,7 @@
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { titleTextExclusionFilter } from '../utils/configs';
-import { emptyContext } from '../utils/context';
+import { contextActions, contextReducer } from '../utils/context';
 import { createDebounced } from '../utils/debounce';
 
 const debounced = createDebounced();
@@ -41,8 +41,8 @@ export const plugin = {
           },
           item({ item, createElement, state }) {
             const onclick = () => {
-              // Assign emptyContext in case of search-recent's content not cleared by clearContext() in widget.ts so there is `noNavigate` that prevents navigate.
-              parameters.navigator.navigate({ item, itemUrl: item.title, state: { ...state, context: emptyContext } });
+              // Reset transient context flags in case search-recent left noNavigate behind.
+              parameters.navigator.navigate({ item, itemUrl: item.title, state: { ...state, context: contextReducer(contextActions.clearTransient()) } });
             };
             const titles = titleFields.map(field => item[field]).filter((item): item is string => typeof item === 'string' && item !== '').map((item, index) =>
               index === 0 ? item : `(${item})`

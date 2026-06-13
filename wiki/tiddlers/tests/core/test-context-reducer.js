@@ -166,19 +166,18 @@ describe('contextReducer', function () {
     });
   });
 
-  // ── emptyContext backward-compat ───────────────────────────────────────────
+  // ── clearTransient direct usage (replaces deprecated emptyContext) ─────────
 
-  describe('emptyContext (legacy)', function () {
-    it('is equivalent to CLEAR_TRANSIENT result', function () {
-      var emptyContext = contextModule.emptyContext;
+  describe('clearTransient result', function () {
+    it('is equivalent to the legacy emptyContext contract', function () {
       var clearTransientResult = contextReducer(contextActions.clearTransient());
-      // emptyContext should have exactly the same keys as CLEAR_TRANSIENT
-      expect(emptyContext).toEqual(clearTransientResult);
+      expect(clearTransientResult).toEqual({ noNavigate: undefined, newQuery: undefined, noClose: undefined });
     });
 
     it('does not include filter key (preserves under-filter continuity)', function () {
-      var emptyContext = contextModule.emptyContext;
-      expect(Object.prototype.hasOwnProperty.call(emptyContext, 'filter')).toBe(false);
+      var clearTransientResult = contextReducer(contextActions.clearTransient());
+      expect(Object.prototype.hasOwnProperty.call(clearTransientResult, 'filter')).toBe(false);
+      expect(Object.prototype.hasOwnProperty.call(clearTransientResult, 'applyExclusion')).toBe(false);
     });
   });
 });
