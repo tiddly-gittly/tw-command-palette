@@ -4,6 +4,7 @@ import { cacheSystemTiddlers } from '../utils/configs';
 import { IContext } from '../utils/context';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
+import { sanitizeFilterQuery } from '../utils/sanitizeFilterQuery';
 
 /**
  * This list won't change during wiki use, so we can only fetch it once.
@@ -29,7 +30,7 @@ export const plugin = {
           return realQuery
             ? allHelpTiddlers.filter((tiddler) =>
               $tw.wiki.filterTiddlers(
-                `[search[${realQuery}]]`,
+                `[search[${sanitizeFilterQuery(realQuery)}]]`,
                 undefined,
                 $tw.wiki.makeTiddlerIterator([
                   tiddler.title.replace('$:/plugins/linonetwo/autocomplete/commands/help/', ''),

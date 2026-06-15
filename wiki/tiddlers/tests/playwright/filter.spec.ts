@@ -6,6 +6,7 @@ import {
   seedBaseState,
   typeIntoPalette,
   waitForWiki,
+  WikiWindow,
 } from './fixtures';
 
 test.beforeEach(async ({ page }) => {
@@ -17,7 +18,7 @@ test('searches within a built-in filter result set', async ({ page }) => {
   const title = `Playwright 未打标签 ${Date.now()}`;
 
   await page.evaluate((untaggedTitle) => {
-    const wikiWindow = window as unknown as { $tw: any };
+    const wikiWindow = window as unknown as WikiWindow;
     wikiWindow.$tw.wiki.addTiddler({
       title: untaggedTitle,
       text: 'This is an untagged tiddler used by Playwright.',

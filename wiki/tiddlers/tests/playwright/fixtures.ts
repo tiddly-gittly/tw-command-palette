@@ -5,7 +5,7 @@ export const palettePanelSelector = '.tw-commandpalette-panel-default';
 export const paletteItemSelector = `${palettePanelSelector} .aa-Item`;
 export const layoutResultSelector = '.tw-commandpalette-layout-result';
 
-export type WikiWindow = Window & { $tw: any };
+export type WikiWindow = Window & { $tw: typeof $tw };
 export type MaybeWikiWindow = Window & {
   $tw?: {
     wiki?: unknown;
@@ -18,7 +18,7 @@ export async function waitForWiki(page: Page) {
   await page.waitForLoadState('networkidle');
   await page.waitForFunction(() => {
     const wikiWindow = window as unknown as MaybeWikiWindow;
-    return Boolean(wikiWindow.$tw?.wiki && wikiWindow.$tw?.rootWidget);
+    return Boolean(wikiWindow.$tw?.wiki && wikiWindow.$tw.rootWidget);
   });
 }
 

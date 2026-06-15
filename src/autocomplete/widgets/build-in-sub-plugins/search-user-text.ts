@@ -3,11 +3,12 @@ import { ITiddlerFields } from 'tiddlywiki';
 import { titleTextExclusionFilter } from '../utils/configs';
 import { contextActions, contextReducer } from '../utils/context';
 import { createDebounced } from '../utils/debounce';
-
-const debounced = createDebounced();
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { getFieldsAsText, getFieldsAsTitle } from '../utils/getFieldsAsTitle';
 import { lingo } from '../utils/lingo';
+import { sanitizeFilterQuery } from '../utils/sanitizeFilterQuery';
+
+const debounced = createDebounced();
 
 export const plugin = {
   async getSources(parameters) {
@@ -19,8 +20,8 @@ export const plugin = {
       {
         sourceId: 'text',
         async getItems({ query }) {
-          if (!query.trim()) return [];
-          const filter = `[all[tiddlers]!is[system]] ${titleTextExclusionFilter()} +[search:${fieldsAsText}[${query}]]`;
+          if (!query.trim() || fieldsAsText === '') return [];
+          const filter = `[all[tiddlers]!is[system]] ${titleTextExclusionFilter()} +[search:${fieldsAsText}[${sanitizeFilterQuery(query)}]]`;
           const result = await filterTiddlersAsync(filter, { system: false, exclude: [] });
           return result;
         },

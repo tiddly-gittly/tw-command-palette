@@ -9,6 +9,7 @@ import {
   seedBaseState,
   typeIntoPalette,
   waitForWiki,
+  WikiWindow,
 } from './fixtures';
 
 test.beforeEach(async ({ page }) => {
@@ -53,7 +54,7 @@ test('selects a layout and updates the current layout label', async ({ page }) =
   await layoutItem.click();
 
   await expect.poll(() => page.evaluate(() => {
-    const wikiWindow = window as unknown as { $tw: any };
+    const wikiWindow = window as unknown as WikiWindow;
     return wikiWindow.$tw.wiki.getTiddlerText('$:/layout', '');
   })).toBe(layoutTitle);
 

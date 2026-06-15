@@ -3,10 +3,11 @@ import { ITiddlerFields } from 'tiddlywiki';
 import { applyIgnoreFilterToTag } from '../utils/configs';
 import { contextActions, contextReducer, IContext } from '../utils/context';
 import { createDebounced } from '../utils/debounce';
-
-const debounced = createDebounced();
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
+import { sanitizeFilterQuery } from '../utils/sanitizeFilterQuery';
+
+const debounced = createDebounced();
 
 export const plugin = {
   async getSources(parameters) {
@@ -24,7 +25,7 @@ export const plugin = {
         // similar to $:/core/Filters/AllTags
         const realQuery = query.slice(1).trim();
         if (!realQuery) return [];
-        const filterToOpen = `[tags[]search[${realQuery}]]`;
+        const filterToOpen = `[tags[]search[${sanitizeFilterQuery(realQuery)}]]`;
         parameters.setContext({ filterToOpen });
         return await filterTiddlersAsync(filterToOpen, { system: true });
       },

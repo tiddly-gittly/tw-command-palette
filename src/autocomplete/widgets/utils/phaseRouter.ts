@@ -1,4 +1,3 @@
-import { ITiddlerFields } from 'tiddlywiki';
 import { IContext, Phase } from './context';
 
 const systemPrefixes = ($tw.wiki.getTiddler('$:/plugins/linonetwo/autocomplete/commands/help/System')?.fields['command-palette-prefix'] as string | undefined)
@@ -29,14 +28,19 @@ export function computeActiveSourceIds(
     return new Set(['action-variable-prompt']);
   }
 
+  // Ctrl+Tab cycle-history mode shows only story history, no other features.
+  if (context.cycleHistoryMode) {
+    return new Set(['story-history']);
+  }
+
   // Under-filter phase - only show filtered results
   if (phase === 'under-filter' || context.filter) {
     return new Set(['filter']);
   }
 
-  // Empty query - show help and recent searches
+  // Empty query - show help, recent searches and story history.
   if (query === '') {
-    return new Set(['help', 'story-history', 'story-list']);
+    return new Set(['help', 'recent-searches', 'story-history']);
   }
 
   const firstChar = query[0];
@@ -89,6 +93,11 @@ export function computePhase(
   // Modal prompts
   if (context.createTiddlerPending || context.actionVariablePrompt) {
     return 'command';
+  }
+
+  // Ctrl+Tab cycle-history mode is a dedicated phase.
+  if (context.cycleHistoryMode) {
+    return 'cycle-history';
   }
 
   // Under filter

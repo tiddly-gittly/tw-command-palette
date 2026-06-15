@@ -2,6 +2,21 @@ title: $:/plugins/linonetwo/autocomplete/changelog
 
 ! Changelog
 
+!! Version 0.9.5
+
+* Fixed: TitleAlias with multiple fields (e.g. `title caption alias`) now searches fields as a union instead of an intersection, so matching a tiddler by its title no longer fails just because its caption doesn't match.
+* Fixed: corrected swapped `sourceId` values between `search-recent` (`recent-searches`) and `search-story-history` (`story-history`) that broke Ctrl+Tab cycle-history navigation.
+* Fixed: Ctrl+Tab cycle-history mode now shows the full story history even when the query is empty.
+* Fixed: search queries containing `]` are now sanitized before being inserted into TiddlyWiki filter strings, preventing `Missing [ in filter expression` errors.
+* Fixed: empty TextAlias config no longer triggers an unintended all-fields search.
+* Fixed: `action-variable-prompt` string coalescing and added a bounds check for prompt definitions.
+* Fixed: various ESLint errors and TypeScript type issues in source plugins and utilities.
+* Changed: default TitleAlias config now includes the `alias` field (`title caption alias`).
+* Changed: default TextAlias config now includes the `keywords` field (`text keywords`).
+* Changed: aligned project dependencies, scripts, `tsconfig.json`, `dprint.json`, `playwright.config.ts`, and Husky/CI workflows with the Modern.TiddlyDev template.
+* Added: comprehensive Jasmine unit tests for title, text, system-title, ignore-filter, story-history, filter ordering, and source-id correctness.
+* Added: Playwright E2E regressions for searching by title, caption, and alias fields.
+
 !! Version 0.9.4
 
 * Fixed: entering `$` (dollar sign), `¥` (half-width yen), or `￥` (full-width yen) in system mode now correctly shows the layout list by default. The system prefix config now includes all three symbols.

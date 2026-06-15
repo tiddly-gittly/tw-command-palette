@@ -3,11 +3,12 @@ import { ITiddlerFields } from 'tiddlywiki';
 import { cacheSystemTiddlers, missingFilterOnTop, titleTextExclusionFilter } from '../utils/configs';
 import { contextActions, contextReducer, IContext } from '../utils/context';
 import { createDebounced } from '../utils/debounce';
-
-const debounced = createDebounced();
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
+import { sanitizeFilterQuery } from '../utils/sanitizeFilterQuery';
+
+const debounced = createDebounced();
 
 /**
  * This list won't change during wiki use, so we can only fetch it once.
@@ -44,7 +45,7 @@ export const plugin = {
         const buildInFilters = realQuery
           ? validFilterTiddlers.filter(tiddler =>
             $tw.wiki.filterTiddlers(
-              `[search[${realQuery}]]`,
+              `[search[${sanitizeFilterQuery(realQuery)}]]`,
               undefined,
               $tw.wiki.makeTiddlerIterator([
                 tiddler.title.replace('$:/plugins/', '').replace('linonetwo/commandpalette/', ''),
@@ -110,7 +111,7 @@ export const plugin = {
 
         // 构建基本过滤器字符串
         const baseFilter = `[all[tiddlers+shadows]]+${context.filter} ${context.applyExclusion ? titleTextExclusionFilter() : ''}`;
-        const filter = realQuery ? `${baseFilter} +[search[${realQuery}]]` : baseFilter;
+        const filter = realQuery ? `${baseFilter} +[search[${sanitizeFilterQuery(realQuery)}]]` : baseFilter;
         const result = await filterTiddlersAsync(filter, {
           system,
           toTiddler: (context.filterGetTiddler ?? true),

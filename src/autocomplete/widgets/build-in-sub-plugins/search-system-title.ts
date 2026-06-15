@@ -3,10 +3,11 @@ import { ITiddlerFields } from 'tiddlywiki';
 import { searchSystemTitle } from '../utils/configs';
 import { contextActions, contextReducer } from '../utils/context';
 import { createDebounced } from '../utils/debounce';
-
-const debounced = createDebounced();
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
+import { sanitizeFilterQuery } from '../utils/sanitizeFilterQuery';
+
+const debounced = createDebounced();
 
 export const plugin = {
   async getSources(parameters) {
@@ -19,7 +20,7 @@ export const plugin = {
         async getItems({ query }) {
           const realQuery = query.substring(1);
           if (!realQuery.trim()) return [];
-          const filterToOpen = `[all[tiddlers+shadows]is[system]search[${realQuery}]]`;
+          const filterToOpen = `[all[tiddlers+shadows]is[system]search[${sanitizeFilterQuery(realQuery)}]]`;
           parameters.setContext({ filterToOpen });
           const result = await filterTiddlersAsync(filterToOpen, { system: true });
           return result;

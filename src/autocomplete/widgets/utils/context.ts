@@ -3,7 +3,7 @@ import type { Widget } from 'tiddlywiki';
 /**
  * Explicit phase to track which stage of the command palette flow we are in.
  */
-export type Phase = 'idle' | 'normal' | 'filter-select' | 'under-filter' | 'tag-search' | 'command' | 'help';
+export type Phase = 'idle' | 'normal' | 'filter-select' | 'under-filter' | 'tag-search' | 'command' | 'help' | 'cycle-history';
 
 export type ActionVariableInputType = 'text' | 'checkbox' | 'select' | 'multi-checkbox';
 
@@ -50,6 +50,8 @@ export interface IContext {
   widget?: IAutocompleteWidget;
   /** User selection before command palette is opened. (Auto focus will remove selection, so we preserve it for later use) */
   selectedText?: string;
+  /** Ctrl+Tab cycle-history mode: only show story history, no other sources. */
+  cycleHistoryMode?: boolean;
 
   // ── Session state (managed via contextReducer + dispatch) ──
   /** Explicit phase of the current flow. */

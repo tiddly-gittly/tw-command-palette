@@ -3,11 +3,11 @@ import { ITiddlerFields } from 'tiddlywiki';
 import { cacheSystemTiddlers } from '../utils/configs';
 import { contextActions, contextReducer, IContext } from '../utils/context';
 import { createDebounced } from '../utils/debounce';
-
-const debounced = createDebounced();
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
+
+const debounced = createDebounced();
 
 /**
  * This list won't change during wiki use, so we can only fetch it once.

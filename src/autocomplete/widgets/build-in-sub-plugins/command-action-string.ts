@@ -3,11 +3,11 @@ import { ITiddlerFields } from 'tiddlywiki';
 import { cacheSystemTiddlers } from '../utils/configs';
 import { contextActions, contextReducer, IActionVariableDefinition, IContext } from '../utils/context';
 import { createDebounced } from '../utils/debounce';
-
-const debounced = createDebounced();
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
+
+const debounced = createDebounced();
 
 function getDynamicField(item: ITiddlerFields, variableName: string, suffix: string) {
   const exactKey = `${variableName}/${suffix}`;
@@ -25,10 +25,10 @@ function parseActionVariableDefinitions(item: ITiddlerFields): IActionVariableDe
     const type = rawType === 'checkbox'
       ? 'checkbox'
       : rawType === 'select'
-        ? 'select'
-        : rawType === 'multi-checkbox'
-          ? 'multi-checkbox'
-          : 'text';
+      ? 'select'
+      : rawType === 'multi-checkbox'
+      ? 'multi-checkbox'
+      : 'text';
     const rawOptions = getDynamicField(item, name, 'options') ?? '';
     const options = rawOptions.trim() === '' ? undefined : $tw.utils.parseStringArray(rawOptions);
     return {

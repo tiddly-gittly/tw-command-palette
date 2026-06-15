@@ -117,18 +117,18 @@ class AutoCompleteSearchWidget extends Widget {
         const {
           'title': titleSource,
           'story-history': storyHistorySource,
-          'story-list': storyListSource,
+          'recent-searches': recentSearchesSource,
           'text': textSource,
           ...rest
         } = sourcesBySourceId;
         // this will also affect `priority` field. The order here is more important than `priority` field.
         return [
-          ...removeDuplicates(...[...(titlePriorityText ? [titleSource, textSource] : [textSource, titleSource]), storyListSource, storyHistorySource].filter(Boolean)),
+          ...removeDuplicates(...[...(titlePriorityText ? [titleSource, textSource] : [textSource, titleSource]), recentSearchesSource, storyHistorySource].filter(Boolean)),
           ...Object.values(rest),
         ];
       },
     });
-    this.autoCompleteInstance.setContext({ widget: this, selectedText } satisfies IContext);
+    this.autoCompleteInstance.setContext({ widget: this, selectedText, cycleHistoryMode: this.cycleHistoryMode } satisfies IContext);
     this.onCommandPaletteInputDOMInit(containerElement);
     this.onCommandPaletteDetachedDOMInit(containerElement);
   }
@@ -341,7 +341,7 @@ class AutoCompleteSearchWidget extends Widget {
       if (event.key === 'Control' && this.autoCompleteState?.state.query === '') {
         event.stopPropagation();
         event.preventDefault();
-        const item = this.autoCompleteState.state.collections.find(({ source }) => source.sourceId === 'story-list')?.items[this.autoCompleteState.state.activeItemId ?? 0];
+        const item = this.autoCompleteState.state.collections.find(({ source }) => source.sourceId === 'story-history')?.items[this.autoCompleteState.state.activeItemId ?? 0];
         if (!item) return;
         this.autoCompleteInstance.navigator.navigate({ item, itemUrl: item.title, state: this.autoCompleteState.state });
       }

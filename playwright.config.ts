@@ -11,6 +11,7 @@ export default defineConfig({
   expect: {
     timeout: 10 * 1000,
   },
+  // Tests share wiki state via browser evaluation, so they must run serially.
   fullyParallel: false,
   workers: 1,
   retries: process.env.CI ? 2 : 0,

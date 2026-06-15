@@ -1,16 +1,15 @@
-import { GetSourcesParams, StateUpdater } from '@algolia/autocomplete-core';
+import { StateUpdater } from '@algolia/autocomplete-core';
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { createLocalStorageRecentSearchesPlugin, RecentSearchesPluginData } from '@algolia/autocomplete-plugin-recent-searches';
 import { RecentSearchesItem } from '@algolia/autocomplete-plugin-recent-searches/dist/esm/types';
 import { AutocompleteNavigator } from '@algolia/autocomplete-shared/dist/esm/core/AutocompleteNavigator';
-import { ITiddlerFields } from 'tiddlywiki';
 import { contextActions, contextReducer, IContext } from '../utils/context';
 import { getIconSvg } from '../utils/getIconSvg';
 import { lingo } from '../utils/lingo';
 
 export const plugin = (id: string): AutocompletePlugin<RecentSearchesItem, RecentSearchesPluginData<RecentSearchesItem>> => {
   let setContext: StateUpdater<IContext> | undefined;
-  let refresh: () => Promise<void> | undefined;
+  let refresh: (() => Promise<void>) | undefined;
   let navigator: AutocompleteNavigator<RecentSearchesItem> | undefined;
   const deleteIcon = getIconSvg('$:/core/images/delete-button', undefined);
   const recentSearchesPlugin = createLocalStorageRecentSearchesPlugin({
@@ -31,7 +30,7 @@ export const plugin = (id: string): AutocompletePlugin<RecentSearchesItem, Recen
       };
       return {
         ...source,
-        sourceId: 'story-history',
+        sourceId: 'recent-searches',
         getItemUrl({ item }) {
           return item.id;
         },
@@ -53,7 +52,7 @@ export const plugin = (id: string): AutocompletePlugin<RecentSearchesItem, Recen
           item({ item, createElement }) {
             const onDelete = () => {
               recentSearchesPlugin.data?.removeItem(item.id);
-              void refresh()?.catch((error: unknown) => {
+              void refresh?.().catch((error: unknown) => {
                 console.error('Error in search-recent refresh', error);
               });
             };

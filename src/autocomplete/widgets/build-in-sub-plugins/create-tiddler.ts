@@ -2,9 +2,9 @@ import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { contextActions, contextReducer, IContext } from '../utils/context';
 import { createDebounced } from '../utils/debounce';
+import { lingo } from '../utils/lingo';
 
 const debounced = createDebounced();
-import { lingo } from '../utils/lingo';
 
 /**
  * Two-phase "Create tiddler" wizard:
@@ -72,9 +72,7 @@ export const plugin = {
           const text = isPrompt
             ? lingo('CreateTiddler/TypeToCreate')
             : `${lingo('CreateTiddler/CreateLabel')}: ${item.title}`;
-          return createElement('div', { onclick, onTap: onclick },
-            text,
-          );
+          return createElement('div', { onclick, onTap: onclick }, text);
         },
       },
     }]);

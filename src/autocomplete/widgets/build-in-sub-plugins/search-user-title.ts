@@ -3,11 +3,11 @@ import { ITiddlerFields } from 'tiddlywiki';
 import { titleTextExclusionFilter } from '../utils/configs';
 import { contextActions, contextReducer } from '../utils/context';
 import { createDebounced } from '../utils/debounce';
-
-const debounced = createDebounced();
 import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { buildTitleFieldFilter, getFieldsAsTitle } from '../utils/getFieldsAsTitle';
 import { lingo } from '../utils/lingo';
+
+const debounced = createDebounced();
 
 export const plugin = {
   async getSources(parameters) {

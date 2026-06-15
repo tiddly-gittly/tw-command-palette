@@ -3,10 +3,10 @@ import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
 import { contextActions, contextReducer, IActionVariableDefinition, IContext } from '../utils/context';
 import { createDebounced } from '../utils/debounce';
-
-const debounced = createDebounced();
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
+
+const debounced = createDebounced();
 
 interface IActionVariablePromptItem extends ITiddlerFields {
   'command-palette-value'?: string;
@@ -36,9 +36,9 @@ function getDefinitionOptions(
   if (!definition.autocompleteFilter || !prompt || !widget) {
     return uniqueSorted(staticOptions);
   }
-  const filterVariables = { ...prompt.baseVariables, ...prompt.values };
+  const filterVariables = { ...prompt.baseVariables, ...prompt.values } as Record<string, string>;
   const temporaryWidget = typeof widget.makeFakeWidgetWithVariables === 'function'
-    ? widget.makeFakeWidgetWithVariables(filterVariables) ?? undefined
+    ? (widget.makeFakeWidgetWithVariables(filterVariables) as import('tiddlywiki').Widget | null | undefined) || undefined
     : undefined;
   let dynamicOptions: string[] = [];
   try {
@@ -70,8 +70,8 @@ export const plugin = {
       }
     };
 
+    if (prompt.currentIndex >= prompt.definitions.length) return [];
     const definition = prompt.definitions[prompt.currentIndex];
-    if (!definition) return [];
     const query = parameters.query.trim();
     const inputCaption = renderWithFallback(definition.caption ?? definition.name);
     const inputDescription = renderWithFallback(definition.description ?? '');
@@ -153,7 +153,7 @@ export const plugin = {
         }
         return;
       }
-      const selectedValue = item['command-palette-value'] ?? query ?? definition.defaultValue ?? '';
+      const selectedValue = item['command-palette-value'] || query || definition.defaultValue || '';
       if (selectedValue === '') return;
       completeCurrentAndContinue(selectedValue);
       if (isClick && state) {
@@ -233,32 +233,38 @@ export const plugin = {
         }
 
         if (query !== '') {
-          return [{
-            title: `${lingo('ActionVariablePrompt/ConfirmText')}: ${query}`,
-            text: '',
-            type: 'text/vnd.tiddlywiki',
-            tags: [],
-            'command-palette-value': query,
-          } satisfies IActionVariablePromptItem];
+          return [
+            {
+              title: `${lingo('ActionVariablePrompt/ConfirmText')}: ${query}`,
+              text: '',
+              type: 'text/vnd.tiddlywiki',
+              tags: [],
+              'command-palette-value': query,
+            } satisfies IActionVariablePromptItem,
+          ];
         }
 
         if (definition.defaultValue && definition.defaultValue !== '') {
-          return [{
-            title: `${lingo('ActionVariablePrompt/UseDefault')}: ${definition.defaultValue}`,
+          return [
+            {
+              title: `${lingo('ActionVariablePrompt/UseDefault')}: ${definition.defaultValue}`,
+              text: '',
+              type: 'text/vnd.tiddlywiki',
+              tags: [],
+              'command-palette-value': definition.defaultValue,
+            } satisfies IActionVariablePromptItem,
+          ];
+        }
+
+        return [
+          {
+            title: lingo('ActionVariablePrompt/TypeToConfirm'),
             text: '',
             type: 'text/vnd.tiddlywiki',
             tags: [],
-            'command-palette-value': definition.defaultValue,
-          } satisfies IActionVariablePromptItem];
-        }
-
-        return [{
-          title: lingo('ActionVariablePrompt/TypeToConfirm'),
-          text: '',
-          type: 'text/vnd.tiddlywiki',
-          tags: [],
-          'command-palette-hint': 'yes',
-        } satisfies IActionVariablePromptItem];
+            'command-palette-hint': 'yes',
+          } satisfies IActionVariablePromptItem,
+        ];
       },
       getItemUrl({ item }) {
         return item.title;

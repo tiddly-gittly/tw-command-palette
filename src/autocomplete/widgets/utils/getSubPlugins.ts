@@ -1,8 +1,8 @@
-import { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { GetSourcesParams } from '@algolia/autocomplete-core';
+import type { AutocompletePlugin, AutocompleteSource } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
-import { computeActiveSourceIds, computePhase } from './phaseRouter';
 import { IContext } from './context';
+import { computeActiveSourceIds, computePhase } from './phaseRouter';
 
 export function getSubPlugins(id: string) {
   const plugins: Array<AutocompletePlugin<ITiddlerFields, unknown>> = [];
@@ -16,13 +16,15 @@ export function getSubPlugins(id: string) {
     .sort((a, b) => (b.priority as number | undefined ?? 0) - (a.priority as number | undefined ?? 0))
     .forEach((tiddlerField) => {
       try {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-require-imports
-        let plugin = require(tiddlerField.title).plugin;
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
+        const pluginModule = require(tiddlerField.title) as {
+          plugin: AutocompletePlugin<ITiddlerFields, unknown> | ((id: string) => AutocompletePlugin<ITiddlerFields, unknown>);
+        };
+        let plugin = pluginModule.plugin;
         if (typeof plugin === 'function') {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
           plugin = plugin(id);
         }
-        
+
         // Wrap the plugin's getSources with centralized routing logic
         const originalGetSources = plugin.getSources;
         if (originalGetSources) {
@@ -30,16 +32,15 @@ export function getSubPlugins(id: string) {
             const context = parameters.state.context as IContext;
             const phase = context.phase ?? computePhase(parameters.query, context);
             const activeSourceIds = computeActiveSourceIds(phase, parameters.query, context);
-            
+
             // Call original getSources
-            const sources = await originalGetSources.call(this, parameters);
-            
+            const sources = await originalGetSources.call(this, parameters) as Array<AutocompleteSource<ITiddlerFields>>;
+
             // Filter to only active sources
-            return sources.filter((source: { sourceId: string }) => activeSourceIds.has(source.sourceId));
+            return sources.filter((source) => activeSourceIds.has(source.sourceId));
           };
         }
-        
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+
         plugins.push(plugin);
       } catch (error) {
         console.error(`Failed to load command palette plugin ${tiddlerField.title}`, error);

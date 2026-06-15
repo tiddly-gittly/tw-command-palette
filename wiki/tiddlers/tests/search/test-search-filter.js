@@ -12,6 +12,7 @@ describe('search-filter source plugin', function () {
   var filterPlugin;
   var contextModule;
   var contextActions;
+  var originalMissingFilterOnTop;
 
   beforeAll(function () {
     helpers = require('tests/helpers/autocomplete-mock.js');
@@ -19,6 +20,7 @@ describe('search-filter source plugin', function () {
     contextModule = require('$:/plugins/linonetwo/autocomplete/widget/utils/context.js');
     contextActions = contextModule.contextActions;
     contextModule.contextReducer;
+    originalMissingFilterOnTop = $tw.wiki.getTiddlerText('$:/plugins/linonetwo/autocomplete/configs/MissingFilterOnTop');
 
     // Ensure at least one Filter-tagged tiddler exists so the search can work.
     // We add a minimal one only if the wiki doesn't already have any.
@@ -32,6 +34,10 @@ describe('search-filter source plugin', function () {
         text: '',
       });
     }
+  });
+
+  afterEach(function () {
+    $tw.wiki.setText('$:/plugins/linonetwo/autocomplete/configs/MissingFilterOnTop', 'text', undefined, originalMissingFilterOnTop || 'no', { suppressTimestamp: true });
   });
 
   // ── Prefix gating ──────────────────────────────────────────────────────────
@@ -120,6 +126,65 @@ describe('search-filter source plugin', function () {
     }).then(function (filterSource) {
       // After centralized routing, plugin no longer gates by context.filter itself.
       expect(filterSource).toBeDefined();
+    }).then(done).catch(done.fail);
+  });
+
+  // ── MissingFilterOnTop ordering ───────────────────────────────────────────
+
+  function setMissingFilterOnTop(value) {
+    var tiddler = $tw.wiki.getTiddler('$:/plugins/linonetwo/autocomplete/configs/MissingFilterOnTop');
+    if (!tiddler) {
+      $tw.wiki.addTiddler({
+        title: '$:/plugins/linonetwo/autocomplete/configs/MissingFilterOnTop',
+        text: value,
+        type: 'text/vnd.tiddlywiki',
+      });
+    } else {
+      $tw.wiki.setText('$:/plugins/linonetwo/autocomplete/configs/MissingFilterOnTop', 'text', undefined, value, { suppressTimestamp: true });
+    }
+  }
+
+  it('MissingFilterOnTop=yes places user input filter at the top', function (done) {
+    setMissingFilterOnTop('yes');
+    var filterHelpTiddler = $tw.wiki.getTiddler('$:/plugins/linonetwo/autocomplete/commands/help/Filter');
+    var filterPrefix = filterHelpTiddler
+      ? (filterHelpTiddler.fields['command-palette-prefix'] || '[')
+      : '[';
+
+    var params = helpers.createMockParameters(filterPrefix + 'nonexistent-filter-xyz', {});
+    Promise.resolve(filterPlugin.plugin.getSources(params)).then(function (sources) {
+      return helpers.findSource(sources, 'filter-select');
+    }).then(function (source) {
+      if (!source) {
+        pending('filter-select source not returned; skipping');
+        return;
+      }
+      return source.getItems({ query: filterPrefix + 'nonexistent-filter-xyz', state: params.state });
+    }).then(function (items) {
+      expect(items.length).toBeGreaterThan(0);
+      expect(items[0].filter).toBe(filterPrefix + 'nonexistent-filter-xyz');
+    }).then(done).catch(done.fail);
+  });
+
+  it('MissingFilterOnTop=no places user input filter at the bottom', function (done) {
+    setMissingFilterOnTop('no');
+    var filterHelpTiddler = $tw.wiki.getTiddler('$:/plugins/linonetwo/autocomplete/commands/help/Filter');
+    var filterPrefix = filterHelpTiddler
+      ? (filterHelpTiddler.fields['command-palette-prefix'] || '[')
+      : '[';
+
+    var params = helpers.createMockParameters(filterPrefix + 'nonexistent-filter-xyz', {});
+    Promise.resolve(filterPlugin.plugin.getSources(params)).then(function (sources) {
+      return helpers.findSource(sources, 'filter-select');
+    }).then(function (source) {
+      if (!source) {
+        pending('filter-select source not returned; skipping');
+        return;
+      }
+      return source.getItems({ query: filterPrefix + 'nonexistent-filter-xyz', state: params.state });
+    }).then(function (items) {
+      expect(items.length).toBeGreaterThan(0);
+      expect(items[items.length - 1].filter).toBe(filterPrefix + 'nonexistent-filter-xyz');
     }).then(done).catch(done.fail);
   });
 

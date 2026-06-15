@@ -11,6 +11,7 @@ import {
   seedBaseState,
   typeIntoPalette,
   waitForWiki,
+  WikiWindow,
 } from './fixtures';
 
 test.beforeEach(async ({ page }) => {
@@ -69,7 +70,7 @@ test('adds a tag through action-string autocomplete variable prompt', async ({ p
   const leakingTiddlerTitle = `Playwright Prompt Leak Candidate ${Date.now()}`;
 
   await page.evaluate(({ nextFocusedTitle, tagToAdd, leakingTitle }) => {
-    const wikiWindow = window as unknown as { $tw: any };
+    const wikiWindow = window as unknown as WikiWindow;
     wikiWindow.$tw.wiki.addTiddler({
       title: nextFocusedTitle,
       text: 'This focused tiddler is used to verify action-variable prompt behavior.',
@@ -102,7 +103,7 @@ test('adds a tag through action-string autocomplete variable prompt', async ({ p
   await clickPaletteItem(page, newTag);
 
   await expect.poll(() => page.evaluate(() => {
-    const wikiWindow = window as unknown as { $tw: any };
+    const wikiWindow = window as unknown as WikiWindow;
     const focused = wikiWindow.$tw.wiki.getTiddlerText('$:/temp/focussedTiddler', '');
     const tags = wikiWindow.$tw.wiki.getTiddler(focused)?.fields.tags || [];
     return tags;
@@ -115,7 +116,7 @@ test('edits a specific tiddler through action-string variable prompt', async ({ 
   const targetTitle = `Playwright Edit Target ${Date.now()}`;
 
   await page.evaluate((tiddlerTitle) => {
-    const wikiWindow = window as unknown as { $tw: any };
+    const wikiWindow = window as unknown as WikiWindow;
     wikiWindow.$tw.wiki.addTiddler({
       title: tiddlerTitle,
       text: 'This tiddler will be edited via command palette parameter.',
@@ -151,7 +152,7 @@ test('deletes a specific tiddler through action-string variable prompt', async (
   const targetTitle = `Playwright Delete Target ${Date.now()}`;
 
   await page.evaluate((tiddlerTitle) => {
-    const wikiWindow = window as unknown as { $tw: any };
+    const wikiWindow = window as unknown as WikiWindow;
     wikiWindow.$tw.wiki.addTiddler({
       title: tiddlerTitle,
       text: 'This tiddler will be deleted via command palette parameter.',
@@ -178,7 +179,7 @@ test('deletes a specific tiddler through action-string variable prompt', async (
   await clickPaletteItem(page, `确认输入: ${targetTitle}`);
 
   await expect.poll(() => page.evaluate((expectedTitle) => {
-    const wikiWindow = window as unknown as { $tw: any };
+    const wikiWindow = window as unknown as WikiWindow;
     return Boolean(wikiWindow.$tw.wiki.getTiddler(expectedTitle));
   }, targetTitle)).toBe(false);
 });
@@ -187,7 +188,7 @@ test('clones a tiddler through action-string variable prompt', async ({ page }) 
   const sourceTitle = `Playwright Clone Source ${Date.now()}`;
 
   await page.evaluate((tiddlerTitle) => {
-    const wikiWindow = window as unknown as { $tw: any };
+    const wikiWindow = window as unknown as WikiWindow;
     wikiWindow.$tw.wiki.addTiddler({
       title: tiddlerTitle,
       text: 'This tiddler will be cloned via command palette parameter.',
