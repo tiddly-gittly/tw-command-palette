@@ -2,6 +2,12 @@ title: $:/plugins/linonetwo/autocomplete/changelog
 
 ! Changelog
 
+!! Version 0.9.6
+
+* Fixed: Aligned `filterTiddlersAsync` IPC option name with TidGi Desktop PR #719 — renamed `ignoreSyncSystemConfig` to `skipSystemFilter`. This fixes multi-run filter corruption where combining multiple filter runs (e.g. `+[search:title[foo]] +[search:alias[foo]] +[search:caption[foo]]`) only returned results from the last run.
+* Fixed: `search-sidebar-tab` now fetches sidebar tabs via IPC (`filterTiddlersAsync`) instead of DOM scraping, consistent with other system-mode sources.
+* Changed: `buildTitleFieldFilter` now searches all title-like fields (title, alias, caption) in a single filter run, preventing duplicate results when the IPC backend returns union results from a combined multi-field search.
+
 !! Version 0.9.5
 
 * Fixed: TitleAlias with multiple fields (e.g. `title caption alias`) now searches fields as a union instead of an intersection, so matching a tiddler by its title no longer fails just because its caption doesn't match.

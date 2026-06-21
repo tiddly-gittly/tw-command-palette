@@ -1,27 +1,19 @@
 import type { AutocompleteState } from '@algolia/autocomplete-core';
 import type { AutocompletePlugin } from '@algolia/autocomplete-js';
 import { ITiddlerFields } from 'tiddlywiki';
+import { cacheSystemTiddlers } from '../utils/configs';
 import { IContext } from '../utils/context';
+import { createDebounced } from '../utils/debounce';
+import { filterTiddlersAsync } from '../utils/filterTiddlersAsync';
 import { lingo } from '../utils/lingo';
 import { renderTextWithCache } from '../utils/renderTextWithCache';
 
-function getSidebarTabTitles() {
-  const domTitles = Array.from(document.querySelectorAll<HTMLButtonElement>('.tc-sidebar-lists .tc-tab-buttons button[data-tab-title]'))
-    .map((button) => button.dataset.tabTitle)
-    .filter((title): title is string => typeof title === 'string' && title.length > 0);
+const debounced = createDebounced();
 
-  if (domTitles.length > 0) {
-    return domTitles;
-  }
-
-  return $tw.wiki.filterTiddlers('[all[tiddlers+shadows]tag[$:/tags/SideBar]!has[draft.of]]');
-}
-
-function getSidebarTabs() {
-  return getSidebarTabTitles()
-    .map((title) => $tw.wiki.getTiddler(title)?.fields)
-    .filter((fields): fields is ITiddlerFields => Boolean(fields));
-}
+/**
+ * This list won't change during wiki use, so we can only fetch it once.
+ */
+let cachedTiddlers: ITiddlerFields[] = [];
 
 function getCurrentSidebarTabTitle() {
   const selectedButtonTitle = document.querySelector<HTMLButtonElement>('.tc-sidebar-lists .tc-tab-buttons button.tc-tab-selected')?.dataset.tabTitle;
@@ -37,29 +29,6 @@ function getCurrentSidebarTabTitle() {
   return $tw.wiki.getTiddlerText('$:/config/DefaultSidebarTab', '');
 }
 
-function getSidebarTabButton(tabTitle: string) {
-  const escapedTitle = typeof CSS !== 'undefined' && typeof CSS.escape === 'function'
-    ? CSS.escape(tabTitle)
-    : tabTitle.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-  return document.querySelector<HTMLButtonElement>(`.tc-sidebar-lists .tc-tab-buttons button[data-tab-title="${escapedTitle}"]`);
-}
-
-function switchSidebarTab(tabTitle: string) {
-  const button = getSidebarTabButton(tabTitle);
-  if (button) {
-    button.click();
-    return true;
-  }
-
-  const stateTitle = $tw.wiki.filterTiddlers('[all[tiddlers+shadows]prefix[$:/state/tab/sidebar--]]')[0];
-  if (stateTitle) {
-    $tw.wiki.setText(stateTitle, 'text', undefined, tabTitle, { suppressTimestamp: true });
-    return true;
-  }
-
-  return false;
-}
-
 function getSidebarTabCaption(tab: ITiddlerFields, widget: IContext['widget']) {
   return renderTextWithCache(tab.caption, widget).trim();
 }
@@ -73,7 +42,7 @@ function getSidebarTabDisplayText(tab: ITiddlerFields, widget: IContext['widget'
 }
 
 export const plugin = {
-  getSources(parameters) {
+  async getSources(parameters) {
     if (!parameters.query.trim()) return [];
     const { widget } = parameters.state.context as IContext;
     const onSelect = (item: ITiddlerFields, state: AutocompleteState<ITiddlerFields>, isClick: boolean) => {
@@ -92,17 +61,21 @@ export const plugin = {
       }
     };
 
-    return [
+    return await debounced([
       {
         sourceId: 'search-sidebar-tab',
-        getItems({ query }) {
-          const realQuery = query.substring(1);
-          const tabs = getSidebarTabs();
-          if (realQuery === '') {
-            return tabs;
+        async getItems({ query }) {
+          if (cachedTiddlers.length === 0 || !cacheSystemTiddlers()) {
+            cachedTiddlers = await filterTiddlersAsync(`[all[tiddlers+shadows]tag[$:/tags/SideBar]!has[draft.of]]`, {
+              system: true,
+              exclude: [],
+            });
           }
 
-          return tabs.filter((tab) =>
+          const realQuery = query.substring(1);
+          if (!realQuery) return cachedTiddlers;
+
+          return cachedTiddlers.filter((tab) =>
             $tw.wiki.filterTiddlers(
               `[search[${realQuery}]]`,
               undefined,
@@ -145,6 +118,25 @@ export const plugin = {
           },
         },
       },
-    ];
+    ]);
   },
 } satisfies AutocompletePlugin<ITiddlerFields, unknown>;
+
+function switchSidebarTab(tabTitle: string) {
+  const escapedTitle = typeof CSS !== 'undefined' && typeof CSS.escape === 'function'
+    ? CSS.escape(tabTitle)
+    : tabTitle.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+  const button = document.querySelector<HTMLButtonElement>(`.tc-sidebar-lists .tc-tab-buttons button[data-tab-title="${escapedTitle}"]`);
+  if (button) {
+    button.click();
+    return true;
+  }
+
+  const stateTitle = $tw.wiki.filterTiddlers('[all[tiddlers+shadows]prefix[$:/state/tab/sidebar--]]')[0];
+  if (stateTitle) {
+    $tw.wiki.setText(stateTitle, 'text', undefined, tabTitle, { suppressTimestamp: true });
+    return true;
+  }
+
+  return false;
+}

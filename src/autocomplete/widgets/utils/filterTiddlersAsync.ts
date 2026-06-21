@@ -20,7 +20,7 @@ export async function filterTiddlersAsync(filter: string, options: { exclude?: s
       'getTiddlersJSON',
       filter,
       exclude,
-      { ignoreSyncSystemConfig: system, toTiddler },
+      { skipSystemFilter: system, toTiddler },
     );
     result = resultFromIPC.data as ITiddlerFields[];
   } else {
