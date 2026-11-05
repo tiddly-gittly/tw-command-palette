@@ -19,3 +19,25 @@ This plugin provides an auto-completion box Widget `<$auto-complete-search />` w
 | `autoFocus`           | yes/no | Automatically sets focus to the input and opens the panel when the widget is rendered.         | `yes`        |
 | `panelBelowInput`   | yes/no | By default panel is below input. Disable this to let it center on top of window. | `yes`     |
 | `destroyWhenNotVis`   | yes/no | Destroys the widget when it is not visible.               | `no`       |
+
+!!! Scoped search
+
+Use `mode="search"` for an embedded search with its own candidates and WikiText actions. The default `mode="palette"` retains the command palette's sources, history and prefixes.
+
+| !Parameter | !Description | !Default |
+| `candidateFilter` | Candidate filter evaluated in the embedding widget context. Searches title, caption, alias and text. | `[all[tiddlers]!is[system]]` |
+| `actionFilter` | Filter selecting action tiddlers. All selected actions are shown, including on empty input. | empty |
+| `limit` | Maximum number of matching entries. Actions are a separate section. | `30` |
+| `placeholder` | Input hint. | `Search for tiddlers` |
+| `openOnFocus` | Show the panel on focus independently of autofocus. | same as `autoFocus` |
+| `detachedMediaQuery` | Media query for detached/mobile presentation; use `none` for an inline input. | Algolia default |
+
+```
+<$auto-complete-search id="projects" mode="search"
+  candidateFilter="[tag[Project]]"
+  actionFilter="[all[tiddlers+shadows]tag[ProjectSearchAction]]"
+  autoFocus="no" openOnFocus="yes" detachedMediaQuery="none"
+  placeholder="Search projects or create one" limit="30" />
+```
+
+Action tiddlers use `caption`, optional `description` and `condition`, and WikiText actions in their body. Captions, conditions, filters and action strings receive `commandpaletteinput` containing the complete input, plus `currentTiddler` and `selectedText`. Existing `action-variables` prompts are supported. Action titles serve as stable identities; the input can serve as a new entry title. Queries such as `>`, `#`, `[` and `?` are literal in search mode. An empty query shows actions only. Instance attributes, language changes and open-panel candidate changes refresh the view.

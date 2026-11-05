@@ -19,3 +19,17 @@ title: $:/plugins/linonetwo/autocomplete/language/zh-Hans/Readme
 | `autoFocus`           | yes/no   | 当微件渲染时，自动将焦点设置到输入框并打开面板。  | `yes`        |
 | `panelBelowInput`   | yes/no   | 默认情况下，面板位于输入下方。禁用此选项可让面板位于窗口顶部的中心位置。  | `yes`     |
 | `destroyWhenNotVis`   | yes/no   | 当不可见时，立即销毁微件。               | `no`       |
+
+!!! 限定范围的搜索
+
+使用 `mode="search"` 可通过 WikiText 为每个实例指定候选范围和操作列表。默认 `mode="palette"` 保留命令面板的候选源、历史和前缀。
+
+| !参数 | !说明 | !默认值 |
+| `candidateFilter` | 在嵌入位置的变量上下文中求值，搜索候选条目的标题、caption、alias 和正文。 | `[all[tiddlers]!is[system]]` |
+| `actionFilter` | 操作条目过滤器；空输入时也展示所选操作。 | 空 |
+| `limit` | 搜索结果数量上限，操作单独展示。 | `30` |
+| `placeholder` | 输入框提示文字。 | `Search for tiddlers` |
+| `openOnFocus` | 聚焦时展开，独立于自动聚焦设置。 | 与 `autoFocus` 一致 |
+| `detachedMediaQuery` | 独立移动端面板的媒体查询；`none` 表示内联输入框。 | Algolia 默认值 |
+
+操作条目使用 `caption`、可选的 `description` 和 `condition` 字段，正文编写 WikiText 动作。过滤器、描述、条件和动作均可使用 `commandpaletteinput` 获取完整输入，另有 `currentTiddler`、`selectedText` 变量，以及已有的 `action-variables` 参数输入机制。条目标题作为操作标识，输入内容可作为新条目的标题。搜索模式将特殊前缀按普通文本处理。实例属性、语言和候选内容变化时会刷新展示。
