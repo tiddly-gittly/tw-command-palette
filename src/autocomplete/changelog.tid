@@ -2,6 +2,12 @@ title: $:/plugins/linonetwo/autocomplete/changelog
 
 ! Changelog
 
+!! Version 0.9.7
+
+* Added: declarative `mode="search"` with per-instance candidate and action filters, literal queries, independent debounce and bounded results.
+* Added: placeholder, focus-opening and inline/mobile presentation attributes, with live attribute and language refresh.
+* Changed: reuse action-string execution and prompted variables in scoped search; preserve the default command palette's sources and prefix routing.
+
 !! Version 0.9.6
 
 * Fixed: Aligned `filterTiddlersAsync` IPC option name with TidGi Desktop PR #719 — renamed `ignoreSyncSystemConfig` to `skipSystemFilter`. This fixes multi-run filter corruption where combining multiple filter runs (e.g. `+[search:title[foo]] +[search:alias[foo]] +[search:caption[foo]]`) only returned results from the last run.

@@ -13,11 +13,22 @@ import { getActiveElement } from './utils/getFocused';
 import { getSubPlugins } from './utils/getSubPlugins';
 import { handleDarkMode } from './utils/handleDarkMode';
 import { computePhase } from './utils/phaseRouter';
+import { createScopedSources } from './utils/scopedSources';
 import { uniqSourcesBy } from './utils/uniqSourcesBy';
 
 class AutoCompleteSearchWidget extends Widget {
   id = 'default';
-  refresh(_changedTiddlers: IChangedTiddlers) {
+  refresh(changedTiddlers: IChangedTiddlers) {
+    if (this.searchMode) {
+      const changedAttributes = this.computeAttributes();
+      if (Object.keys(changedAttributes).length > 0 || Object.hasOwn(changedTiddlers, '$:/language')) {
+        const focused = this.domNodes[0]?.contains(document.activeElement);
+        this.refreshSelf();
+        if (focused) (this.domNodes[0] as HTMLElement).querySelector('input')!.focus();
+        return true;
+      }
+      if (this.autoCompleteState?.state.isOpen) void this.autoCompleteInstance!.refresh();
+    }
     return false;
   }
 
@@ -51,14 +62,24 @@ class AutoCompleteSearchWidget extends Widget {
   panelBelowInput = true;
   /** By default we use @seznam/visibility-observer to destroy on unseen */
   destroyWhenNotVis = false;
+  searchMode = false;
+
+  removeChildDomNodes() {
+    if (this.searchMode) {
+      this.autoCompleteInstance?.destroy();
+      window.removeEventListener('resize', this.fixPanelPosition);
+    }
+    super.removeChildDomNodes();
+  }
 
   render(parent: Element, nextSibling: Element) {
     this.parentDomNode = parent;
     this.computeAttributes();
     this.execute();
     this.id = this.getAttribute('id', 'default');
+    this.searchMode = this.getAttribute('mode', 'palette') === 'search';
     // params are get from `$:/plugins/linonetwo/autocomplete/DefaultCommandPalette` using transclusion from `$:/temp/auto-complete-search/default/opened`
-    const initialPrefix = this.getAttribute('prefix', '');
+    const initialPrefix = this.searchMode ? this.autoCompleteState?.state.query ?? this.getAttribute('prefix', '') : this.getAttribute('prefix', '');
     this.cycleHistoryMode = this.getAttribute('cycleHistoryMode', 'no') === 'yes';
     this.autoFocus = this.getAttribute('autoFocus', 'yes') === 'yes';
     this.panelBelowInput = this.getAttribute('panelBelowInput', 'yes') === 'yes';
@@ -77,19 +98,22 @@ class AutoCompleteSearchWidget extends Widget {
     const updateState = (nextState: OnStateChangeProps<ITiddlerFields>) => {
       this.autoCompleteState = nextState;
     };
+    const searchMode = this.searchMode;
     this.autoCompleteInstance = autocomplete<ITiddlerFields>({
       id: this.id,
       container: containerElement,
       classNames: {
         panel: `tw-commandpalette-panel-${this.id}`,
       },
-      placeholder: 'Search for tiddlers',
+      placeholder: this.getAttribute('placeholder', 'Search for tiddlers'),
+      ...(this.hasAttribute('detachedMediaQuery') ? { detachedMediaQuery: this.getAttribute('detachedMediaQuery') } : {}),
       initialState: {
         query: initialPrefix,
       },
       defaultActiveItemId: 0,
       onStateChange(nextState) {
         updateState(nextState);
+        if (searchMode) return;
 
         // Automatically compute and update phase based on query and context
         const context = nextState.state.context as IContext;
@@ -105,15 +129,17 @@ class AutoCompleteSearchWidget extends Widget {
         }
       },
       autoFocus: this.autoFocus,
-      openOnFocus: this.autoFocus,
+      openOnFocus: this.getAttribute('openOnFocus', this.autoFocus ? 'yes' : 'no') === 'yes',
       ignoreCompositionEvents: true,
       navigator: {
         navigate: this.onEnter.bind(this) satisfies AutocompleteNavigator<ITiddlerFields>['navigate'],
         navigateNewTab: this.onCtrlEnter.bind(this) satisfies AutocompleteNavigator<ITiddlerFields>['navigateNewTab'],
         navigateNewWindow: this.onShiftEnter.bind(this) satisfies AutocompleteNavigator<ITiddlerFields>['navigateNewWindow'],
       },
-      plugins: getSubPlugins(this.id),
+      plugins: this.searchMode ? [] : getSubPlugins(this.id),
+      ...(this.searchMode ? { getSources: createScopedSources(this) } : {}),
       reshape({ sourcesBySourceId }) {
+        if (searchMode) return Object.values(sourcesBySourceId);
         const {
           'title': titleSource,
           'story-history': storyHistorySource,
@@ -357,9 +383,9 @@ class AutoCompleteSearchWidget extends Widget {
 
   destroy() {
     this.setCloseState();
-    const containerElement = this.parentDomNode?.querySelector('.tw-auto-complete-container');
+    const containerElement = this.domNodes[0];
     this.autoCompleteInstance?.destroy();
-    containerElement?.remove();
+    containerElement.remove();
     this.parentDomNode = undefined;
     this.autoCompleteInstance = undefined;
     /* eslint-disable @typescript-eslint/unbound-method */
